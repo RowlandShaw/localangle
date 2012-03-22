@@ -1,0 +1,65 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{434D6432-D633-44A7-B78B-19869CEE209A}"
+	ProjectSection(SolutionItems) = preProject
+		LocalAngle.vsmdi = LocalAngle.vsmdi
+		SmartDeviceTestRun.testrunConfig = SmartDeviceTestRun.testrunConfig
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalAngle.Test", "Source\Test\LocalAngle.Test\LocalAngle.Test.csproj", "{8C6C60A8-5AD3-4335-98C0-6CD144E8C2DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalAngle.Editor.Windows", "Source\Code\LocalAngle.Editor.Windows\LocalAngle.Editor.Windows.csproj", "{98CD1B85-B768-4E94-BC7D-8FA0ABE4CEB3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalAngle.Windows", "Source\Code\LocalAngle.Windows\LocalAngle.Windows.csproj", "{C2ED3878-2F1E-4656-8C02-EAE2458E1C40}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalAngle", "Source\Code\LocalAngle\LocalAngle.csproj", "{8777C7E2-6699-4772-945E-87B0A88C29A8}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 5
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/TFS23
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Source\\Code\\LocalAngle.Editor.Windows\\LocalAngle.Editor.Windows.csproj
+		SccProjectName1 = Source/Code/LocalAngle.Editor.Windows
+		SccLocalPath1 = Source\\Code\\LocalAngle.Editor.Windows
+		SccProjectUniqueName2 = Source\\Code\\LocalAngle.Windows\\LocalAngle.Windows.csproj
+		SccProjectName2 = Source/Code/LocalAngle.Windows
+		SccLocalPath2 = Source\\Code\\LocalAngle.Windows
+		SccProjectUniqueName3 = Source\\Code\\LocalAngle\\LocalAngle.csproj
+		SccProjectName3 = Source/Code/LocalAngle
+		SccLocalPath3 = Source\\Code\\LocalAngle
+		SccProjectUniqueName4 = Source\\Test\\LocalAngle.Test\\LocalAngle.Test.csproj
+		SccProjectName4 = Source/Test/LocalAngle.Test
+		SccLocalPath4 = Source\\Test\\LocalAngle.Test
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = LocalAngle.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8C6C60A8-5AD3-4335-98C0-6CD144E8C2DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C6C60A8-5AD3-4335-98C0-6CD144E8C2DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C6C60A8-5AD3-4335-98C0-6CD144E8C2DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C6C60A8-5AD3-4335-98C0-6CD144E8C2DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98CD1B85-B768-4E94-BC7D-8FA0ABE4CEB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98CD1B85-B768-4E94-BC7D-8FA0ABE4CEB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98CD1B85-B768-4E94-BC7D-8FA0ABE4CEB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98CD1B85-B768-4E94-BC7D-8FA0ABE4CEB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2ED3878-2F1E-4656-8C02-EAE2458E1C40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2ED3878-2F1E-4656-8C02-EAE2458E1C40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2ED3878-2F1E-4656-8C02-EAE2458E1C40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2ED3878-2F1E-4656-8C02-EAE2458E1C40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8777C7E2-6699-4772-945E-87B0A88C29A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8777C7E2-6699-4772-945E-87B0A88C29A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8777C7E2-6699-4772-945E-87B0A88C29A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8777C7E2-6699-4772-945E-87B0A88C29A8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
