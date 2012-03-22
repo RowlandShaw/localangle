@@ -8,7 +8,7 @@ namespace LocalAngle.Net
     /// <summary>
     /// Represents a request parmeter used in HttpWebRequests, either on the URI (for a GET query), or as part of the request body (for POST requests)
     /// </summary>
-    public struct RequestParameter :  IComparable<RequestParameter>
+    public struct RequestParameter : IComparable<RequestParameter>, IEquatable<RequestParameter>
     {
         public RequestParameter(string name, string value)
         {
@@ -49,6 +49,23 @@ namespace LocalAngle.Net
         public override string ToString()
         {
             return string.Format(CultureInfo.InvariantCulture, "{0}={1}", Name, Value);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is RequestParameter)
+            {
+                return CompareTo((RequestParameter)obj) == 0;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool Equals(RequestParameter other)
+        {
+            return CompareTo(other) == 0;
         }
     }
 

@@ -58,8 +58,12 @@
     <Compile Include="Cache.cs" />
     <Compile Include="CacheEntry.cs" />
     <Compile Include="CacheOptions.cs" />
+    <Compile Include="Classifieds\AdvertType.cs" />
+    <Compile Include="Classifieds\PublishStatus.cs" />
+    <Compile Include="Classifieds\Freead.cs" />
     <Compile Include="Comparer.cs" />
     <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="Events\PublishStatus.cs" />
     <Compile Include="Events\SpecialEvent.cs" />
     <Compile Include="ICacheable.cs" />
     <Compile Include="IOAuthCredentials.cs" />
