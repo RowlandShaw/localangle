@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -18,6 +19,7 @@ namespace LocalAngle.Net
     /// This should greatly simplify clients wanting to make requests, as it'll automatically handle signing of requests.
     /// Currently does not support multipart requests (so you cannot upload media to Twitter with it *yet*.
     /// </remarks>
+    [Serializable]
     public class OAuthWebRequest : WebRequest
     {
         #region Constructors
@@ -63,6 +65,12 @@ namespace LocalAngle.Net
             bob.Append(uri.AbsolutePath);
 
             this.Request = WebRequest.Create(new Uri(bob.ToString())) as HttpWebRequest;
+        }
+
+        protected OAuthWebRequest(SerializationInfo info, StreamingContext context) : base(info,context)
+        {
+            _timeStamp = info.GetString("Timestamp");
+            //TODO: Deserialize the rest
         }
 
         #endregion
@@ -169,7 +177,7 @@ namespace LocalAngle.Net
                         throw new NotSupportedException("Haven't needed to implement RSA-SHA1 hashing yet, so I haven't. Sorry about that.");
 
                     default:
-                        throw new InvalidEnumArgumentException();
+                        throw new InvalidEnumArgumentException("SignatureMethod",(int)value,typeof(OAuthSignatureMethod));
                 }
             }
         }
@@ -182,7 +190,7 @@ namespace LocalAngle.Net
         /// You must not use the same <see cref="Nonce"/> for the same time stamp to avoid replay attacks; you may choose to store both "just in case"
         /// </remarks>
         /// <value>The time stamp.</value>
-        public string TimeStamp
+        public string Timestamp
         {
             get
             {
@@ -233,6 +241,24 @@ namespace LocalAngle.Net
 
         #region Protected Methods
 
+        /// <summary>
+        /// Populates a <see cref="T:System.Runtime.Serialization.SerializationInfo"/> with the data needed to serialize the target object.
+        /// </summary>
+        /// <param name="serializationInfo">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> to populate with data.</param>
+        /// <param name="streamingContext">A <see cref="T:System.Runtime.Serialization.StreamingContext"/> that specifies the destination for this serialization.</param>
+        protected override void GetObjectData(SerializationInfo serializationInfo, StreamingContext streamingContext)
+        {
+            if (serializationInfo == null)
+            {
+                throw new ArgumentNullException("serializationInfo");
+            }
+
+            base.GetObjectData(serializationInfo, streamingContext);
+
+            serializationInfo.AddValue("Timestamp", _timeStamp);
+            //TODO: Serialize the rest
+        }
+
         protected void Sign()
         {
             if (OAuthCredentials == null)
@@ -256,7 +282,7 @@ namespace LocalAngle.Net
 
             // For Plain text these aren't required (after all, the secrets are transferred in plain text)
             sortedParameters.Add(new RequestParameter("oauth_nonce", EscapeDataString(Nonce)));
-            sortedParameters.Add(new RequestParameter("oauth_timestamp", EscapeDataString(TimeStamp)));
+            sortedParameters.Add(new RequestParameter("oauth_timestamp", EscapeDataString(Timestamp)));
 
             switch (SignatureMethod)
             {
@@ -288,14 +314,14 @@ namespace LocalAngle.Net
             string normalisedParameters = string.Join("&", (from RequestParameter p in sortedParameters select p.ToString()).ToArray());
 
             // Build the digest
-            string requestToSign = string.Format("{0}&{1}&{2}", Method.ToUpperInvariant(), EscapeDataString(Request.RequestUri.AbsoluteUri), EscapeDataString(normalisedParameters));
+            string requestToSign = string.Format(CultureInfo.InvariantCulture, "{0}&{1}&{2}", Method.ToUpperInvariant(), EscapeDataString(Request.RequestUri.AbsoluteUri), EscapeDataString(normalisedParameters));
 
             switch (SignatureMethod)
             {
                 // TODO: consider using an attribute on the enum 
                 case OAuthSignatureMethod.HmacSha1:
                     HMACSHA1 hmacsha1 = new HMACSHA1();
-                    hmacsha1.Key = Encoding.ASCII.GetBytes(string.Format("{0}&{1}", EscapeDataString(OAuthCredentials.ConsumerSecret), EscapeDataString(OAuthCredentials.TokenSecret)));
+                    hmacsha1.Key = Encoding.ASCII.GetBytes(string.Format(CultureInfo.InvariantCulture, "{0}&{1}", EscapeDataString(OAuthCredentials.ConsumerSecret), EscapeDataString(OAuthCredentials.TokenSecret)));
 
                     byte[] dataBuffer = System.Text.Encoding.ASCII.GetBytes(requestToSign);
                     byte[] hashBytes = hmacsha1.ComputeHash(dataBuffer);
@@ -304,7 +330,7 @@ namespace LocalAngle.Net
                     break;
 
                 case OAuthSignatureMethod.Plaintext:
-                    sortedParameters.Add(new RequestParameter("oauth_signature", EscapeDataString(string.Format("{0}&{1}", OAuthCredentials.ConsumerSecret, OAuthCredentials.TokenSecret))));
+                    sortedParameters.Add(new RequestParameter("oauth_signature", EscapeDataString(string.Format(CultureInfo.InvariantCulture, "{0}&{1}", OAuthCredentials.ConsumerSecret, OAuthCredentials.TokenSecret))));
                     break;
 
                 case OAuthSignatureMethod.RsaSha1:
@@ -316,7 +342,7 @@ namespace LocalAngle.Net
             normalisedParameters = string.Join("&", (from RequestParameter p in sortedParameters select p.ToString()).ToArray());
             if (string.Compare(Method, "GET", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                Uri targetUri = new Uri(string.Format("{0}?{1}", Request.RequestUri, normalisedParameters));
+                Uri targetUri = new Uri(string.Format(CultureInfo.InvariantCulture, "{0}?{1}", Request.RequestUri, normalisedParameters));
                 HttpWebRequest newRequest = WebRequest.Create(targetUri) as HttpWebRequest;
                 newRequest.UserAgent = Request.UserAgent;
                 newRequest.Method = "GET";
@@ -414,14 +440,14 @@ namespace LocalAngle.Net
                 }
                 else
                 {
-                    result.Append('%' + String.Format("{0:X2}", (int)symbol));
+                    result.Append('%' + String.Format(CultureInfo.InvariantCulture, "{0:X2}", (int)symbol));
                 }
             }
 
             return result.ToString();
         }
 
-        protected static IComparer<RequestParameter> ParameterComparer = new Comparer<RequestParameter>();
+        private static IComparer<RequestParameter> ParameterComparer = new Comparer<RequestParameter>();
 
         #endregion
     }

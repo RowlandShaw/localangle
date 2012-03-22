@@ -4,23 +4,12 @@ using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
-using System.Text;
 using LocalAngle.Net;
 
-namespace LocalAngle.Events
+namespace LocalAngle.Classifieds
 {
-    [DataContract]
-    public class SpecialEvent
+    public class Freead
     {
-        #region Constructors
-
-        public SpecialEvent()
-        {
-            Location = new Postcode();
-        }
-
-        #endregion
-
         #region Public Properties
 
         /// <summary>
@@ -30,7 +19,7 @@ namespace LocalAngle.Events
         /// The event id.
         /// </value>
         [DataMember]
-        public string EventId { get; protected set; }
+        public string AdvertId { get; protected set; }
 
         /// <summary>
         /// Gets or sets the event name.
@@ -51,74 +40,13 @@ namespace LocalAngle.Events
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets the venue name.
+        /// Gets or sets the contact details.
         /// </summary>
         /// <value>
-        /// The name of the venue.
+        /// The contact details.
         /// </value>
         [DataMember]
-        public string VenueName { get; set; }
-
-        /// <summary>
-        /// Gets or sets the location postal code.
-        /// </summary>
-        /// <value>
-        /// The location.
-        /// </value>
-        public Postcode Location { get; set; }
-
-        /// <summary>
-        /// Gets or sets the start time.
-        /// </summary>
-        /// <value>
-        /// The start time.
-        /// </value>
-        [DataMember]
-        public DateTime StartTime { get; set; }
-
-        /// <summary>
-        /// Gets or sets the end time.
-        /// </summary>
-        /// <value>
-        /// The end time.
-        /// </value>
-        [DataMember]
-        public DateTime EndTime { get; set; }
-
-        /// <summary>
-        /// Gets or sets the URI for ticketing information.
-        /// </summary>
-        /// <value>
-        /// The ticket URI.
-        /// </value>
-        [DataMember]
-        public Uri TicketUri { get; set; }
-
-        #endregion
-
-        #region Protected Properties
-
-        /// <summary>
-        /// Gets or sets the postcode.
-        /// </summary>
-        /// <value>
-        /// The postcode.
-        /// </value>
-        /// <remarks>
-        /// Intended for use by the JSON serialisers
-        /// </remarks>
-        [DataMember]
-        protected string Postcode
-        {
-            get
-            {
-                return Location.ToString();
-            }
-            set
-            {
-                Location = new Postcode(value);
-            }
-        }
+        public string ContactDetails { get; set; }
 
         #endregion
 
@@ -138,26 +66,20 @@ namespace LocalAngle.Events
                 throw new UnauthorizedAccessException("Insufficient details provided to be able to save changes.");
             }
 
-            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/event/save"), credentials);
+            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/freead/save"), credentials);
             req.Method = "POST";
             // TODO:
             req.RequestParameters.Add(new RequestParameter("name", Name));
             req.RequestParameters.Add(new RequestParameter("description", Description));
+            req.RequestParameters.Add(new RequestParameter("contact", ContactDetails));
             HttpWebResponse res = req.GetResponse() as HttpWebResponse;
 
-            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(SpecialEvent));
-            SpecialEvent retval = (SpecialEvent)ser.ReadObject(res.GetResponseStream());
-            if (retval != null)
-            {
-                this.EventId = retval.EventId;
-                this.Name = retval.Name;
-                this.Description = retval.Description;
-                this.VenueName = retval.VenueName;
-                this.Location = retval.Location;
-                this.StartTime = retval.StartTime;
-                this.EndTime = retval.EndTime;
-                this.TicketUri = retval.TicketUri;
-            }
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(Freead));
+            Freead retval = (Freead)ser.ReadObject(res.GetResponseStream());
+            this.AdvertId = retval.AdvertId;
+            this.Name = retval.Name;
+            this.Description = retval.Description;
+            this.ContactDetails = retval.ContactDetails;
 
             throw new NotImplementedException();
         }
@@ -173,7 +95,7 @@ namespace LocalAngle.Events
         /// <param name="range">The range in miles to search for events in.</param>
         /// <param name="credentials">The credentials.</param>
         /// <returns></returns>
-        public static IEnumerable<SpecialEvent> SearchNear(Postcode location, double range, IOAuthCredentials credentials)
+        public static IEnumerable<Freead> SearchNear(Postcode location, double range, IOAuthCredentials credentials)
         {
             return SearchNear(location, range, default(DateTime), credentials);
         }
@@ -186,19 +108,19 @@ namespace LocalAngle.Events
         /// <param name="since">The date to bring back changes since.</param>
         /// <param name="credentials">The credentials.</param>
         /// <returns></returns>
-        public static IEnumerable<SpecialEvent> SearchNear(Postcode location, double range, DateTime since, IOAuthCredentials credentials)
+        public static IEnumerable<Freead> SearchNear(Postcode location, double range, DateTime since, IOAuthCredentials credentials)
         {
-            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/events/nearby"), credentials);
+            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/adverts/nearby"), credentials);
             req.RequestParameters.Add(new RequestParameter("location", Uri.EscapeDataString(location.ToString())));
-            req.RequestParameters.Add(new RequestParameter("range",range.ToString()));
+            req.RequestParameters.Add(new RequestParameter("range", range.ToString()));
             if (since != default(DateTime))
             {
                 req.RequestParameters.Add(new RequestParameter("since", since.ToUnixTime().ToString()));
             }
             HttpWebResponse res = req.GetResponse() as HttpWebResponse;
 
-            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(IEnumerable<SpecialEvent>));
-            IEnumerable<SpecialEvent> retval = (IEnumerable<SpecialEvent>)ser.ReadObject(res.GetResponseStream());
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(IEnumerable<Freead>));
+            IEnumerable<Freead> retval = (IEnumerable<Freead>)ser.ReadObject(res.GetResponseStream());
 
             return retval;
         }
