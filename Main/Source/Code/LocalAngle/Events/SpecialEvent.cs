@@ -10,7 +10,7 @@ using LocalAngle.Net;
 namespace LocalAngle.Events
 {
     [DataContract]
-    public class SpecialEvent
+    public class SpecialEvent : BindableBase
     {
         #region Constructors
 
@@ -23,6 +23,7 @@ namespace LocalAngle.Events
 
         #region Public Properties
 
+        private string _eventId;
         /// <summary>
         /// Gets or sets a unique identifier for the event.
         /// </summary>
@@ -30,8 +31,19 @@ namespace LocalAngle.Events
         /// The event id.
         /// </value>
         [DataMember]
-        public string EventId { get; protected set; }
+        public string EventId
+        {
+            get
+            {
+                return _eventId;
+            }
+            protected set
+            {
+                OnPropertyChanged("AdvertId", ref _eventId, value);
+            }
+        }
 
+        private string _name;
         /// <summary>
         /// Gets or sets the event name.
         /// </summary>
@@ -39,8 +51,19 @@ namespace LocalAngle.Events
         /// The name.
         /// </value>
         [DataMember]
-        public string Name { get; set; }
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+            protected set
+            {
+                OnPropertyChanged("Name", ref _name, value);
+            }
+        }
 
+        private string _description;
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
@@ -48,8 +71,19 @@ namespace LocalAngle.Events
         /// The description.
         /// </value>
         [DataMember]
-        public string Description { get; set; }
+        public string Description
+        {
+            get
+            {
+                return _description;
+            }
+            protected set
+            {
+                OnPropertyChanged("Description", ref _description, value);
+            }
+        }
 
+        private string _venueName;
         /// <summary>
         /// Gets or sets the venue name.
         /// </summary>
@@ -57,16 +91,38 @@ namespace LocalAngle.Events
         /// The name of the venue.
         /// </value>
         [DataMember]
-        public string VenueName { get; set; }
+        public string VenueName
+        {
+            get
+            {
+                return _venueName;
+            }
+            protected set
+            {
+                OnPropertyChanged("VenueName", ref _venueName, value);
+            }
+        }
 
+        private Postcode _location;
         /// <summary>
         /// Gets or sets the location postal code.
         /// </summary>
         /// <value>
         /// The location.
         /// </value>
-        public Postcode Location { get; set; }
+        public Postcode Location
+        {
+            get
+            {
+                return _location;
+            }
+            protected set
+            {
+                OnPropertyChanged("Location", ref _location, value);
+            }
+        }
 
+        private DateTime _start;
         /// <summary>
         /// Gets or sets the start time.
         /// </summary>
@@ -74,8 +130,19 @@ namespace LocalAngle.Events
         /// The start time.
         /// </value>
         [DataMember]
-        public DateTime StartTime { get; set; }
+        public DateTime StartTime
+        {
+            get
+            {
+                return _start;
+            }
+            protected set
+            {
+                OnPropertyChanged("StartTime", ref _start, value);
+            }
+        }
 
+        private DateTime _end;
         /// <summary>
         /// Gets or sets the end time.
         /// </summary>
@@ -83,8 +150,19 @@ namespace LocalAngle.Events
         /// The end time.
         /// </value>
         [DataMember]
-        public DateTime EndTime { get; set; }
+        public DateTime EndTime
+        {
+            get
+            {
+                return _end;
+            }
+            protected set
+            {
+                OnPropertyChanged("EndTime", ref _end, value);
+            }
+        }
 
+        private Uri _ticketUri;
         /// <summary>
         /// Gets or sets the URI for ticketing information.
         /// </summary>
@@ -92,7 +170,17 @@ namespace LocalAngle.Events
         /// The ticket URI.
         /// </value>
         [DataMember]
-        public Uri TicketUri { get; set; }
+        public Uri TicketUri
+        {
+            get
+            {
+                return _ticketUri;
+            }
+            protected set
+            {
+                OnPropertyChanged("TicketUri", ref _ticketUri, value);
+            }
+        }
 
         #endregion
 

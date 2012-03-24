@@ -67,6 +67,11 @@ namespace LocalAngle.Net
         {
             return CompareTo(other) == 0;
         }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
+        }
     }
 
     public static class RequestParameterExtensions
