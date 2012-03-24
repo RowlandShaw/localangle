@@ -358,7 +358,6 @@ namespace LocalAngle.Net
                     using (StreamWriter writer = new StreamWriter(req))
                     {
                         writer.Write(normalisedParameters);
-                        writer.Close();
                     }
                 }
             }

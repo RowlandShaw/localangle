@@ -8,10 +8,11 @@ using LocalAngle.Net;
 
 namespace LocalAngle.Classifieds
 {
-    public class Freead
+    public class Freead : BindableBase
     {
         #region Public Properties
 
+        private string _advertId;
         /// <summary>
         /// Gets or sets a unique identifier for the event.
         /// </summary>
@@ -19,8 +20,19 @@ namespace LocalAngle.Classifieds
         /// The event id.
         /// </value>
         [DataMember]
-        public string AdvertId { get; protected set; }
+        public string AdvertId
+        {
+            get
+            {
+                return _advertId;
+            }
+            protected set
+            {
+                OnPropertyChanged("AdvertId", ref _advertId, value);
+            }
+        }
 
+        private string _name;
         /// <summary>
         /// Gets or sets the event name.
         /// </summary>
@@ -28,8 +40,19 @@ namespace LocalAngle.Classifieds
         /// The name.
         /// </value>
         [DataMember]
-        public string Name { get; set; }
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+            protected set
+            {
+                OnPropertyChanged("Name", ref _name, value);
+            }
+        }
 
+        private string _description;
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
@@ -37,8 +60,19 @@ namespace LocalAngle.Classifieds
         /// The description.
         /// </value>
         [DataMember]
-        public string Description { get; set; }
+        public string Description
+        {
+            get
+            {
+                return _description;
+            }
+            protected set
+            {
+                OnPropertyChanged("Description", ref _description, value);
+            }
+        }
 
+        private string _contact;
         /// <summary>
         /// Gets or sets the contact details.
         /// </summary>
@@ -46,7 +80,17 @@ namespace LocalAngle.Classifieds
         /// The contact details.
         /// </value>
         [DataMember]
-        public string ContactDetails { get; set; }
+        public string ContactDetails
+        {
+            get
+            {
+                return _contact;
+            }
+            protected set
+            {
+                OnPropertyChanged("ContactDetails", ref _contact, value);
+            }
+        }
 
         #endregion
 
