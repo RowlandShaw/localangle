@@ -37,7 +37,7 @@ namespace LocalAngle.Events
             {
                 return _eventId;
             }
-            protected set
+            set
             {
                 OnPropertyChanged("AdvertId", ref _eventId, value);
             }
@@ -57,7 +57,7 @@ namespace LocalAngle.Events
             {
                 return _name;
             }
-            protected set
+            set
             {
                 OnPropertyChanged("Name", ref _name, value);
             }
@@ -77,7 +77,7 @@ namespace LocalAngle.Events
             {
                 return _description;
             }
-            protected set
+            set
             {
                 OnPropertyChanged("Description", ref _description, value);
             }
@@ -97,7 +97,7 @@ namespace LocalAngle.Events
             {
                 return _venueName;
             }
-            protected set
+            set
             {
                 OnPropertyChanged("VenueName", ref _venueName, value);
             }
@@ -116,7 +116,7 @@ namespace LocalAngle.Events
             {
                 return _location;
             }
-            protected set
+            set
             {
                 OnPropertyChanged("Location", ref _location, value);
             }
@@ -136,7 +136,7 @@ namespace LocalAngle.Events
             {
                 return _start;
             }
-            protected set
+            set
             {
                 OnPropertyChanged("StartTime", ref _start, value);
             }
@@ -156,7 +156,7 @@ namespace LocalAngle.Events
             {
                 return _end;
             }
-            protected set
+            set
             {
                 OnPropertyChanged("EndTime", ref _end, value);
             }
@@ -176,7 +176,7 @@ namespace LocalAngle.Events
             {
                 return _ticketUri;
             }
-            protected set
+            set
             {
                 OnPropertyChanged("TicketUri", ref _ticketUri, value);
             }

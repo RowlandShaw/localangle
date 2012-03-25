@@ -7,7 +7,11 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
-using System.Security.Cryptography;
+using System.Threading.Tasks;
+using Windows.Security.Authentication.Web;
+using Windows.Security.Cryptography.Core;
+using Windows.Security.Cryptography;
+using Windows.Storage.Streams;
 using System.Text;
 
 namespace LocalAngle.Net
@@ -19,7 +23,6 @@ namespace LocalAngle.Net
     /// This should greatly simplify clients wanting to make requests, as it'll automatically handle signing of requests.
     /// Currently does not support multipart requests (so you cannot upload media to Twitter with it *yet*.
     /// </remarks>
-    [Serializable]
     public class OAuthWebRequest : WebRequest
     {
         #region Constructors
@@ -42,7 +45,7 @@ namespace LocalAngle.Net
                 throw new ArgumentNullException("uri");
             }
 
-            if (string.Compare(uri.Scheme, Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) != 0 && string.Compare(uri.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase) != 0)
+            if (string.Compare(uri.Scheme, "http", StringComparison.OrdinalIgnoreCase) != 0 && string.Compare(uri.Scheme, "https", StringComparison.OrdinalIgnoreCase) != 0)
             {
                 throw new ArgumentOutOfRangeException("uri", "Only HTTP and HTTPS schemes are supported for OAuth requests.");
             }
@@ -57,7 +60,7 @@ namespace LocalAngle.Net
             bob.Append(uri.Scheme.ToLowerInvariant());
             bob.Append("://");
             bob.Append(uri.Host);
-            if ((string.Compare(uri.Scheme, Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) == 0 & uri.Port != 80) || (string.Compare(uri.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase) == 0 & uri.Port != 443))
+            if ((string.Compare(uri.Scheme, "http", StringComparison.OrdinalIgnoreCase) == 0 & uri.Port != 80) || (string.Compare(uri.Scheme, "https", StringComparison.OrdinalIgnoreCase) == 0 & uri.Port != 443))
             {
                 bob.Append(':');
                 bob.Append(uri.Port);
@@ -67,15 +70,33 @@ namespace LocalAngle.Net
             this.Request = WebRequest.Create(new Uri(bob.ToString())) as HttpWebRequest;
         }
 
-        protected OAuthWebRequest(SerializationInfo info, StreamingContext context) : base(info,context)
-        {
-            _timeStamp = info.GetString("Timestamp");
-            //TODO: Deserialize the rest
-        }
-
         #endregion
 
         #region Public Properties
+
+        public override string ContentType
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public override WebHeaderCollection Headers
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         public IOAuthCredentials OAuthCredentials { get; set; }
 
@@ -177,7 +198,7 @@ namespace LocalAngle.Net
                         throw new NotSupportedException("Haven't needed to implement RSA-SHA1 hashing yet, so I haven't. Sorry about that.");
 
                     default:
-                        throw new InvalidEnumArgumentException("SignatureMethod",(int)value,typeof(OAuthSignatureMethod));
+                        throw new InvalidOperationException("Unexpected signature method");
                 }
             }
         }
@@ -222,7 +243,7 @@ namespace LocalAngle.Net
 
         public override IAsyncResult BeginGetRequestStream(AsyncCallback callback, object state)
         {
-            return base.BeginGetRequestStream(callback, state);
+            throw new NotImplementedException();
         }
 
         public override IAsyncResult BeginGetResponse(AsyncCallback callback, object state)
@@ -233,7 +254,7 @@ namespace LocalAngle.Net
 
         public override Stream EndGetRequestStream(IAsyncResult asyncResult)
         {
-            return base.EndGetRequestStream(asyncResult);
+            throw new NotImplementedException();
         }
 
         public override WebResponse EndGetResponse(IAsyncResult asyncResult)
@@ -241,13 +262,15 @@ namespace LocalAngle.Net
             return Request.EndGetResponse(asyncResult);
         }
 
-        public override WebResponse GetResponse()
+        public WebResponse GetResponse()
         {
+            Sign();
+
             WebResponse resp = null;
-            IAsyncResult res = BeginGetResponse(callback =>
-            {
-                resp = EndGetResponse(callback);
-            }, null);
+            IAsyncResult res = Request.BeginGetResponse(callback =>
+                {
+                    resp = EndGetResponse(callback);
+                }, null);
 
             res.AsyncWaitHandle.WaitOne();
             return resp;
@@ -256,24 +279,6 @@ namespace LocalAngle.Net
         #endregion
 
         #region Protected Methods
-
-        /// <summary>
-        /// Populates a <see cref="T:System.Runtime.Serialization.SerializationInfo"/> with the data needed to serialize the target object.
-        /// </summary>
-        /// <param name="serializationInfo">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> to populate with data.</param>
-        /// <param name="streamingContext">A <see cref="T:System.Runtime.Serialization.StreamingContext"/> that specifies the destination for this serialization.</param>
-        protected override void GetObjectData(SerializationInfo serializationInfo, StreamingContext streamingContext)
-        {
-            if (serializationInfo == null)
-            {
-                throw new ArgumentNullException("serializationInfo");
-            }
-
-            base.GetObjectData(serializationInfo, streamingContext);
-
-            serializationInfo.AddValue("Timestamp", _timeStamp);
-            //TODO: Serialize the rest
-        }
 
         protected void Sign()
         {
@@ -336,13 +341,13 @@ namespace LocalAngle.Net
             {
                 // TODO: consider using an attribute on the enum 
                 case OAuthSignatureMethod.HmacSha1:
-                    HMACSHA1 hmacsha1 = new HMACSHA1();
-                    hmacsha1.Key = Encoding.UTF8.GetBytes(string.Format(CultureInfo.InvariantCulture, "{0}&{1}", EscapeDataString(OAuthCredentials.ConsumerSecret), EscapeDataString(OAuthCredentials.TokenSecret)));
+                    IBuffer KeyMaterial = CryptographicBuffer.ConvertStringToBinary(string.Format(CultureInfo.InvariantCulture, "{0}&{1}", EscapeDataString(OAuthCredentials.ConsumerSecret), EscapeDataString(OAuthCredentials.TokenSecret)), BinaryStringEncoding.Utf8);
+                    MacAlgorithmProvider HmacSha1Provider = MacAlgorithmProvider.OpenAlgorithm("HMAC_SHA1");
+                    CryptographicKey MacKey = HmacSha1Provider.CreateKey(KeyMaterial);
+                    IBuffer DataToBeSigned = CryptographicBuffer.ConvertStringToBinary(requestToSign, BinaryStringEncoding.Utf8);
+                    IBuffer SignatureBuffer = CryptographicEngine.Sign(MacKey, DataToBeSigned);
 
-                    byte[] dataBuffer = System.Text.Encoding.UTF8.GetBytes(requestToSign);
-                    byte[] hashBytes = hmacsha1.ComputeHash(dataBuffer);
-
-                    sortedParameters.Add(new RequestParameter("oauth_signature", EscapeDataString(Convert.ToBase64String(hashBytes))));
+                    sortedParameters.Add(new RequestParameter("oauth_signature", EscapeDataString(CryptographicBuffer.EncodeToBase64String(SignatureBuffer))));
                     break;
 
                 case OAuthSignatureMethod.Plaintext:
@@ -360,7 +365,6 @@ namespace LocalAngle.Net
             {
                 Uri targetUri = new Uri(string.Format(CultureInfo.InvariantCulture, "{0}?{1}", Request.RequestUri, normalisedParameters));
                 HttpWebRequest newRequest = WebRequest.Create(targetUri) as HttpWebRequest;
-                newRequest.UserAgent = Request.UserAgent;
                 newRequest.Method = "GET";
                 // TODO: If we expose more properties from the encapsulated HttpWebRequest, we'll need to copy them across here.
                 Request = newRequest;
@@ -369,13 +373,18 @@ namespace LocalAngle.Net
             {
                 // TODO: Would need to do something magical if we were to support multi-part uploads here.
                 Request.ContentType = "application/x-www-form-urlencoded";
-                using (Stream req = Request.GetRequestStream())
+
+                object Foo = new object();
+                Request.BeginGetRequestStream(callback =>
                 {
-                    using (StreamWriter writer = new StreamWriter(req))
+                    using (Stream req = Request.EndGetRequestStream(callback))
                     {
-                        writer.Write(normalisedParameters);
+                        using (StreamWriter writer = new StreamWriter(req))
+                        {
+                            writer.Write(normalisedParameters);
+                        }
                     }
-                }
+                }, Foo);
             }
         }
         
@@ -405,7 +414,7 @@ namespace LocalAngle.Net
                 throw new ArgumentNullException("uri");
             }
 
-            if (string.Compare(uri.Scheme, Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) != 0 && string.Compare(uri.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase) != 0)
+            if (string.Compare(uri.Scheme, "http", StringComparison.OrdinalIgnoreCase) != 0 && string.Compare(uri.Scheme, "https", StringComparison.OrdinalIgnoreCase) != 0)
             {
                 throw new ArgumentOutOfRangeException("uri", "Only HTTP and HTTPS schemes are supported for OAuth requests.");
             }
