@@ -86,7 +86,7 @@ namespace LocalAngle.Net
                 throw new ArgumentNullException("uri");
             }
 
-            if (string.Compare(uri.Scheme, Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) != 0 && string.Compare(uri.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase) != 0)
+            if (string.Compare(uri.Scheme, "http", StringComparison.OrdinalIgnoreCase) != 0 && string.Compare(uri.Scheme, "https", StringComparison.OrdinalIgnoreCase) != 0)
             {
                 throw new ArgumentOutOfRangeException("uri", "Only HTTP and HTTPS schemes are supported for retrieving request parameterss.");
             }

@@ -30,7 +30,7 @@ namespace LocalAngle
                 return;
             }
 
-            string value = postcode.ToUpper(CultureInfo.InvariantCulture);
+            string value = postcode.ToUpperInvariant();
             var results = Postcode.Parse.Match(value);
             if (results.Success)
             {
