@@ -73,7 +73,7 @@ namespace LocalAngle.Entities.Test
         [TestMethod()]
         public void SpecialEventConstructorTest()
         {
-            SortableCollection<SpecialEvent> col = new SortableCollection<SpecialEvent>();
+            List<SpecialEvent> col = new List<SpecialEvent>();
 
             SpecialEvent target = new SpecialEvent();
             target.Name = "Test event name";

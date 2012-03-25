@@ -220,37 +220,61 @@ namespace LocalAngle.Net
             Request.Abort();
         }
 
+        /// <exception cref="T:System.NotImplementedException">Any attempt is made to access the method, when the method is not overridden in a descendant class. </exception>
         public override IAsyncResult BeginGetRequestStream(AsyncCallback callback, object state)
         {
             return base.BeginGetRequestStream(callback, state);
         }
 
+        /// <summary>
+        /// Begins an asynchronous request for an OAuth resource.
+        /// </summary>
+        /// <param name="callback">The <see cref="AsyncCallback"/> delegate.</param>
+        /// <param name="state">An object containing state information for this asynchronous request.</param>
+        /// <returns>
+        /// An <see cref="IAsyncResult"/> that references the asynchronous request.
+        /// </returns>
         public override IAsyncResult BeginGetResponse(AsyncCallback callback, object state)
         {
             Sign();
             return Request.BeginGetResponse(callback, state);
         }
 
+        /// <exception cref="T:System.NotImplementedException">Any attempt is made to access the method, when the method is not overridden in a descendant class. </exception>
         public override Stream EndGetRequestStream(IAsyncResult asyncResult)
         {
             return base.EndGetRequestStream(asyncResult);
         }
 
+        /// <summary>
+        /// Returns a <see cref="WebResponse"/>.
+        /// </summary>
+        /// <param name="asyncResult">An <see cref="IAsyncResult"/> that references a pending request for a response.</param>
+        /// <returns>
+        /// A <see cref="WebResponse"/> that contains a response to the OAuth request.
+        /// </returns>
         public override WebResponse EndGetResponse(IAsyncResult asyncResult)
         {
             return Request.EndGetResponse(asyncResult);
         }
 
+        /// <summary>
+        /// Returns a response to an OAuth request.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="WebResponse"/> containing the response to the OAuth request.
+        /// </returns>
+        /// <PermissionSet>
+        ///   <IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/>
+        /// </PermissionSet>
+        /// <remarks>
+        /// Just wraps the IAsync version
+        /// </remarks>
         public override WebResponse GetResponse()
         {
-            WebResponse resp = null;
-            IAsyncResult res = BeginGetResponse(callback =>
-            {
-                resp = EndGetResponse(callback);
-            }, null);
-
+            IAsyncResult res = BeginGetResponse(callback => {}, null);
             res.AsyncWaitHandle.WaitOne();
-            return resp;
+            return EndGetResponse(res);
         }
 
         #endregion
@@ -275,6 +299,9 @@ namespace LocalAngle.Net
             //TODO: Serialize the rest
         }
 
+        /// <summary>
+        /// Performs the OAuth signing for the request
+        /// </summary>
         protected void Sign()
         {
             if (OAuthCredentials == null)
@@ -369,13 +396,18 @@ namespace LocalAngle.Net
             {
                 // TODO: Would need to do something magical if we were to support multi-part uploads here.
                 Request.ContentType = "application/x-www-form-urlencoded";
-                using (Stream req = Request.GetRequestStream())
+                IAsyncResult res = BeginGetRequestStream(callback =>
                 {
-                    using (StreamWriter writer = new StreamWriter(req))
+                    using (Stream req = EndGetRequestStream(callback))
                     {
-                        writer.Write(normalisedParameters);
+                        using (StreamWriter writer = new StreamWriter(req))
+                        {
+                            writer.Write(normalisedParameters);
+                        }
                     }
-                }
+                }, null);
+
+                res.AsyncWaitHandle.WaitOne();
             }
         }
         

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Runtime.Serialization;
 
 namespace LocalAngle
 {
-    [DataContract]
     public abstract class BindableBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
