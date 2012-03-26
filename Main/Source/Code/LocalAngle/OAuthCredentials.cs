@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace LocalAngle
 {
-    public struct OAuthCredentials : IOAuthCredentials
+    public struct OAuthCredentials : IOAuthCredentials, IEquatable<IOAuthCredentials>
     {
         #region Constructors
 
@@ -88,6 +85,55 @@ namespace LocalAngle
             {
                 _tokenSecret = value;
             }
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public override bool Equals(object obj)
+        {
+            IOAuthCredentials other = obj as IOAuthCredentials;
+            return Equals(other);
+        }
+
+        public bool Equals(IOAuthCredentials other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+            else
+            {
+                return other.ConsumerKey == this.ConsumerKey &&
+                    other.ConsumerSecret == this.ConsumerSecret &&
+                    other.Token == this.Token &&
+                    other.TokenSecret == this.TokenSecret;
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return this.ToString().GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return string.Concat(this.ConsumerKey, ":", this.Token);
+        }
+
+        #endregion
+
+        #region Public Static Methods
+
+        public static bool operator ==(OAuthCredentials left, IOAuthCredentials right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(OAuthCredentials left, IOAuthCredentials right)
+        {
+            return !left.Equals(right);
         }
 
         #endregion

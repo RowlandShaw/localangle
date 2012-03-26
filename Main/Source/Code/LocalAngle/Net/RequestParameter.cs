@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Globalization;
-
+    
 namespace LocalAngle.Net
 {
     /// <summary>
@@ -10,11 +10,17 @@ namespace LocalAngle.Net
     /// </summary>
     public struct RequestParameter : IComparable<RequestParameter>, IEquatable<RequestParameter>
     {
+        #region Constructors
+
         public RequestParameter(string name, string value)
         {
             _name = name;
             _value = value;
         }
+
+        #endregion
+
+        #region Public Properties
 
         private string _name;
         public string Name
@@ -33,6 +39,10 @@ namespace LocalAngle.Net
                 return _value;
             }
         }
+
+        #endregion
+
+        #region Public Methods
 
         public int CompareTo(RequestParameter other)
         {
@@ -72,7 +82,43 @@ namespace LocalAngle.Net
         {
             return Name.GetHashCode();
         }
-    }
+
+            #endregion
+
+        #region Public Static Methods
+
+        public static bool operator ==(RequestParameter left, RequestParameter right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(RequestParameter left, RequestParameter right)
+        {
+            return !left.Equals(right);
+        }
+
+        public static bool operator >(RequestParameter left, RequestParameter right)
+        {
+            return left.CompareTo(right) > 0;
+        }
+
+        public static bool operator <=(RequestParameter left, RequestParameter right)
+        {
+            return left.CompareTo(right) <= 0;
+        }
+
+        public static bool operator >=(RequestParameter left, RequestParameter right)
+        {
+            return left.CompareTo(right) >= 0;
+        }
+
+        public static bool operator <(RequestParameter left, RequestParameter right)
+        {
+            return left.CompareTo(right) < 0;
+        }
+
+        #endregion
+}
 
     public static class RequestParameterExtensions
     {

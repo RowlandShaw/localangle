@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Runtime.Serialization.Json;
 using LocalAngle.Events;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using LocalAngle;
-
+using LocalAngle.Net;
 
 namespace LocalAngle.Entities.Test
 {
@@ -66,6 +67,7 @@ namespace LocalAngle.Entities.Test
         //
         #endregion
 
+        private IOAuthCredentials credentials = new OAuthCredentials("ngcA6zb9mcLwj15Hyjy0vA", "jmOYyX43N3W5S0gHsX2lP7OzUPavVUEigTrsdvyirG4", "86389544-grD6t7NnRyVPyOFNwkH4ciL3rhdT2ayN1RmLMg1Q", "6h45JPBeXaMq0TngKolfku6M2tB6gmTmIQshBZgL8i8"); // TODO: Initialize to an appropriate value
 
         /// <summary>
         ///A test for SpecialEvent Constructor
@@ -107,10 +109,31 @@ namespace LocalAngle.Entities.Test
         {
             Postcode location = new Postcode("IP3 9SJ"); // TODO: Initialize to an appropriate value
             double range = 0F; // TODO: Initialize to an appropriate value
-            IOAuthCredentials credentials = new OAuthCredentials("ngcA6zb9mcLwj15Hyjy0vA", "jmOYyX43N3W5S0gHsX2lP7OzUPavVUEigTrsdvyirG4", "86389544-grD6t7NnRyVPyOFNwkH4ciL3rhdT2ayN1RmLMg1Q", "6h45JPBeXaMq0TngKolfku6M2tB6gmTmIQshBZgL8i8"); // TODO: Initialize to an appropriate value
             IEnumerable<SpecialEvent> actual;
             actual = SpecialEvent.SearchNear(location, range, credentials);
             Assert.Inconclusive("Verify the correctness of this test method.");
+        }
+
+        /// <summary>
+        ///A test to verify trust level
+        ///</summary>
+        [TestMethod()]
+        public void VerifyTrustTest()
+        {
+            Uri uri = new Uri("http://api.angle.uk.com/oauth/1.0/auth/verifytrust");
+            string expected = "0"; // Expect the user token / app key associated to UAT to report no access
+
+            OAuthWebRequest req = OAuthWebRequest.Create(uri, credentials);
+
+            // Get the response
+            HttpWebResponse actualResponse = req.GetResponse() as HttpWebResponse;
+            Assert.IsNotNull(actualResponse);
+
+            // Read the message
+            StreamReader reader = new StreamReader(actualResponse.GetResponseStream());
+            string actual = reader.ReadToEnd();
+
+            Assert.AreEqual(expected, actual);
         }
     }
 }
