@@ -177,7 +177,7 @@ namespace LocalAngle.Net
                         throw new NotSupportedException("Haven't needed to implement RSA-SHA1 hashing yet, so I haven't. Sorry about that.");
 
                     default:
-                        throw new InvalidEnumArgumentException("SignatureMethod",(int)value,typeof(OAuthSignatureMethod));
+                        throw new InvalidEnumArgumentException("value",(int)value,typeof(OAuthSignatureMethod));
                 }
             }
         }
