@@ -162,6 +162,40 @@ namespace LocalAngle.Events
             }
         }
 
+        private PublishStatus _publishStatus = PublishStatus.Active;
+        public PublishStatus PublishStatus
+        {
+            get
+            {
+                return _publishStatus;
+            }
+            set
+            {
+                OnPropertyChanged("PublishStatus", ref _publishStatus, value);
+            }
+        }
+
+        private ICollection<string> _tags;
+        /// <summary>
+        /// Gets or sets the tags.
+        /// </summary>
+        /// <value>
+        /// The tags.
+        /// </value>
+        [DataMember]
+        public ICollection<string> Tags
+        {
+            get
+            {
+                if( _tags == null )
+                {
+                    _tags = new List<string>();
+                }
+
+                return _tags;
+            }
+        }
+
         private Uri _ticketUri;
         /// <summary>
         /// Gets or sets the URI for ticketing information.
