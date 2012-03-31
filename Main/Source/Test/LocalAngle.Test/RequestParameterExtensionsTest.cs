@@ -84,5 +84,25 @@ namespace LocalAngle.Net.Test
             Assert.AreEqual(expectedName, actual[0].Name);
             Assert.AreEqual(expectedValue, actual[0].Value);
         }
+
+        /// <summary>
+        ///A test for GetParameters
+        ///</summary>
+        [TestMethod()]
+        public void GetEscapedParametersTest()
+        {
+            Uri uri = new Uri("http://term.ie/oauth/example/echo_api.php?method=test%20escaped+data");
+            int expectedCount = 1;
+            string expectedName = "method";
+            string expectedValue = "test escaped data";
+
+            IList<RequestParameter> actual;
+            actual = RequestParameterExtensions.GetParameters(uri);
+
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(expectedCount, actual.Count);
+            Assert.AreEqual(expectedName, actual[0].Name);
+            Assert.AreEqual(expectedValue, actual[0].Value);
+        }
     }
 }

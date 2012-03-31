@@ -67,7 +67,7 @@ namespace LocalAngle.Entities.Test
         //
         #endregion
 
-        private IOAuthCredentials credentials = new OAuthCredentials("ngcA6zb9mcLwj15Hyjy0vA", "jmOYyX43N3W5S0gHsX2lP7OzUPavVUEigTrsdvyirG4", "86389544-grD6t7NnRyVPyOFNwkH4ciL3rhdT2ayN1RmLMg1Q", "6h45JPBeXaMq0TngKolfku6M2tB6gmTmIQshBZgL8i8"); // TODO: Initialize to an appropriate value
+        private IOAuthCredentials uatCredentials = new OAuthCredentials("ngcA6zb9mcLwj15Hyjy0vA", "jmOYyX43N3W5S0gHsX2lP7OzUPavVUEigTrsdvyirG4", "86389544-grD6t7NnRyVPyOFNwkH4ciL3rhdT2ayN1RmLMg1Q", "6h45JPBeXaMq0TngKolfku6M2tB6gmTmIQshBZgL8i8"); // TODO: Initialize to an appropriate value
 
         /// <summary>
         ///A test for SpecialEvent Constructor
@@ -83,6 +83,8 @@ namespace LocalAngle.Entities.Test
             target.Location = new Postcode("IP1 5PH");
             target.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
             target.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
+            target.Tags.Add("gig");
+            target.Tags.Add("jazz");
             col.Add(target);
 
             SpecialEvent target2 = new SpecialEvent();
@@ -110,8 +112,7 @@ namespace LocalAngle.Entities.Test
             Postcode location = new Postcode("IP3 9SJ"); // TODO: Initialize to an appropriate value
             double range = 0F; // TODO: Initialize to an appropriate value
             IEnumerable<SpecialEvent> actual;
-            actual = SpecialEvent.SearchNear(location, range, credentials);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            actual = SpecialEvent.SearchNear(location, range, uatCredentials);
         }
 
         /// <summary>
@@ -123,7 +124,7 @@ namespace LocalAngle.Entities.Test
             Uri uri = new Uri("http://api.angle.uk.com/oauth/1.0/auth/verifytrust");
             string expected = "0"; // Expect the user token / app key associated to UAT to report no access
 
-            OAuthWebRequest req = OAuthWebRequest.Create(uri, credentials);
+            OAuthWebRequest req = OAuthWebRequest.Create(uri, uatCredentials);
 
             // Get the response
             HttpWebResponse actualResponse = req.GetResponse() as HttpWebResponse;
@@ -134,6 +135,22 @@ namespace LocalAngle.Entities.Test
             string actual = reader.ReadToEnd();
 
             Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        ///A test for Save
+        ///</summary>
+        [TestMethod()]
+        public void SaveTest()
+        {
+            SpecialEvent target = new SpecialEvent(); // TODO: Initialize to an appropriate value
+            target.StartTime = new DateTime(2012, 03, 31, 13, 45, 0);
+            target.EndTime = new DateTime(2012, 03, 31, 13, 45, 59);
+            target.VenueName = "UAT Land";
+            target.Location = new Postcode("IP11 4RL"); // Completely made up postcode, but should be syntactically valid (heck, it might even be a real one)
+            target.Tags.Add("gig"); // Pretend to be a live music event
+            target.Save(uatCredentials);
+            Assert.IsTrue(!string.IsNullOrEmpty(target.EventId));
         }
     }
 }
