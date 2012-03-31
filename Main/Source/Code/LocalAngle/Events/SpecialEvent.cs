@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
@@ -10,7 +11,7 @@ using LocalAngle.Net;
 namespace LocalAngle.Events
 {
     [DataContract]
-    public class SpecialEvent : BindableBase
+    public class SpecialEvent : BindableBase, IComparable<SpecialEvent>, IEquatable<SpecialEvent>
     {
         #region Constructors
 
@@ -247,6 +248,69 @@ namespace LocalAngle.Events
         #region Public Methods
 
         /// <summary>
+        /// Compares the current object with another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// A 32-bit signed integer that indicates the relative order of the objects being compared. The return value has the following meanings:
+        /// Value
+        /// Meaning
+        /// Less than zero
+        /// This object is less than the <paramref name="other"/> parameter.
+        /// Zero
+        /// This object is equal to <paramref name="other"/>.
+        /// Greater than zero
+        /// This object is greater than <paramref name="other"/>.
+        /// </returns>
+        public int CompareTo(SpecialEvent other)
+        {
+            if (object.ReferenceEquals(this, other))
+            {
+                return 0;
+            }
+
+            if (object.ReferenceEquals(null, other))
+            {
+                return -1;
+            }
+
+            int retval = this.StartTime.CompareTo(other.StartTime);
+            if (retval != 0)
+            {
+                retval = this.EndTime.CompareTo(other.EndTime);
+            }
+
+            if (retval != 0)
+            {
+                retval = string.Compare(this.VenueName, other.VenueName, StringComparison.CurrentCultureIgnoreCase);
+            }
+
+            if (retval != 0)
+            {
+                retval = string.Compare(this.Postcode, other.Postcode, StringComparison.CurrentCultureIgnoreCase);
+            }
+
+            // TODO: Other fallback comparisons.
+
+            return retval;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as SpecialEvent);
+        }
+
+        public bool Equals(SpecialEvent other)
+        {
+            return CompareTo(other) == 0;
+        }
+
+        public override int GetHashCode()
+        {
+            return StartTime.GetHashCode() ^ EndTime.GetHashCode();
+        }
+
+        /// <summary>
         /// Saves changes to the event using the specified credentials.
         /// </summary>
         /// <param name="credentials">The credentials.</param>
@@ -265,6 +329,10 @@ namespace LocalAngle.Events
             // TODO:
             req.RequestParameters.Add(new RequestParameter("name", Name));
             req.RequestParameters.Add(new RequestParameter("description", Description));
+            req.RequestParameters.Add(new RequestParameter("locname", VenueName));
+            req.RequestParameters.Add(new RequestParameter("locpostcode", Location.ToString()));
+            req.RequestParameters.Add(new RequestParameter("start", StartTime.ToString(DateFormat)));
+            req.RequestParameters.Add(new RequestParameter("end", EndTime.ToString(DateFormat)));
             HttpWebResponse res = req.GetResponse() as HttpWebResponse;
 
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(SpecialEvent));
@@ -280,13 +348,47 @@ namespace LocalAngle.Events
                 this.EndTime = retval.EndTime;
                 this.TicketUri = retval.TicketUri;
             }
-
-            throw new NotImplementedException();
         }
 
         #endregion
 
+        #region Protected Properties
+
+        private const string DateFormat = "yyyy-MM-dd HH:mm";
+
+        #endregion
+
         #region Public Static Methods
+
+        public static bool operator ==(SpecialEvent left, SpecialEvent right)
+        {
+            return object.ReferenceEquals(left,right) || left.Equals(right);
+        }
+
+        public static bool operator !=(SpecialEvent left, SpecialEvent right)
+        {
+            return !(left == right);
+        }
+
+        public static bool operator >(SpecialEvent left, SpecialEvent right)
+        {
+            return left.CompareTo(right) > 0;
+        }
+
+        public static bool operator <=(SpecialEvent left, SpecialEvent right)
+        {
+            return left.CompareTo(right) <= 0;
+        }
+
+        public static bool operator >=(SpecialEvent left, SpecialEvent right)
+        {
+            return left.CompareTo(right) >= 0;
+        }
+
+        public static bool operator <(SpecialEvent left, SpecialEvent right)
+        {
+            return left.CompareTo(right) < 0;
+        }
 
         /// <summary>
         /// Searches for events near the specified location.
@@ -297,7 +399,7 @@ namespace LocalAngle.Events
         /// <returns></returns>
         public static IEnumerable<SpecialEvent> SearchNear(Postcode location, double range, IOAuthCredentials credentials)
         {
-            return SearchNear(location, range, default(DateTime), credentials);
+            return SearchNear(location, range, default(DateTime), null, credentials);
         }
 
         /// <summary>
@@ -310,12 +412,30 @@ namespace LocalAngle.Events
         /// <returns></returns>
         public static IEnumerable<SpecialEvent> SearchNear(Postcode location, double range, DateTime since, IOAuthCredentials credentials)
         {
+            return SearchNear(location, range, default(DateTime), null, credentials);
+        }
+
+        /// <summary>
+        /// Searches for events near the specified location.
+        /// </summary>
+        /// <param name="location">The location to search near.</param>
+        /// <param name="range">The range in miles to search for events in.</param>
+        /// <param name="since">The date to bring back changes since.</param>
+        /// <param name="topic">The category of events to bring back.</param>
+        /// <param name="credentials">The credentials.</param>
+        /// <returns></returns>
+        public static IEnumerable<SpecialEvent> SearchNear(Postcode location, double range, DateTime since, string topic, IOAuthCredentials credentials)
+        {
             OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/events/nearby"), credentials);
             req.RequestParameters.Add(new RequestParameter("location", Uri.EscapeDataString(location.ToString())));
             req.RequestParameters.Add(new RequestParameter("range",range.ToString()));
             if (since != default(DateTime))
             {
                 req.RequestParameters.Add(new RequestParameter("since", since.ToUnixTime().ToString()));
+            }
+            if (! string.IsNullOrEmpty(topic))
+            {
+                req.RequestParameters.Add(new RequestParameter("topic", topic));
             }
             HttpWebResponse res = req.GetResponse() as HttpWebResponse;
 

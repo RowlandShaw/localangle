@@ -2,6 +2,8 @@
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Net;
     
 namespace LocalAngle.Net
 {
@@ -36,7 +38,7 @@ namespace LocalAngle.Net
         {
             get
             {
-                return _value;
+                return (_value == null ? string.Empty :_value);
             }
         }
 
@@ -46,6 +48,16 @@ namespace LocalAngle.Net
 
         public int CompareTo(RequestParameter other)
         {
+            if (object.ReferenceEquals(this, other))
+            {
+                return 0;
+            }
+
+            if (object.ReferenceEquals(null, other))
+            {
+                return -1;
+            }
+
             int retval = string.Compare(this.Name, other.Name, StringComparison.Ordinal);
 
             if (retval == 0)
@@ -54,11 +66,6 @@ namespace LocalAngle.Net
             }
 
             return retval;
-        }
-
-        public override string ToString()
-        {
-            return string.Format(CultureInfo.InvariantCulture, "{0}={1}", Name, Value);
         }
 
         public override bool Equals(object obj)
@@ -83,7 +90,18 @@ namespace LocalAngle.Net
             return Name.GetHashCode();
         }
 
-            #endregion
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance, escaped ready for use on a URI.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String"/> that represents this instance.
+        /// </returns>
+        public override string ToString()
+        {
+            return string.Format(CultureInfo.InvariantCulture, "{0}={1}", Uri.EscapeDataString(Name), Uri.EscapeDataString(Value));
+        }
+
+        #endregion
 
         #region Public Static Methods
 
@@ -118,7 +136,7 @@ namespace LocalAngle.Net
         }
 
         #endregion
-}
+    }
 
     public static class RequestParameterExtensions
     {
@@ -138,7 +156,7 @@ namespace LocalAngle.Net
             }
 
             List<RequestParameter> retval = new List<RequestParameter>();
-            string raw = uri.Query;
+            string raw = uri.Query.Replace('+', ' ');
             if (raw.StartsWith("?", StringComparison.OrdinalIgnoreCase))
             {
                 // Remove the first character
@@ -159,11 +177,11 @@ namespace LocalAngle.Net
                     int index = pair.IndexOf('=');
                     if (index < 0)
                     {
-                        retval.Add(new RequestParameter(pair, string.Empty));
+                        retval.Add(new RequestParameter(Uri.UnescapeDataString(pair), string.Empty));
                     }
                     else
                     {
-                        retval.Add(new RequestParameter(pair.Substring(0,index), pair.Substring(index + 1,pair.Length - (index + 1))));
+                        retval.Add(new RequestParameter(Uri.UnescapeDataString(pair.Substring(0, index)), Uri.UnescapeDataString(pair.Substring(index + 1, pair.Length - (index + 1)))));
                     }
                 }
             }
