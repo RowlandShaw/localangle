@@ -55,7 +55,7 @@ namespace LocalAngle.Net
             StringBuilder bob = new StringBuilder();
             bob.Append(uri.Scheme.ToLowerInvariant());
             bob.Append("://");
-            bob.Append(uri.Host);
+            bob.Append(uri.Host.ToLowerInvariant());
             if ((string.Compare(uri.Scheme, Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) == 0 & uri.Port != 80) || (string.Compare(uri.Scheme, Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase) == 0 & uri.Port != 443))
             {
                 bob.Append(':');
@@ -213,43 +213,83 @@ namespace LocalAngle.Net
             Request.Abort();
         }
 
+        /// <summary>
+        /// When overridden in a descendant class, provides an asynchronous version of the <see cref="M:System.Net.WebRequest.GetRequestStream"/> method.
+        /// </summary>
+        /// <param name="callback">The <see cref="T:System.AsyncCallback"/> delegate.</param>
+        /// <param name="state">An object containing state information for this asynchronous request.</param>
+        /// <returns>
+        /// An <see cref="T:System.IAsyncResult"/> that references the asynchronous request.
+        /// </returns>
         public override IAsyncResult BeginGetRequestStream(AsyncCallback callback, object state)
         {
-            return base.BeginGetRequestStream(callback, state);
+            return Request.BeginGetRequestStream(callback, state);
         }
 
+        /// <summary>
+        /// Begins an asynchronous request for an OAuth resource.
+        /// </summary>
+        /// <param name="callback">The <see cref="AsyncCallback"/> delegate.</param>
+        /// <param name="state">An object containing state information for this asynchronous request.</param>
+        /// <returns>
+        /// An <see cref="IAsyncResult"/> that references the asynchronous request.
+        /// </returns>
         public override IAsyncResult BeginGetResponse(AsyncCallback callback, object state)
         {
             Sign();
             return Request.BeginGetResponse(callback, state);
         }
 
+        /// <summary>
+        /// When overridden in a descendant class, returns a <see cref="T:System.IO.Stream"/> for writing data to the Internet resource.
+        /// </summary>
+        /// <param name="asyncResult">An <see cref="T:System.IAsyncResult"/> that references a pending request for a stream.</param>
+        /// <returns>
+        /// A <see cref="T:System.IO.Stream"/> to write data to.
+        /// </returns>
         public override Stream EndGetRequestStream(IAsyncResult asyncResult)
         {
-            return base.EndGetRequestStream(asyncResult);
+            return Request.EndGetRequestStream(asyncResult);
         }
 
+        /// <summary>
+        /// Returns a <see cref="WebResponse"/>.
+        /// </summary>
+        /// <param name="asyncResult">An <see cref="IAsyncResult"/> that references a pending request for a response.</param>
+        /// <returns>
+        /// A <see cref="WebResponse"/> that contains a response to the OAuth request.
+        /// </returns>
         public override WebResponse EndGetResponse(IAsyncResult asyncResult)
         {
             return Request.EndGetResponse(asyncResult);
         }
 
+        /// <summary>
+        /// Returns a response to an OAuth request.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="WebResponse"/> containing the response to the OAuth request.
+        /// </returns>
+        /// <PermissionSet>
+        ///   <IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/>
+        /// </PermissionSet>
+        /// <remarks>
+        /// Just wraps the IAsync version
+        /// </remarks>
         public WebResponse GetResponse()
         {
-            WebResponse resp = null;
-            IAsyncResult res = BeginGetResponse(callback =>
-            {
-                resp = EndGetResponse(callback);
-            }, null);
-
+            IAsyncResult res = BeginGetResponse(callback => {}, null);
             res.AsyncWaitHandle.WaitOne();
-            return resp;
+            return EndGetResponse(res);
         }
 
         #endregion
 
         #region Protected Methods
 
+        /// <summary>
+        /// Performs the OAuth signing for the request
+        /// </summary>
         protected void Sign()
         {
             if (OAuthCredentials == null)
@@ -266,76 +306,49 @@ namespace LocalAngle.Net
             // Decouple from externally visible parameters
             // TODO: consider changing to use a list that maintains order.
             // TODO: If we support multipart uploads, Twitter reckons you don't include anything other than the oauth fields in the signature
-            List<RequestParameter> sortedParameters = new List<RequestParameter>(RequestParameters);
+            List<RequestParameter> signingParameters = new List<RequestParameter>(RequestParameters);
 
             // Add in OAuth parameters
-            sortedParameters.Add(new RequestParameter("oauth_consumer_key", EscapeDataString(OAuthCredentials.ConsumerKey)));
+            signingParameters.Add(new RequestParameter("oauth_consumer_key", EscapeDataString(OAuthCredentials.ConsumerKey)));
 
             // For Plain text these aren't required (after all, the secrets are transferred in plain text)
-            sortedParameters.Add(new RequestParameter("oauth_nonce", EscapeDataString(Nonce)));
-            sortedParameters.Add(new RequestParameter("oauth_timestamp", EscapeDataString(Timestamp)));
+            signingParameters.Add(new RequestParameter("oauth_nonce", EscapeDataString(Nonce)));
+            signingParameters.Add(new RequestParameter("oauth_timestamp", EscapeDataString(Timestamp)));
 
             switch (SignatureMethod)
             {
                     // TODO: consider using an attribute on the enum 
                 case OAuthSignatureMethod.HmacSha1:
-                    sortedParameters.Add(new RequestParameter("oauth_signature_method", "HMAC-SHA1"));
+                    signingParameters.Add(new RequestParameter("oauth_signature_method", "HMAC-SHA1"));
                     break;
                 
                 case OAuthSignatureMethod.Plaintext:
-                    sortedParameters.Add(new RequestParameter("oauth_signature_method", "PLAINTEXT"));
+                    signingParameters.Add(new RequestParameter("oauth_signature_method", "PLAINTEXT"));
                     break;
 
                 case OAuthSignatureMethod.RsaSha1:
-                    sortedParameters.Add(new RequestParameter("oauth_signature_method", "RSA-SHA1"));
+                    signingParameters.Add(new RequestParameter("oauth_signature_method", "RSA-SHA1"));
                     break;
             }
 
             if (!string.IsNullOrEmpty(OAuthCredentials.Token))
             {
                 // User token is specified, so let the server know (so it can look up the user secret and verify the request)
-                sortedParameters.Add(new RequestParameter("oauth_token", EscapeDataString(OAuthCredentials.Token)));
+                signingParameters.Add(new RequestParameter("oauth_token", EscapeDataString(OAuthCredentials.Token)));
             }
 
-            sortedParameters.Add(new RequestParameter("oauth_version", "1.0"));
-
-            // Force the order to be right (might become obsolete "later")
-            sortedParameters.Sort(ParameterComparer);
-
-            string normalisedParameters = string.Join("&", (from RequestParameter p in sortedParameters select p.ToString()).ToArray());
+            signingParameters.Add(new RequestParameter("oauth_version", "1.0"));
 
             // Build the digest
-            string requestToSign = string.Format(CultureInfo.InvariantCulture, "{0}&{1}&{2}", Method.ToUpperInvariant(), EscapeDataString(Request.RequestUri.AbsoluteUri), EscapeDataString(normalisedParameters));
-
-            switch (SignatureMethod)
-            {
-                // TODO: consider using an attribute on the enum 
-                case OAuthSignatureMethod.HmacSha1:
-                    using (HMACSHA1 hmacsha1 = new HMACSHA1())
-                    {
-                        hmacsha1.Key = Encoding.UTF8.GetBytes(string.Format(CultureInfo.InvariantCulture, "{0}&{1}", EscapeDataString(OAuthCredentials.ConsumerSecret), EscapeDataString(OAuthCredentials.TokenSecret)));
-
-                        byte[] dataBuffer = System.Text.Encoding.UTF8.GetBytes(requestToSign);
-                        byte[] hashBytes = hmacsha1.ComputeHash(dataBuffer);
-
-                        sortedParameters.Add(new RequestParameter("oauth_signature", EscapeDataString(Convert.ToBase64String(hashBytes))));
-                    }
-                    break;
-
-                case OAuthSignatureMethod.Plaintext:
-                    sortedParameters.Add(new RequestParameter("oauth_signature", EscapeDataString(string.Format(CultureInfo.InvariantCulture, "{0}&{1}", OAuthCredentials.ConsumerSecret, OAuthCredentials.TokenSecret))));
-                    break;
-
-                case OAuthSignatureMethod.RsaSha1:
-                    throw new NotImplementedException();
-            }
+            string baseString = GenerateBaseString(Method,Request.RequestUri, signingParameters);
+            signingParameters.Add(new RequestParameter("oauth_signature", GenerateSignature(OAuthCredentials.ConsumerSecret, OAuthCredentials.TokenSecret, baseString, SignatureMethod)));
 
             // Righty, rebuild the request
             // No need to UriEncode anything as the things we've added have been URI encoded as we went along :)
-            normalisedParameters = string.Join("&", (from RequestParameter p in sortedParameters select p.ToString()).ToArray());
             if (string.Compare(Method, "GET", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                Uri targetUri = new Uri(string.Format(CultureInfo.InvariantCulture, "{0}?{1}", Request.RequestUri, normalisedParameters));
+                string uri = string.Format(CultureInfo.InvariantCulture, "{0}?{1}", Request.RequestUri, NormalizeParameters(signingParameters));
+                Uri targetUri = new Uri(uri);
                 HttpWebRequest newRequest = WebRequest.Create(targetUri) as HttpWebRequest;
                 newRequest.UserAgent = Request.UserAgent;
                 newRequest.Method = "GET";
@@ -352,7 +365,7 @@ namespace LocalAngle.Net
                     {
                         using (StreamWriter writer = new StreamWriter(req))
                         {
-                            writer.Write(normalisedParameters);
+                            writer.Write(NormalizeParameters(signingParameters));
                         }
                     }
                 }, null);
@@ -428,10 +441,11 @@ namespace LocalAngle.Net
             }
 
             StringBuilder result = new StringBuilder();
+            byte[] utf8bytes = System.Text.Encoding.UTF8.GetBytes(value);
 
-            for (int Index = 0; Index < value.Length; Index++)
+            for (int Index = 0; Index < utf8bytes.Length; Index++)
             {
-                char symbol = value[Index];
+                byte symbol = utf8bytes[Index];
                 if ((symbol >= 'A' && symbol <= 'Z') ||
                     (symbol >= 'a' && symbol <= 'z') ||
                     (symbol >= '0' && symbol <= '9') ||
@@ -440,14 +454,82 @@ namespace LocalAngle.Net
                     symbol == '.' || 
                     symbol == '~')
                 {
-                    result.Append(symbol);
+                    result.Append((char)symbol);
                 }
                 else
                 {
-                    result.Append('%' + String.Format(CultureInfo.InvariantCulture, "{0:X2}", (int)symbol));
+                    result.Append('%' + String.Format(CultureInfo.InvariantCulture, "{0:X2}", (byte)symbol));
                 }
             }
             return result.ToString();
+        }
+
+        protected static string GenerateBaseString(string method, Uri uri, IEnumerable<RequestParameter> parameters)
+        {
+            return string.Format(CultureInfo.InvariantCulture, "{0}&{1}&{2}", method.ToUpperInvariant(), EscapeDataString(uri.AbsoluteUri), EscapeDataString(NormalizeParameters(parameters))); // Yes, really escape the data twice
+        }
+
+        /// <summary>
+        /// Generates the signature for the given consumer secret, token secret and base string using the specified method.
+        /// </summary>
+        /// <param name="consumerSecret">The consumer secret.</param>
+        /// <param name="tokenSecret">The token secret.</param>
+        /// <param name="baseString">The base string.</param>
+        /// <param name="method">The method.</param>
+        /// <returns></returns>
+        /// <remarks>Shouldn't escape its output, as the token will most likely be normalised again.</remarks>
+        protected static string GenerateSignature(string consumerSecret, string tokenSecret, string baseString, OAuthSignatureMethod method)
+        {
+            switch (method)
+            {
+                case OAuthSignatureMethod.HmacSha1:
+                    return GenerateHmacSignature(consumerSecret, tokenSecret, baseString);
+
+                case OAuthSignatureMethod.Plaintext:
+                    return GeneratePlaintextSignature(consumerSecret, tokenSecret, baseString);
+
+                case OAuthSignatureMethod.RsaSha1:
+                    throw new NotImplementedException();
+
+                default:
+                    throw new ArgumentOutOfRangeException("method", "Unexpected signature method");
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="consumerSecret"></param>
+        /// <param name="tokenSecret"></param>
+        /// <param name="baseString"></param>
+        /// <returns></returns>
+        /// <remarks>The HMAC-SHA1 signature method uses the HMAC-SHA1 signature algorithm as defined in [RFC2104] where the Signature Base String is the text and the key is the concatenated values (each first encoded per Parameter Encoding) of the Consumer Secret and Token Secret, separated by an '&amp;' character (ASCII code 38) even if empty.</remarks>
+        private static string GenerateHmacSignature(string consumerSecret, string tokenSecret, string baseString)
+        {
+            HMACSHA1 hmacsha1 = new HMACSHA1();
+            hmacsha1.Key = Encoding.UTF8.GetBytes(string.Format(CultureInfo.InvariantCulture, "{0}&{1}", EscapeDataString(consumerSecret), EscapeDataString(tokenSecret)));
+
+            byte[] dataBuffer = System.Text.Encoding.UTF8.GetBytes(baseString);
+            byte[] hashBytes = hmacsha1.ComputeHash(dataBuffer);
+
+            return Convert.ToBase64String(hashBytes);
+        }
+
+        private static string GeneratePlaintextSignature(string consumerSecret, string tokenSecret, string baseString)
+        {
+            return string.Format(CultureInfo.InvariantCulture, "{0}&{1}", EscapeDataString(consumerSecret), EscapeDataString(tokenSecret));
+        }
+
+        /// <summary>
+        /// Normalise parameters into order required for OAuth
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        protected static string NormalizeParameters(IEnumerable<RequestParameter> parameters)
+        {
+            List<RequestParameter> sortedParameters = new List<RequestParameter>(parameters);
+            sortedParameters.Sort(ParameterComparer);
+            return string.Join("&", (from RequestParameter p in sortedParameters select string.Format("{0}={1}", EscapeDataString(p.Name), EscapeDataString(p.Value))).ToArray());
         }
 
         private static IComparer<RequestParameter> ParameterComparer = new Comparer<RequestParameter>();
