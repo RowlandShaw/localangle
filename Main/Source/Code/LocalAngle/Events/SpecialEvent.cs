@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Globalization;
 using System.Net;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
@@ -10,11 +11,17 @@ using LocalAngle.Net;
 
 namespace LocalAngle.Events
 {
+    /// <summary>
+    /// Represents an event
+    /// </summary>
     [DataContract]
     public class SpecialEvent : BindableBase, IComparable<SpecialEvent>, IEquatable<SpecialEvent>
     {
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SpecialEvent"/> class.
+        /// </summary>
         public SpecialEvent()
         {
             Location = new Postcode();
@@ -164,6 +171,12 @@ namespace LocalAngle.Events
         }
 
         private PublishStatus _publishStatus = PublishStatus.Active;
+        /// <summary>
+        /// Gets or sets the publish status.
+        /// </summary>
+        /// <value>
+        /// The publish status.
+        /// </value>
         public PublishStatus PublishStatus
         {
             get
@@ -295,16 +308,36 @@ namespace LocalAngle.Events
             return retval;
         }
 
+        /// <summary>
+        /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
+        /// </summary>
+        /// <param name="obj">The <see cref="System.Object"/> to compare with this instance.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
         public override bool Equals(object obj)
         {
             return Equals(obj as SpecialEvent);
         }
 
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// true if the current object is equal to the other parameter; otherwise, false.
+        /// </returns>
         public bool Equals(SpecialEvent other)
         {
             return CompareTo(other) == 0;
         }
 
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// </returns>
         public override int GetHashCode()
         {
             return StartTime.GetHashCode() ^ EndTime.GetHashCode();
@@ -319,6 +352,11 @@ namespace LocalAngle.Events
         /// </remarks>
         public void Save(IOAuthCredentials credentials)
         {
+            if (credentials == null)
+            {
+                throw new ArgumentNullException("credentials", "You must supply the credentials to use to save the advert");
+            }
+
             if (string.IsNullOrEmpty(credentials.Token))
             {
                 throw new UnauthorizedAccessException("Insufficient details provided to be able to save changes.");
@@ -331,8 +369,8 @@ namespace LocalAngle.Events
             req.RequestParameters.Add(new RequestParameter("description", Description));
             req.RequestParameters.Add(new RequestParameter("locname", VenueName));
             req.RequestParameters.Add(new RequestParameter("locpostcode", Location.ToString()));
-            req.RequestParameters.Add(new RequestParameter("start", StartTime.ToString(DateFormat)));
-            req.RequestParameters.Add(new RequestParameter("end", EndTime.ToString(DateFormat)));
+            req.RequestParameters.Add(new RequestParameter("start", StartTime.ToString(DateFormat,CultureInfo.InvariantCulture)));
+            req.RequestParameters.Add(new RequestParameter("end", EndTime.ToString(DateFormat, CultureInfo.InvariantCulture)));
             req.RequestParameters.Add(new RequestParameter("tag", string.Join("-", Tags.ToArray())));
             HttpWebResponse res = req.GetResponse() as HttpWebResponse;
 
@@ -361,33 +399,92 @@ namespace LocalAngle.Events
 
         #region Public Static Methods
 
+        /// <summary>
+        /// Implements the operator ==.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public static bool operator ==(SpecialEvent left, SpecialEvent right)
         {
             return object.ReferenceEquals(left,right) || left.Equals(right);
         }
 
+        /// <summary>
+        /// Implements the operator !=.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
         public static bool operator !=(SpecialEvent left, SpecialEvent right)
         {
             return !(left == right);
         }
 
+        /// <summary>
+        /// Implements the operator &gt;.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
         public static bool operator >(SpecialEvent left, SpecialEvent right)
         {
+            if (left == null)
+            {
+                return (right == null ? false : true);
+            }
+
             return left.CompareTo(right) > 0;
         }
 
+        /// <summary>
+        /// Implements the operator &lt;=.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
         public static bool operator <=(SpecialEvent left, SpecialEvent right)
         {
-            return left.CompareTo(right) <= 0;
+            return !(left > right);
         }
 
+        /// <summary>
+        /// Implements the operator &gt;=.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
         public static bool operator >=(SpecialEvent left, SpecialEvent right)
         {
-            return left.CompareTo(right) >= 0;
+            return !(left < right);
         }
 
+        /// <summary>
+        /// Implements the operator &lt;.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
         public static bool operator <(SpecialEvent left, SpecialEvent right)
         {
+            if (left == null)
+            {
+                return false;
+            }
+
             return left.CompareTo(right) < 0;
         }
 
@@ -413,7 +510,7 @@ namespace LocalAngle.Events
         /// <returns></returns>
         public static IEnumerable<SpecialEvent> SearchNear(Postcode location, double range, DateTime since, IOAuthCredentials credentials)
         {
-            return SearchNear(location, range, default(DateTime), null, credentials);
+            return SearchNear(location, range, since, null, credentials);
         }
 
         /// <summary>
@@ -427,14 +524,19 @@ namespace LocalAngle.Events
         /// <returns></returns>
         public static IEnumerable<SpecialEvent> SearchNear(Postcode location, double range, DateTime since, string topic, IOAuthCredentials credentials)
         {
+            if (location == null)
+            {
+                throw new ArgumentNullException("location", "You must specify a location to search near");
+            }
+
             OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/events/nearby"), credentials);
             req.RequestParameters.Add(new RequestParameter("location", location.ToString()));
-            req.RequestParameters.Add(new RequestParameter("range",range.ToString()));
+            req.RequestParameters.Add(new RequestParameter("range",range.ToString(CultureInfo.InvariantCulture)));
             if (since != default(DateTime))
             {
-                req.RequestParameters.Add(new RequestParameter("since", since.ToUnixTime().ToString()));
+                req.RequestParameters.Add(new RequestParameter("since", since.ToUnixTime().ToString(CultureInfo.InvariantCulture)));
             }
-            if (! string.IsNullOrEmpty(topic))
+            if (!string.IsNullOrEmpty(topic))
             {
                 req.RequestParameters.Add(new RequestParameter("topic", topic));
             }

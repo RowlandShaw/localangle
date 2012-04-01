@@ -4,10 +4,18 @@ using System.ComponentModel;
 
 namespace LocalAngle
 {
-    public class CacheEntry<T>
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    internal class CacheEntry<T>
     {
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CacheEntry&lt;T&gt;"/> class.
+        /// </summary>
+        /// <param name="data">The data.</param>
         public CacheEntry(object data)
         {
             if ((this.Options & CacheOptions.UseWeakReferences) == CacheOptions.UseWeakReferences)
@@ -20,6 +28,11 @@ namespace LocalAngle
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CacheEntry&lt;T&gt;"/> class.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <param name="options">The options.</param>
         public CacheEntry(object data, CacheOptions options)
         {
             this._options = options;
@@ -33,6 +46,11 @@ namespace LocalAngle
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CacheEntry&lt;T&gt;"/> class.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <param name="maxAge">The max age.</param>
         public CacheEntry(object data, TimeSpan maxAge)
         {
             if ((this.Options & CacheOptions.UseWeakReferences) == CacheOptions.UseWeakReferences)
@@ -46,6 +64,12 @@ namespace LocalAngle
             this._maxage = maxAge;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CacheEntry&lt;T&gt;"/> class.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="birth">The birth.</param>
         public CacheEntry(object data, CacheOptions options, DateTime birth)
         {
             this._birth = birth;
@@ -60,6 +84,12 @@ namespace LocalAngle
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CacheEntry&lt;T&gt;"/> class.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="maxAge">The max age.</param>
         public CacheEntry(object data, CacheOptions options, TimeSpan maxAge)
         {
             this._maxage = maxAge;
@@ -74,6 +104,13 @@ namespace LocalAngle
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CacheEntry&lt;T&gt;"/> class.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="birth">The birth.</param>
+        /// <param name="maxAge">The max age.</param>
         public CacheEntry(object data, CacheOptions options, DateTime birth, TimeSpan maxAge)
         {
             this._birth = birth;

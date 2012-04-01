@@ -14,6 +14,11 @@ namespace LocalAngle.Net
     {
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RequestParameter"/> struct.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="value">The value.</param>
         public RequestParameter(string name, string value)
         {
             _name = name;
@@ -25,6 +30,9 @@ namespace LocalAngle.Net
         #region Public Properties
 
         private string _name;
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
         public string Name
         {
             get
@@ -34,6 +42,9 @@ namespace LocalAngle.Net
         }
 
         private string _value;
+        /// <summary>
+        /// Gets the value.
+        /// </summary>
         public string Value
         {
             get
@@ -46,6 +57,13 @@ namespace LocalAngle.Net
 
         #region Public Methods
 
+        /// <summary>
+        /// Compares the current object with another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// A 32-bit signed integer that indicates the relative order of the objects being compared. The return value has the following meanings: Value Meaning Less than zero This object is less than the other parameter.Zero This object is equal to other. Greater than zero This object is greater than other.
+        /// </returns>
         public int CompareTo(RequestParameter other)
         {
             if (object.ReferenceEquals(this, other))
@@ -68,6 +86,13 @@ namespace LocalAngle.Net
             return retval;
         }
 
+        /// <summary>
+        /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
+        /// </summary>
+        /// <param name="obj">The <see cref="System.Object"/> to compare with this instance.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
         public override bool Equals(object obj)
         {
             if (obj is RequestParameter)
@@ -80,11 +105,24 @@ namespace LocalAngle.Net
             }
         }
 
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// true if the current object is equal to the other parameter; otherwise, false.
+        /// </returns>
         public bool Equals(RequestParameter other)
         {
             return CompareTo(other) == 0;
         }
 
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// </returns>
         public override int GetHashCode()
         {
             return Name.GetHashCode();
@@ -105,39 +143,100 @@ namespace LocalAngle.Net
 
         #region Public Static Methods
 
+        /// <summary>
+        /// Implements the operator ==.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
         public static bool operator ==(RequestParameter left, RequestParameter right)
         {
-            return left.Equals(right);
+            return object.ReferenceEquals(left, right) || left.Equals(right);
         }
 
+        /// <summary>
+        /// Implements the operator !=.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
         public static bool operator !=(RequestParameter left, RequestParameter right)
         {
-            return !left.Equals(right);
+            return !(left == right);
         }
 
+        /// <summary>
+        /// Implements the operator &gt;.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
         public static bool operator >(RequestParameter left, RequestParameter right)
         {
+            if (left == null)
+            {
+                return (right == null ? false : true);
+            }
+
             return left.CompareTo(right) > 0;
         }
 
+        /// <summary>
+        /// Implements the operator &lt;=.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
         public static bool operator <=(RequestParameter left, RequestParameter right)
         {
-            return left.CompareTo(right) <= 0;
+            return !(left > right);
         }
 
+        /// <summary>
+        /// Implements the operator &gt;=.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
         public static bool operator >=(RequestParameter left, RequestParameter right)
         {
-            return left.CompareTo(right) >= 0;
+            return !(left < right);
         }
 
+        /// <summary>
+        /// Implements the operator &lt;.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
         public static bool operator <(RequestParameter left, RequestParameter right)
         {
+            if (left == null)
+            {
+                return false;
+            }
+
             return left.CompareTo(right) < 0;
         }
 
         #endregion
     }
 
+    /// <summary>
+    /// Extensions for objects implementing generic interfaces involving <see cref="RequestParameter"/>
+    /// </summary>
     public static class RequestParameterExtensions
     {
         /// <summary>

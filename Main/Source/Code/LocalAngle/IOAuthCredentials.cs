@@ -3,6 +3,9 @@ using System.Net;
 
 namespace LocalAngle
 {
+    /// <summary>
+    /// Interface to denote that an object can provide credentials for OAuth
+    /// </summary>
     public interface IOAuthCredentials
     {
         /// <summary>

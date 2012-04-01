@@ -5,6 +5,10 @@ using System.Text;
 
 namespace LocalAngle
 {
+    /// <summary>
+    /// Interface to indicate that an object is can be loaded and used in a cache
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public interface ICacheable<T>
     {
         /// <summary>
