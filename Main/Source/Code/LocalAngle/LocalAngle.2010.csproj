@@ -68,7 +68,7 @@
     <Compile Include="SortableList.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CodeAnalysisDictionary.xml" />
+    <CodeAnalysisDictionary Include="CodeAnalysisDictionary.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
   <ProjectExtensions>

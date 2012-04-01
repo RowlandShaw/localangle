@@ -24,16 +24,35 @@ namespace LocalAngle.Net
     {
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OAuthWebRequest"/> class.
+        /// </summary>
+        /// <param name="uri">The URI.</param>
+        /// <param name="consumerKey">The consumer key.</param>
+        /// <param name="consumerSecret">The consumer secret.</param>
         public OAuthWebRequest(Uri uri, string consumerKey, string consumerSecret)
             : this(uri, new OAuthCredentials(consumerKey, consumerSecret, string.Empty, string.Empty))
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OAuthWebRequest"/> class.
+        /// </summary>
+        /// <param name="uri">The URI.</param>
+        /// <param name="consumerKey">The consumer key.</param>
+        /// <param name="consumerSecret">The consumer secret.</param>
+        /// <param name="token">The token.</param>
+        /// <param name="tokenSecret">The token secret.</param>
         public OAuthWebRequest(Uri uri, string consumerKey, string consumerSecret, string token, string tokenSecret)
             : this(uri, new OAuthCredentials(consumerKey, consumerSecret, token, tokenSecret))
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OAuthWebRequest"/> class.
+        /// </summary>
+        /// <param name="uri">The URI.</param>
+        /// <param name="credentials">The credentials.</param>
         [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification= "OAuth requires the protocol be normalised in lower case.")]
         public OAuthWebRequest(Uri uri, IOAuthCredentials credentials)
         {
@@ -67,8 +86,19 @@ namespace LocalAngle.Net
             this.Request = WebRequest.Create(new Uri(bob.ToString())) as HttpWebRequest;
         }
 
-        protected OAuthWebRequest(SerializationInfo info, StreamingContext context) : base(info,context)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OAuthWebRequest"/> class.
+        /// </summary>
+        /// <param name="info">The info.</param>
+        /// <param name="context">The context.</param>
+        protected OAuthWebRequest(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
+            if (info == null)
+            {
+                throw new ArgumentNullException("info", "Invalid serialization info");
+            }
+
             _timeStamp = info.GetString("Timestamp");
             //TODO: Deserialize the rest
         }
@@ -77,6 +107,12 @@ namespace LocalAngle.Net
 
         #region Public Properties
 
+        /// <summary>
+        /// Gets or sets the OAuth credentials.
+        /// </summary>
+        /// <value>
+        /// The OAuth credentials.
+        /// </value>
         public IOAuthCredentials OAuthCredentials { get; set; }
 
         /// <summary>
@@ -109,7 +145,7 @@ namespace LocalAngle.Net
         /// Gets or sets the nonce to use for this request
         /// </summary>
         /// <remarks>
-        /// You must not use the same nonce for the same <see cref="TimeStamp" /> to avoid replay attacks; you may choose to store both "just in case"
+        /// You must not use the same nonce for the same <see cref="Timestamp" /> to avoid replay attacks; you may choose to store both "just in case"
         /// </remarks>
         /// <value>The nonce.</value>
         /// <todo>TODO: Consider making this a little better</todo>
@@ -119,7 +155,7 @@ namespace LocalAngle.Net
             {
                 if (string.IsNullOrEmpty(_nonce))
                 {
-                    _nonce = NonceGenerator.Next(100000, 99999999).ToString();
+                    _nonce = NonceGenerator.Next(100000, 99999999).ToString(CultureInfo.InvariantCulture);
                 }
 
                 return _nonce;
@@ -130,6 +166,9 @@ namespace LocalAngle.Net
             }
         }
 
+        /// <summary>
+        /// Gets the request parameters.
+        /// </summary>
         public IList<RequestParameter> RequestParameters { get; private set; }
 
         /// <summary>
@@ -177,7 +216,7 @@ namespace LocalAngle.Net
                         throw new NotSupportedException("Haven't needed to implement RSA-SHA1 hashing yet, so I haven't. Sorry about that.");
 
                     default:
-                        throw new InvalidEnumArgumentException("value",(int)value,typeof(OAuthSignatureMethod));
+                        throw new InvalidOperationException("Unrecognized Signature Method");
                 }
             }
         }
@@ -196,7 +235,7 @@ namespace LocalAngle.Net
             {
                 if (string.IsNullOrEmpty(_timeStamp))
                 {
-                    _timeStamp = DateTime.UtcNow.ToUnixTime().ToString();
+                    _timeStamp = DateTime.UtcNow.ToUnixTime().ToString(CultureInfo.InvariantCulture);
                 }
 
                 return _timeStamp;
@@ -207,14 +246,48 @@ namespace LocalAngle.Net
 
         #region Protected Properties
 
+        /// <summary>
+        /// Populates a <see cref="T:System.Runtime.Serialization.SerializationInfo"/> with the data needed to serialize the target object.
+        /// </summary>
+        /// <param name="serializationInfo">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> to populate with data.</param>
+        /// <param name="streamingContext">A <see cref="T:System.Runtime.Serialization.StreamingContext"/> that specifies the destination for this serialization.</param>
+        protected override void GetObjectData(SerializationInfo serializationInfo, StreamingContext streamingContext)
+        {
+            if (serializationInfo == null)
+            {
+                throw new ArgumentNullException("serializationInfo");
+            }
+
+            base.GetObjectData(serializationInfo, streamingContext);
+
+            serializationInfo.AddValue("Timestamp", _timeStamp);
+            //TODO: Serialize the rest
+        }
+
+        /// <summary>
+        /// Gets or sets the encapsulated request.
+        /// </summary>
+        /// <value>
+        /// The request.
+        /// </value>
         protected HttpWebRequest Request { get; set; }
 
+        /// <summary>
+        /// Gets or sets the post body.
+        /// </summary>
+        /// <value>
+        /// The post body.
+        /// </value>
         protected string PostBody { get; set; }
         
         #endregion
 
         #region Public Methods
 
+        /// <summary>
+        /// Aborts the Request.
+        /// </summary>
+        /// <exception cref="T:System.NotImplementedException">Any attempt is made to access the method, when the method is not overridden in a descendant class. </exception>
         public override void Abort()
         {
             Request.Abort();
@@ -283,6 +356,7 @@ namespace LocalAngle.Net
         /// <remarks>
         /// Just wraps the IAsync version
         /// </remarks>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         public override WebResponse GetResponse()
         {
             IAsyncResult res = BeginGetResponse(callback => {}, null);
@@ -295,31 +369,14 @@ namespace LocalAngle.Net
         #region Protected Methods
 
         /// <summary>
-        /// Populates a <see cref="T:System.Runtime.Serialization.SerializationInfo"/> with the data needed to serialize the target object.
-        /// </summary>
-        /// <param name="serializationInfo">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> to populate with data.</param>
-        /// <param name="streamingContext">A <see cref="T:System.Runtime.Serialization.StreamingContext"/> that specifies the destination for this serialization.</param>
-        protected override void GetObjectData(SerializationInfo serializationInfo, StreamingContext streamingContext)
-        {
-            if (serializationInfo == null)
-            {
-                throw new ArgumentNullException("serializationInfo");
-            }
-
-            base.GetObjectData(serializationInfo, streamingContext);
-
-            serializationInfo.AddValue("Timestamp", _timeStamp);
-            //TODO: Serialize the rest
-        }
-
-        /// <summary>
         /// Performs the OAuth signing for the request
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         protected void Sign()
         {
             if (OAuthCredentials == null)
             {
-                throw new UnauthorizedAccessException("You must specify some credentials to sign an OAuth request");
+                throw new UnauthorizedAccessException("You must specify some credentials to sign a request");
             }
 
             // Validate bits
@@ -413,10 +470,7 @@ namespace LocalAngle.Net
         /// Creates an OAuthWebRequest for the specified URI.
         /// </summary>
         /// <param name="uri">The URI.</param>
-        /// <param name="consumerKey">The consumer (application) key.</param>
-        /// <param name="consumerSecret">The consumer secret.</param>
-        /// <param name="token">The token (user key).</param>
-        /// <param name="tokenSecret">The token secret.</param>
+        /// <param name="credentials">An object that can provide OAuth credentials.</param>
         /// <returns></returns>
         public static OAuthWebRequest Create(Uri uri, IOAuthCredentials credentials)
         {
@@ -452,7 +506,7 @@ namespace LocalAngle.Net
 
         #region Protected Static Methods
 
-        protected const string UriSafeCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~";
+        private const string UriSafeCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~";
         /// <summary>
         /// The URI encoding providing by the .Net framework doesn't match the implementation specified by the OAuth spec, so reimplement per OAuth
         /// </summary>
@@ -489,8 +543,30 @@ namespace LocalAngle.Net
             return result.ToString();
         }
 
+        /// <summary>
+        /// Generates the base string.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        /// <param name="uri">The URI.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <returns></returns>
         protected static string GenerateBaseString(string method, Uri uri, IEnumerable<RequestParameter> parameters)
         {
+            if (string.IsNullOrEmpty(method))
+            {
+                throw new ArgumentOutOfRangeException("method", "There must be a HTTP verb specified");
+            }
+
+            if (uri == null)
+            {
+                throw new ArgumentNullException("uri", "A URI must be specified");
+            }
+
+            if (parameters == null)
+            {
+                throw new ArgumentNullException("parameters", "There must be some parameters specified to generate the base string");
+            }
+
             return string.Format(CultureInfo.InvariantCulture, "{0}&{1}&{2}", method.ToUpperInvariant(), EscapeDataString(uri.AbsoluteUri), EscapeDataString(NormalizeParameters(parameters))); // Yes, really escape the data twice
         }
 
@@ -503,6 +579,7 @@ namespace LocalAngle.Net
         /// <param name="method">The method.</param>
         /// <returns></returns>
         /// <remarks>Shouldn't escape its output, as the token will most likely be normalised again.</remarks>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "string")]
         protected static string GenerateSignature(string consumerSecret, string tokenSecret, string baseString, OAuthSignatureMethod method)
         {
             switch (method)
@@ -511,13 +588,13 @@ namespace LocalAngle.Net
                     return GenerateHmacSignature(consumerSecret, tokenSecret, baseString);
 
                 case OAuthSignatureMethod.Plaintext:
-                    return GeneratePlaintextSignature(consumerSecret, tokenSecret, baseString);
+                    return GeneratePlaintextSignature(consumerSecret, tokenSecret);
 
                 case OAuthSignatureMethod.RsaSha1:
                     throw new NotImplementedException();
 
                 default:
-                    throw new ArgumentOutOfRangeException("method", method, "Unexpected signature method");
+                    throw new ArgumentOutOfRangeException("method", "Unexpected signature method");
             }
         }
 
@@ -531,16 +608,18 @@ namespace LocalAngle.Net
         /// <remarks>The HMAC-SHA1 signature method uses the HMAC-SHA1 signature algorithm as defined in [RFC2104] where the Signature Base String is the text and the key is the concatenated values (each first encoded per Parameter Encoding) of the Consumer Secret and Token Secret, separated by an '&amp;' character (ASCII code 38) even if empty.</remarks>
         private static string GenerateHmacSignature(string consumerSecret, string tokenSecret, string baseString)
         {
-            HMACSHA1 hmacsha1 = new HMACSHA1();
-            hmacsha1.Key = Encoding.ASCII.GetBytes(string.Format(CultureInfo.InvariantCulture, "{0}&{1}", EscapeDataString(consumerSecret), EscapeDataString(tokenSecret)));
+            using (HMACSHA1 hmacsha1 = new HMACSHA1())
+            {
+                hmacsha1.Key = Encoding.UTF8.GetBytes(string.Format(CultureInfo.InvariantCulture, "{0}&{1}", EscapeDataString(consumerSecret), EscapeDataString(tokenSecret)));
 
-            byte[] dataBuffer = System.Text.Encoding.ASCII.GetBytes(baseString);
-            byte[] hashBytes = hmacsha1.ComputeHash(dataBuffer);
+                byte[] dataBuffer = System.Text.Encoding.UTF8.GetBytes(baseString);
+                byte[] hashBytes = hmacsha1.ComputeHash(dataBuffer);
 
-            return Convert.ToBase64String(hashBytes);
+                return Convert.ToBase64String(hashBytes);
+            }
         }
 
-        private static string GeneratePlaintextSignature(string consumerSecret, string tokenSecret, string baseString)
+        private static string GeneratePlaintextSignature(string consumerSecret, string tokenSecret)
         {
             return string.Format(CultureInfo.InvariantCulture, "{0}&{1}", EscapeDataString(consumerSecret), EscapeDataString(tokenSecret));
         }
@@ -554,7 +633,7 @@ namespace LocalAngle.Net
         {
             List<RequestParameter> sortedParameters = new List<RequestParameter>(parameters);
             sortedParameters.Sort(ParameterComparer);
-            return string.Join("&", (from RequestParameter p in sortedParameters select string.Format("{0}={1}", EscapeDataString(p.Name), EscapeDataString(p.Value))).ToArray());
+            return string.Join("&", (from RequestParameter p in sortedParameters select string.Format(CultureInfo.InvariantCulture, "{0}={1}", EscapeDataString(p.Name), EscapeDataString(p.Value))).ToArray());
         }
 
         private static IComparer<RequestParameter> ParameterComparer = new Comparer<RequestParameter>();
