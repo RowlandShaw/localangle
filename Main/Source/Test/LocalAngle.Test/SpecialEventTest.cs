@@ -110,7 +110,7 @@ namespace LocalAngle.Entities.Test
         public void SearchNearTest()
         {
             Postcode location = new Postcode("IP3 9SJ"); // TODO: Initialize to an appropriate value
-            double range = 0F; // TODO: Initialize to an appropriate value
+            double range = 10F; // TODO: Initialize to an appropriate value
             IEnumerable<SpecialEvent> actual;
             actual = SpecialEvent.SearchNear(location, range, uatCredentials);
         }
@@ -147,10 +147,351 @@ namespace LocalAngle.Entities.Test
             target.StartTime = new DateTime(2012, 03, 31, 13, 45, 0);
             target.EndTime = new DateTime(2012, 03, 31, 13, 45, 59);
             target.VenueName = "UAT Land";
-            target.Location = new Postcode("IP11 4RL"); // Completely made up postcode, but should be syntactically valid (heck, it might even be a real one)
+            target.Location = new Postcode("IP1 3RL"); // Completely made up postcode, but should be syntactically valid (heck, it might even be a real one)
             target.Tags.Add("gig"); // Pretend to be a live music event
             target.Save(uatCredentials);
             Assert.IsTrue(!string.IsNullOrEmpty(target.EventId));
         }
+
+        #region Comparison tests
+
+
+        /// <summary>
+        ///A test for op_LessThanOrEqual
+        ///</summary>
+        [TestMethod()]
+        public void op_LessThanOrEqualTestWhenEqual()
+        {
+            SpecialEvent left = new SpecialEvent();
+            left.Name = "Test event name";
+            left.Description = "Little bit of info about the event";
+            left.Location = new Postcode("IP1 5PH");
+            left.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
+            left.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
+            left.Tags.Add("gig");
+
+            SpecialEvent right = new SpecialEvent();
+            right.Name = "Test event name";
+            right.Description = "Little bit of info about the event";
+            right.Location = new Postcode("IP1 5PH");
+            right.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
+            right.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
+            right.Tags.Add("gig");
+
+            bool expected = true;
+            bool actual;
+            actual = (left <= right);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        ///A test for op_LessThan
+        ///</summary>
+        [TestMethod()]
+        public void op_LessThanTestWhenEqual()
+        {
+            SpecialEvent left = new SpecialEvent();
+            left.Name = "Test event name";
+            left.Description = "Little bit of info about the event";
+            left.Location = new Postcode("IP1 5PH");
+            left.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
+            left.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
+            left.Tags.Add("gig");
+
+            SpecialEvent right = new SpecialEvent();
+            right.Name = "Test event name";
+            right.Description = "Little bit of info about the event";
+            right.Location = new Postcode("IP1 5PH");
+            right.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
+            right.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
+            right.Tags.Add("gig");
+
+            bool expected = false;
+            bool actual;
+            actual = (left < right);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        ///A test for op_Inequality
+        ///</summary>
+        [TestMethod()]
+        public void op_InequalityTestWhenEqual()
+        {
+            SpecialEvent left = new SpecialEvent();
+            left.Name = "Test event name";
+            left.Description = "Little bit of info about the event";
+            left.Location = new Postcode("IP1 5PH");
+            left.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
+            left.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
+            left.Tags.Add("gig");
+
+            SpecialEvent right = new SpecialEvent();
+            right.Name = "Test event name";
+            right.Description = "Little bit of info about the event";
+            right.Location = new Postcode("IP1 5PH");
+            right.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
+            right.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
+            right.Tags.Add("gig");
+
+            bool expected = false;
+            bool actual;
+            actual = (left != right);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        ///A test for op_Equality
+        ///</summary>
+        [TestMethod()]
+        public void op_EqualityTestWhenEqual()
+        {
+            SpecialEvent left = new SpecialEvent();
+            left.Name = "Test event name";
+            left.Description = "Little bit of info about the event";
+            left.Location = new Postcode("IP1 5PH");
+            left.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
+            left.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
+            left.Tags.Add("gig");
+
+            SpecialEvent right = new SpecialEvent();
+            right.Name = "Test event name";
+            right.Description = "Little bit of info about the event";
+            right.Location = new Postcode("IP1 5PH");
+            right.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
+            right.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
+            right.Tags.Add("gig");
+
+            bool expected = true;
+            bool actual;
+            actual = (left == right);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        ///A test for op_GreaterThanOrEqual
+        ///</summary>
+        [TestMethod()]
+        public void op_GreaterThanOrEqualTestWhenEqual()
+        {
+            SpecialEvent left = new SpecialEvent();
+            left.Name = "Test event name";
+            left.Description = "Little bit of info about the event";
+            left.Location = new Postcode("IP1 5PH");
+            left.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
+            left.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
+            left.Tags.Add("gig");
+
+            SpecialEvent right = new SpecialEvent();
+            right.Name = "Test event name";
+            right.Description = "Little bit of info about the event";
+            right.Location = new Postcode("IP1 5PH");
+            right.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
+            right.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
+            right.Tags.Add("gig");
+
+            bool expected = true;
+            bool actual;
+            actual = (left >= right);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        ///A test for op_GreaterThan
+        ///</summary>
+        [TestMethod()]
+        public void op_GreaterThanTestWhenEqual()
+        {
+            SpecialEvent left = new SpecialEvent();
+            left.Name = "Test event name";
+            left.Description = "Little bit of info about the event";
+            left.Location = new Postcode("IP1 5PH");
+            left.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
+            left.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
+            left.Tags.Add("gig");
+
+            SpecialEvent right = new SpecialEvent();
+            right.Name = "Test event name";
+            right.Description = "Little bit of info about the event";
+            right.Location = new Postcode("IP1 5PH");
+            right.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
+            right.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
+            right.Tags.Add("gig");
+
+            bool expected = false;
+            bool actual;
+            actual = (left > right);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        ///A test for op_LessThanOrEqual
+        ///</summary>
+        [TestMethod()]
+        public void op_LessThanOrEqualTestWhenRightGreater()
+        {
+            SpecialEvent left = new SpecialEvent();
+            left.Name = "Test event name";
+            left.Description = "Little bit of info about the event";
+            left.Location = new Postcode("IP1 5PH");
+            left.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
+            left.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
+            left.Tags.Add("gig");
+
+            SpecialEvent right = new SpecialEvent();
+            right.Name = "Test event name";
+            right.Description = "Little bit of info about the event";
+            right.Location = new Postcode("IP1 5PH");
+            right.StartTime = new DateTime(2011, 11, 24, 10, 00, 00); // 1322046000000
+            right.EndTime = new DateTime(2011, 11, 24, 10, 01, 02); //   1322046065000
+            right.Tags.Add("gig");
+
+            bool expected = true;
+            bool actual;
+            actual = (left <= right);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        ///A test for op_LessThan
+        ///</summary>
+        [TestMethod()]
+        public void op_LessThanTestWhenRightGreater()
+        {
+            SpecialEvent left = new SpecialEvent();
+            left.Name = "Test event name";
+            left.Description = "Little bit of info about the event";
+            left.Location = new Postcode("IP1 5PH");
+            left.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
+            left.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
+            left.Tags.Add("gig");
+
+            SpecialEvent right = new SpecialEvent();
+            right.Name = "Test event name";
+            right.Description = "Little bit of info about the event";
+            right.Location = new Postcode("IP1 5PH");
+            right.StartTime = new DateTime(2011, 11, 24, 10, 00, 00); // 1322046000000
+            right.EndTime = new DateTime(2011, 11, 24, 10, 01, 02); //   1322046065000
+            right.Tags.Add("gig");
+
+            bool expected = true;
+            bool actual;
+            actual = (left < right);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        ///A test for op_Inequality
+        ///</summary>
+        [TestMethod()]
+        public void op_InequalityTestWhenRightGreater()
+        {
+            SpecialEvent left = new SpecialEvent();
+            left.Name = "Test event name";
+            left.Description = "Little bit of info about the event";
+            left.Location = new Postcode("IP1 5PH");
+            left.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
+            left.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
+            left.Tags.Add("gig");
+
+            SpecialEvent right = new SpecialEvent();
+            right.Name = "Test event name";
+            right.Description = "Little bit of info about the event";
+            right.Location = new Postcode("IP1 5PH");
+            right.StartTime = new DateTime(2011, 11, 24, 10, 00, 00); // 1322046000000
+            right.EndTime = new DateTime(2011, 11, 24, 10, 01, 02); //   1322046065000
+            right.Tags.Add("gig");
+
+            bool expected = true;
+            bool actual;
+            actual = (left != right);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        ///A test for op_Equality
+        ///</summary>
+        [TestMethod()]
+        public void op_EqualityTestWhenRightGreater()
+        {
+            SpecialEvent left = new SpecialEvent();
+            left.Name = "Test event name";
+            left.Description = "Little bit of info about the event";
+            left.Location = new Postcode("IP1 5PH");
+            left.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
+            left.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
+            left.Tags.Add("gig");
+
+            SpecialEvent right = new SpecialEvent();
+            right.Name = "Test event name";
+            right.Description = "Little bit of info about the event";
+            right.Location = new Postcode("IP1 5PH");
+            right.StartTime = new DateTime(2011, 11, 24, 10, 00, 00); // 1322046000000
+            right.EndTime = new DateTime(2011, 11, 24, 10, 01, 02); //   1322046065000
+            right.Tags.Add("gig");
+
+            bool expected = false;
+            bool actual;
+            actual = (left == right);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        ///A test for op_GreaterThanOrEqual
+        ///</summary>
+        [TestMethod()]
+        public void op_GreaterThanOrEqualTestWhenRightGreater()
+        {
+            SpecialEvent left = new SpecialEvent();
+            left.Name = "Test event name";
+            left.Description = "Little bit of info about the event";
+            left.Location = new Postcode("IP1 5PH");
+            left.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
+            left.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
+            left.Tags.Add("gig");
+
+            SpecialEvent right = new SpecialEvent();
+            right.Name = "Test event name";
+            right.Description = "Little bit of info about the event";
+            right.Location = new Postcode("IP1 5PH");
+            right.StartTime = new DateTime(2011, 11, 24, 10, 00, 00); // 1322046000000
+            right.EndTime = new DateTime(2011, 11, 24, 10, 01, 02); //   1322046065000
+            right.Tags.Add("gig");
+
+            bool expected = false;
+            bool actual;
+            actual = (left >= right);
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        ///A test for op_GreaterThan
+        ///</summary>
+        [TestMethod()]
+        public void op_GreaterThanTestWhenRightGreater()
+        {
+            SpecialEvent left = new SpecialEvent();
+            left.Name = "Test event name";
+            left.Description = "Little bit of info about the event";
+            left.Location = new Postcode("IP1 5PH");
+            left.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
+            left.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
+            left.Tags.Add("gig");
+
+            SpecialEvent right = new SpecialEvent();
+            right.Name = "Test event name";
+            right.Description = "Little bit of info about the event";
+            right.Location = new Postcode("IP1 5PH");
+            right.StartTime = new DateTime(2011, 11, 24, 10, 00, 00); // 1322046000000
+            right.EndTime = new DateTime(2011, 11, 24, 10, 01, 02); //   1322046065000
+            right.Tags.Add("gig");
+
+            bool expected = false;
+            bool actual;
+            actual = (left > right);
+            Assert.AreEqual(expected, actual);
+        }
+
+        #endregion
     }
 }
