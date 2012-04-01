@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Globalization;
 using System.Net;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
@@ -8,6 +9,9 @@ using LocalAngle.Net;
 
 namespace LocalAngle.Classifieds
 {
+    /// <summary>
+    /// Represents a classified advert
+    /// </summary>
     public class Freead : BindableBase
     {
         #region Public Properties
@@ -105,6 +109,11 @@ namespace LocalAngle.Classifieds
         /// </remarks>
         public void Save(IOAuthCredentials credentials)
         {
+            if (credentials == null)
+            {
+                throw new ArgumentNullException("credentials", "You must supply the credentials to use to save the advert");
+            }
+
             if (string.IsNullOrEmpty(credentials.Token))
             {
                 throw new UnauthorizedAccessException("Insufficient details provided to be able to save changes.");
@@ -154,12 +163,17 @@ namespace LocalAngle.Classifieds
         /// <returns></returns>
         public static IEnumerable<Freead> SearchNear(Postcode location, double range, DateTime since, IOAuthCredentials credentials)
         {
+            if (location == null)
+            {
+                throw new ArgumentNullException("location", "You must specify a location to search near");
+            }
+
             OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/adverts/nearby"), credentials);
             req.RequestParameters.Add(new RequestParameter("location", Uri.EscapeDataString(location.ToString())));
-            req.RequestParameters.Add(new RequestParameter("range", range.ToString()));
+            req.RequestParameters.Add(new RequestParameter("range", range.ToString(CultureInfo.InvariantCulture)));
             if (since != default(DateTime))
             {
-                req.RequestParameters.Add(new RequestParameter("since", since.ToUnixTime().ToString()));
+                req.RequestParameters.Add(new RequestParameter("since", since.ToUnixTime().ToString(CultureInfo.InvariantCulture)));
             }
             HttpWebResponse res = req.GetResponse() as HttpWebResponse;
 

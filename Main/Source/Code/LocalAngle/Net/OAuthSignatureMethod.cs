@@ -5,6 +5,9 @@ using System.Text;
 
 namespace LocalAngle.Net
 {
+    /// <summary>
+    /// The different signature methods for use with OAuth
+    /// </summary>
     public enum OAuthSignatureMethod
     {
         /// <summary>

@@ -16,8 +16,15 @@ namespace LocalAngle
     {
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Postcode"/> class.
+        /// </summary>
         public Postcode() : this( string.Empty) {}
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Postcode"/> class.
+        /// </summary>
+        /// <param name="postcode">The postcode.</param>
         public Postcode(string postcode)
         {
             _area = string.Empty;
@@ -99,9 +106,36 @@ namespace LocalAngle
 
         #region Public Methods
 
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String"/> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             return this.Unit;
+        }
+
+        #endregion
+
+        #region Public Static Methods
+
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="LocalAngle.Postcode"/> to <see cref="System.String"/>.
+        /// </summary>
+        /// <param name="postcode">The post code.</param>
+        /// <returns>
+        /// The result of the conversion.
+        /// </returns>
+        public static implicit operator string(Postcode postcode)
+        {
+            if (postcode == null)
+            {
+                return string.Empty;
+            }
+
+            return postcode.ToString();
         }
 
         #endregion

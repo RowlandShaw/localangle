@@ -2,6 +2,9 @@
 
 namespace LocalAngle.Classifieds
 {
+    /// <summary>
+    /// The advert type
+    /// </summary>
     public enum AdvertType
     {
         /// <summary>
