@@ -275,17 +275,17 @@ namespace LocalAngle.Events
             }
 
             int retval = this.StartTime.CompareTo(other.StartTime);
-            if (retval != 0)
+            if (retval == 0)
             {
                 retval = this.EndTime.CompareTo(other.EndTime);
             }
 
-            if (retval != 0)
+            if (retval == 0)
             {
                 retval = string.Compare(this.VenueName, other.VenueName, StringComparison.CurrentCultureIgnoreCase);
             }
 
-            if (retval != 0)
+            if (retval == 0)
             {
                 retval = string.Compare(this.Postcode, other.Postcode, StringComparison.CurrentCultureIgnoreCase);
             }
@@ -333,6 +333,7 @@ namespace LocalAngle.Events
             req.RequestParameters.Add(new RequestParameter("locpostcode", Location.ToString()));
             req.RequestParameters.Add(new RequestParameter("start", StartTime.ToString(DateFormat)));
             req.RequestParameters.Add(new RequestParameter("end", EndTime.ToString(DateFormat)));
+            req.RequestParameters.Add(new RequestParameter("tag", string.Join("-", Tags.ToArray())));
             HttpWebResponse res = req.GetResponse() as HttpWebResponse;
 
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(SpecialEvent));
@@ -427,7 +428,7 @@ namespace LocalAngle.Events
         public static IEnumerable<SpecialEvent> SearchNear(Postcode location, double range, DateTime since, string topic, IOAuthCredentials credentials)
         {
             OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/events/nearby"), credentials);
-            req.RequestParameters.Add(new RequestParameter("location", Uri.EscapeDataString(location.ToString())));
+            req.RequestParameters.Add(new RequestParameter("location", location.ToString()));
             req.RequestParameters.Add(new RequestParameter("range",range.ToString()));
             if (since != default(DateTime))
             {
