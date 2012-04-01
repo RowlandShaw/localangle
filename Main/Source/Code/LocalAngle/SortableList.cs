@@ -112,7 +112,7 @@ namespace LocalAngle
         /// <param name="direction">One of the <see cref="T:System.ComponentModel.ListSortDirection"/>  values.</param>
         protected override void ApplySortCore(PropertyDescriptor prop, ListSortDirection direction)
         {
-            if ((this.Items != null) & (this.Items is List<T>))
+            if ((this.Items != null) && (this.Items is List<T>) && (prop != null))
             {
                 List<T> items = (List<T>)this.Items;
                 this._sortDirection = direction;
