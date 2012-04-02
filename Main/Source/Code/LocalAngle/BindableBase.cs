@@ -8,12 +8,17 @@ namespace LocalAngle
     /// Base implementation for INotifyPropertyChanged
     /// </summary>
     [DataContract]
-    public abstract class BindableBase : INotifyPropertyChanged
+    public abstract class BindableBase : INotifyPropertyChanged, INotifyPropertyChanging
     {
         /// <summary>
         /// Occurs when a property value changes.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Occurs when a property value is changing.
+        /// </summary>
+        public event PropertyChangingEventHandler PropertyChanging;
 
         /// <summary>
         /// Checks if a property already matches a desired value.  Sets the property and
@@ -43,6 +48,18 @@ namespace LocalAngle
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, e);
+            }
+        }
+
+        /// <summary>
+        /// Raises the <see cref="E:PropertyChanging"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="System.ComponentModel.PropertyChangingEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnPropertyChanging(PropertyChangingEventArgs e)
+        {
+            if (PropertyChanging != null)
+            {
+                PropertyChanging(this, e);
             }
         }
     }
