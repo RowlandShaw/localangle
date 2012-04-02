@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.Linq;
+using System.Data.Linq.Mapping;
 using System.Linq;
 using System.Globalization;
 using System.Net;
@@ -14,7 +16,7 @@ namespace LocalAngle.Events
     /// <summary>
     /// Represents an event
     /// </summary>
-    [DataContract]
+    [DataContract,Table]
     public class SpecialEvent : BindableBase, IComparable<SpecialEvent>, IEquatable<SpecialEvent>
     {
         #region Constructors
@@ -38,7 +40,7 @@ namespace LocalAngle.Events
         /// <value>
         /// The event id.
         /// </value>
-        [DataMember]
+        [DataMember,Column(IsPrimaryKey = true)]
         public string EventId
         {
             get
@@ -58,7 +60,7 @@ namespace LocalAngle.Events
         /// <value>
         /// The name.
         /// </value>
-        [DataMember]
+        [DataMember,Column]
         public string Name
         {
             get
@@ -78,7 +80,7 @@ namespace LocalAngle.Events
         /// <value>
         /// The description.
         /// </value>
-        [DataMember]
+        [DataMember, Column]
         public string Description
         {
             get
@@ -98,7 +100,7 @@ namespace LocalAngle.Events
         /// <value>
         /// The name of the venue.
         /// </value>
-        [DataMember]
+        [DataMember, Column]
         public string VenueName
         {
             get
@@ -108,6 +110,26 @@ namespace LocalAngle.Events
             set
             {
                 OnPropertyChanged("VenueName", ref _venueName, value);
+            }
+        }
+
+        private DateTime _lastModified;
+        /// <summary>
+        /// Gets or sets the last modification time.
+        /// </summary>
+        /// <value>
+        /// The last modified.
+        /// </value>
+        [DataMember, Column]
+        public DateTime LastModified
+        {
+            get
+            {
+                return _lastModified;
+            }
+            set
+            {
+                OnPropertyChanged("LastModified", ref _lastModified, value);
             }
         }
 
@@ -137,7 +159,7 @@ namespace LocalAngle.Events
         /// <value>
         /// The start time.
         /// </value>
-        [DataMember]
+        [DataMember, Column]
         public DateTime StartTime
         {
             get
@@ -157,7 +179,7 @@ namespace LocalAngle.Events
         /// <value>
         /// The end time.
         /// </value>
-        [DataMember]
+        [DataMember, Column]
         public DateTime EndTime
         {
             get
@@ -177,6 +199,7 @@ namespace LocalAngle.Events
         /// <value>
         /// The publish status.
         /// </value>
+        [DataMember, Column]
         public PublishStatus PublishStatus
         {
             get
@@ -217,7 +240,7 @@ namespace LocalAngle.Events
         /// <value>
         /// The ticket URI.
         /// </value>
-        [DataMember]
+        [DataMember, Column]
         public Uri TicketUri
         {
             get
@@ -364,7 +387,6 @@ namespace LocalAngle.Events
 
             OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/event/save"), credentials);
             req.Method = "POST";
-            // TODO:
             req.RequestParameters.Add(new RequestParameter("name", Name));
             req.RequestParameters.Add(new RequestParameter("description", Description));
             req.RequestParameters.Add(new RequestParameter("locname", VenueName));
