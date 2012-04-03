@@ -1,7 +1,4 @@
-﻿using System;
-using System.Net;
-
-namespace LocalAngle
+﻿namespace LocalAngle
 {
     /// <summary>
     /// Interface to denote that an object can provide credentials for OAuth

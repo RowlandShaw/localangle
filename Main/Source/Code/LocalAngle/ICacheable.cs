@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace LocalAngle
+﻿namespace LocalAngle
 {
     /// <summary>
     /// Interface to indicate that an object is can be loaded and used in a cache
