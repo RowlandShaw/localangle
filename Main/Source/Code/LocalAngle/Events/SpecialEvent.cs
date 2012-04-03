@@ -16,7 +16,7 @@ namespace LocalAngle.Events
     /// <summary>
     /// Represents an event
     /// </summary>
-    [DataContract,Table]
+    [DataContract, Table]
     public class SpecialEvent : BindableBase, IComparable<SpecialEvent>, IEquatable<SpecialEvent>
     {
         #region Constructors
@@ -40,7 +40,7 @@ namespace LocalAngle.Events
         /// <value>
         /// The event id.
         /// </value>
-        [DataMember,Column(IsPrimaryKey = true)]
+        [DataMember, Column(IsPrimaryKey = true)]
         public string EventId
         {
             get
@@ -60,7 +60,7 @@ namespace LocalAngle.Events
         /// <value>
         /// The name.
         /// </value>
-        [DataMember,Column]
+        [DataMember, Column]
         public string Name
         {
             get
@@ -266,7 +266,7 @@ namespace LocalAngle.Events
         /// <remarks>
         /// Intended for use by the JSON serialisers
         /// </remarks>
-        [DataMember]
+        [DataMember, Column]
         protected string Postcode
         {
             get
