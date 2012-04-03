@@ -109,39 +109,23 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\LocalAngle\BindableBase.cs">
-      <Link>BindableBase.cs</Link>
-    </Compile>
-    <Compile Include="..\LocalAngle\Cache.cs">
-      <Link>CacheO.cs</Link>
-    </Compile>
-    <Compile Include="..\LocalAngle\CacheEntry.cs">
-      <Link>CacheEntry.cs</Link>
-    </Compile>
-    <Compile Include="..\LocalAngle\CacheOptions.cs">
-      <Link>CacheOptions.cs</Link>
-    </Compile>
+    <Compile Include="..\LocalAngle\BindableBase.cs" />
+    <Compile Include="..\LocalAngle\Cache.cs" />
+    <Compile Include="..\LocalAngle\CacheEntry.cs" />
+    <Compile Include="..\LocalAngle\CacheOptions.cs" />
     <Compile Include="..\LocalAngle\Classifieds\AdvertType.cs">
       <Link>Classifieds\AdvertType.cs</Link>
     </Compile>
-    <Compile Include="..\LocalAngle\Classifieds\Freead.cs">
-      <Link>Classifieds\Freead.cs</Link>
-    </Compile>
-    <Compile Include="..\LocalAngle\Events\PublishStatus.cs">
-      <Link>Events\PublishStatus.cs</Link>
-    </Compile>
     <Compile Include="..\LocalAngle\Classifieds\PublishStatus.cs">
-      <Link>Events\PublishStatus.cs</Link>
+      <Link>Classifieds\PublishStatus.cs</Link>
     </Compile>
     <Compile Include="..\LocalAngle\Comparer.cs" />
     <Compile Include="..\LocalAngle\DateTimeExtensions.cs" />
-    <Compile Include="..\LocalAngle\Events\PublishStatus.cs" />
-    <Compile Include="..\LocalAngle\Events\SpecialEvent.cs">
-      <Link>Events\SpecialEvent.cs</Link>
+    <Compile Include="..\LocalAngle\Events\PublishStatus.cs">
+      <Link>Events\PublishStatus.cs</Link>
     </Compile>
     <Compile Include="..\LocalAngle\ICacheable.cs" />
     <Compile Include="..\LocalAngle\IOAuthCredentials.cs" />
-    <Compile Include="Net\OAuthWebRequest.cs" />
     <Compile Include="..\LocalAngle\Net\OAuthSignatureMethod.cs">
       <Link>Net\OAuthSignatureMethod.cs</Link>
     </Compile>
@@ -150,7 +134,16 @@
     </Compile>
     <Compile Include="..\LocalAngle\OAuthCredentials.cs" />
     <Compile Include="..\LocalAngle\Postcode.cs" />
-    <Compile Include="..\LocalAngle\Properties\AssemblyInfo.cs" />
+    <Compile Include="..\LocalAngle\Properties\AssemblyInfo.cs">
+      <Link>Properties\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\LocalAngle\Classifieds\Freead.cs">
+      <Link>Classifieds\Freead.cs</Link>
+    </Compile>
+    <Compile Include="..\LocalAngle\Events\SpecialEvent.cs">
+      <Link>Events\SpecialEvent.cs</Link>
+    </Compile>
+    <Compile Include="Net\OAuthWebRequest.cs" />
     <Compile Include="Windows8CredentialProvider.cs" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' ">

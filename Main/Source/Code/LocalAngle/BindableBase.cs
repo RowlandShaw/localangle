@@ -7,7 +7,10 @@ namespace LocalAngle
     /// Base implementation for INotifyPropertyChanged
     /// </summary>
     [DataContract]
-    public abstract class BindableBase : INotifyPropertyChanged, INotifyPropertyChanging
+    public abstract class BindableBase : INotifyPropertyChanged
+#if !NETFX_CORE
+        , INotifyPropertyChanging
+#endif
     {
         #region Public Events
 
@@ -16,10 +19,12 @@ namespace LocalAngle
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+#if !NETFX_CORE
         /// <summary>
         /// Occurs when a property value is changing.
         /// </summary>
         public event PropertyChangingEventHandler PropertyChanging;
+#endif
 
         #endregion
 
@@ -39,7 +44,9 @@ namespace LocalAngle
             if (!object.Equals(storage, value))
             {
                 //T oldValue = storage;
+#if !NETFX_CORE
                 OnPropertyChanging(new PropertyChangingEventArgs(propertyName));
+#endif
                 storage = value;
                 OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
             }
@@ -57,6 +64,7 @@ namespace LocalAngle
             }
         }
 
+#if !NETFX_CORE
         /// <summary>
         /// Raises the <see cref="E:PropertyChanging"/> event.
         /// </summary>
@@ -68,6 +76,7 @@ namespace LocalAngle
                 PropertyChanging(this, e);
             }
         }
+#endif
 
         #endregion
     }
