@@ -1,10 +1,7 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Net;
-    
+
 namespace LocalAngle.Net
 {
     /// <summary>

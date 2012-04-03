@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace LocalAngle.Net
+﻿namespace LocalAngle.Net
 {
     /// <summary>
     /// The different signature methods for use with OAuth
