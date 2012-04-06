@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-#if !NETFX_CORE
 using System.Data.Linq.Mapping;
-#endif
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -16,9 +14,7 @@ namespace LocalAngle.Events
     /// Represents an event
     /// </summary>
     [DataContract]
-#if !NETFX_CORE
     [Table]
-#endif
     public class SpecialEvent : BindableBase, IComparable<SpecialEvent>, IEquatable<SpecialEvent>
     {
         #region Constructors
@@ -43,9 +39,7 @@ namespace LocalAngle.Events
         /// The event id.
         /// </value>
         [DataMember]
-#if !NETFX_CORE
         [Column(IsPrimaryKey = true)]
-#endif
         public string EventId
         {
             get
@@ -66,9 +60,7 @@ namespace LocalAngle.Events
         /// The name.
         /// </value>
         [DataMember]
-#if !NETFX_CORE
         [Column]
-#endif
         public string Name
         {
             get
@@ -89,9 +81,7 @@ namespace LocalAngle.Events
         /// The description.
         /// </value>
         [DataMember]
-#if !NETFX_CORE
         [Column]
-#endif
         public string Description
         {
             get
@@ -112,9 +102,7 @@ namespace LocalAngle.Events
         /// The name of the venue.
         /// </value>
         [DataMember]
-#if !NETFX_CORE
         [Column]
-#endif
         public string VenueName
         {
             get
@@ -135,9 +123,7 @@ namespace LocalAngle.Events
         /// The last modified.
         /// </value>
         [DataMember]
-#if !NETFX_CORE
         [Column]
-#endif
         public DateTime LastModified
         {
             get
@@ -177,9 +163,7 @@ namespace LocalAngle.Events
         /// The start time.
         /// </value>
         [DataMember]
-#if !NETFX_CORE
         [Column]
-#endif
         public DateTime StartTime
         {
             get
@@ -200,9 +184,7 @@ namespace LocalAngle.Events
         /// The end time.
         /// </value>
         [DataMember]
-#if !NETFX_CORE
         [Column]
-#endif
         public DateTime EndTime
         {
             get
@@ -223,9 +205,7 @@ namespace LocalAngle.Events
         /// The publish status.
         /// </value>
         [DataMember]
-#if !NETFX_CORE
         [Column]
-#endif
         public PublishStatus PublishStatus
         {
             get
@@ -267,9 +247,7 @@ namespace LocalAngle.Events
         /// The ticket URI.
         /// </value>
         [DataMember]
-#if !NETFX_CORE
         [Column]
-#endif
         public Uri TicketUri
         {
             get
@@ -296,9 +274,7 @@ namespace LocalAngle.Events
         /// Intended for use by the JSON serialisers
         /// </remarks>
         [DataMember]
-#if !NETFX_CORE
         [Column]
-#endif
         protected string Postcode
         {
             get
