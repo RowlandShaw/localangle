@@ -8,7 +8,7 @@
         /// <summary>
         /// Occurs when a property value is changing.
         /// </summary>
-        event PropertyChangingEventHandler PropertyChanging;
+        event EventHandler<PropertyChangingEventArgs> PropertyChanging;
     }
 
     /// <summary>
