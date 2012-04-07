@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Windows.Devices.Geolocation;
+using System.Device.Location;
 
 namespace LocalAngle
 {
@@ -14,6 +13,11 @@ namespace LocalAngle
     {
         #region
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GeoLocation"/> class.
+        /// </summary>
+        /// <param name="latitude">The latitude.</param>
+        /// <param name="longitude">The longitude.</param>
         public GeoLocation( double latitude, double longitude )
         {
             Latitude = latitude;
@@ -43,9 +47,29 @@ namespace LocalAngle
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
-        public static implicit operator GeoLocation(Geoposition position)
+        public static implicit operator GeoLocation(GeoCoordinate position)
         {
-            return new GeoLocation(position.Coordinate.Latitude, position.Coordinate.Longitude);
+            if (position == null)
+            {
+                return null;
+            }
+
+            return new GeoLocation(position.Latitude, position.Longitude);
+        }
+
+        /// <summary>
+        /// convert from framework type
+        /// </summary>
+        /// <param name="position">The position.</param>
+        /// <returns></returns>
+        public static GeoLocation FromGeoCoordinate(GeoCoordinate position)
+        {
+            if (position == null)
+            {
+                return null;
+            }
+
+            return new GeoLocation(position.Latitude, position.Longitude);
         }
 
         #endregion
