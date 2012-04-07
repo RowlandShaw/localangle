@@ -621,8 +621,8 @@ namespace LocalAngle.Events
             }
 
             OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/events/nearby"), credentials);
-            req.RequestParameters.Add(new RequestParameter("latitude", location.Latitude.ToString()));
-            req.RequestParameters.Add(new RequestParameter("longitude", location.Longitude.ToString()));
+            req.RequestParameters.Add(new RequestParameter("latitude", location.Latitude.ToString(CultureInfo.InvariantCulture)));
+            req.RequestParameters.Add(new RequestParameter("longitude", location.Longitude.ToString(CultureInfo.InvariantCulture)));
             req.RequestParameters.Add(new RequestParameter("range", range.ToString(CultureInfo.InvariantCulture)));
             if (since != default(DateTime))
             {

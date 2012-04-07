@@ -49,6 +49,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Device" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Servicemodel.Web" />
     <Reference Include="System.Windows" />
@@ -75,6 +76,9 @@
       <Link>Events\PublishStatus.cs</Link>
     </Compile>
     <Compile Include="..\LocalAngle\ICacheable.cs" />
+    <Compile Include="..\LocalAngle\IGeoLocation.cs">
+      <Link>IGeoLocation.cs</Link>
+    </Compile>
     <Compile Include="..\LocalAngle\IOAuthCredentials.cs" />
     <Compile Include="..\LocalAngle\Net\OAuthSignatureMethod.cs">
       <Link>Net\OAuthSignatureMethod.cs</Link>
@@ -93,6 +97,7 @@
     <Compile Include="..\LocalAngle\Events\SpecialEvent.cs">
       <Link>Events\SpecialEvent.cs</Link>
     </Compile>
+    <Compile Include="GeoLocation.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Net\OAuthWebRequest.cs" />
   </ItemGroup>

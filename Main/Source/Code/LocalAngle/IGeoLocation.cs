@@ -8,7 +8,7 @@ namespace LocalAngle
     /// <summary>
     /// Allow us to abstract out the different sources of geographical position
     /// </summary>
-    interface IGeoLocation
+    public interface IGeoLocation
     {
         /// <summary>
         /// The latitude (in decimal degrees North)
