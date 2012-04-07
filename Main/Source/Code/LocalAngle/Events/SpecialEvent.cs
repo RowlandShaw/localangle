@@ -552,6 +552,7 @@ namespace LocalAngle.Events
         /// <param name="topic">The category of events to bring back.</param>
         /// <param name="credentials">The credentials.</param>
         /// <returns></returns>
+        /// <remarks>If the postcode is not recognised by the server, it will fall back to making a guess based on the client IP address</remarks>
         public static IEnumerable<SpecialEvent> SearchNear(Postcode location, double range, DateTime since, string topic, IOAuthCredentials credentials)
         {
             if (location == null)
@@ -561,7 +562,68 @@ namespace LocalAngle.Events
 
             OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/events/nearby"), credentials);
             req.RequestParameters.Add(new RequestParameter("location", location.ToString()));
-            req.RequestParameters.Add(new RequestParameter("range",range.ToString(CultureInfo.InvariantCulture)));
+            req.RequestParameters.Add(new RequestParameter("range", range.ToString(CultureInfo.InvariantCulture)));
+            if (since != default(DateTime))
+            {
+                req.RequestParameters.Add(new RequestParameter("since", since.ToUnixTime().ToString(CultureInfo.InvariantCulture)));
+            }
+            if (!string.IsNullOrEmpty(topic))
+            {
+                req.RequestParameters.Add(new RequestParameter("topic", topic));
+            }
+            HttpWebResponse res = req.GetResponse() as HttpWebResponse;
+
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(IEnumerable<SpecialEvent>));
+            IEnumerable<SpecialEvent> retval = (IEnumerable<SpecialEvent>)ser.ReadObject(res.GetResponseStream());
+
+            return retval;
+        }
+
+        /// <summary>
+        /// Searches for events near the specified location.
+        /// </summary>
+        /// <param name="location">The location to search near.</param>
+        /// <param name="range">The range in miles to search for events in.</param>
+        /// <param name="credentials">The credentials.</param>
+        /// <returns></returns>
+        public static IEnumerable<SpecialEvent> SearchNear(IGeoLocation location, double range, IOAuthCredentials credentials)
+        {
+            return SearchNear(location, range, default(DateTime), null, credentials);
+        }
+
+        /// <summary>
+        /// Searches for events near the specified location.
+        /// </summary>
+        /// <param name="location">The location to search near.</param>
+        /// <param name="range">The range in miles to search for events in.</param>
+        /// <param name="since">The date to bring back changes since.</param>
+        /// <param name="credentials">The credentials.</param>
+        /// <returns></returns>
+        public static IEnumerable<SpecialEvent> SearchNear(IGeoLocation location, double range, DateTime since, IOAuthCredentials credentials)
+        {
+            return SearchNear(location, range, since, null, credentials);
+        }
+
+        /// <summary>
+        /// Searches for events near the specified location.
+        /// </summary>
+        /// <param name="location">The location to search near.</param>
+        /// <param name="range">The range in miles to search for events in.</param>
+        /// <param name="since">The date to bring back changes since.</param>
+        /// <param name="topic">The category of events to bring back.</param>
+        /// <param name="credentials">The credentials.</param>
+        /// <returns></returns>
+        public static IEnumerable<SpecialEvent> SearchNear(IGeoLocation location, double range, DateTime since, string topic, IOAuthCredentials credentials)
+        {
+            if (location == null)
+            {
+                throw new ArgumentNullException("location", "You must specify a location to search near");
+            }
+
+            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/events/nearby"), credentials);
+            req.RequestParameters.Add(new RequestParameter("latitude", location.Latitude.ToString()));
+            req.RequestParameters.Add(new RequestParameter("longitude", location.Longitude.ToString()));
+            req.RequestParameters.Add(new RequestParameter("range", range.ToString(CultureInfo.InvariantCulture)));
             if (since != default(DateTime))
             {
                 req.RequestParameters.Add(new RequestParameter("since", since.ToUnixTime().ToString(CultureInfo.InvariantCulture)));
