@@ -441,18 +441,26 @@ namespace LocalAngle.Net
             {
                 // TODO: Would need to do something magical if we were to support multi-part uploads here.
                 Request.ContentType = "application/x-www-form-urlencoded";
+
+                // Convert the string into a byte array.
+                string postData = NormalizeParameters(signingParameters);
+                byte[] byteArray = Encoding.UTF8.GetBytes(postData);
+                Request.ContentLength = postData.Length;
+
                 IAsyncResult res = BeginGetRequestStream(callback =>
                 {
                     using (Stream req = EndGetRequestStream(callback))
                     {
-                        using (StreamWriter writer = new StreamWriter(req))
-                        {
-                            writer.Write(NormalizeParameters(signingParameters));
-                        }
+                        // Write to the request stream.
+                        req.Write(byteArray, 0, postData.Length);
                     }
-                }, null);
+                }, Request);
 
-                res.AsyncWaitHandle.WaitOne();
+                while (!res.IsCompleted)
+                {
+                    // this should be fairly quick, but it can still take some time (especially on a multi-core CPU)
+                    System.Threading.Thread.Sleep(10);
+                }
             }
         }
         

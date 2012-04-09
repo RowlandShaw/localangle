@@ -10,14 +10,14 @@ namespace LocalAngle.Events
         /// <summary>
         /// The advert is still shown
         /// </summary>
-        Active,
+        Active = 1,
         /// <summary>
         /// The advert is still shown, as sold out
         /// </summary>
-        SoldOut,
+        SoldOut = 2,
         /// <summary>
         /// The advert is not to be shown
         /// </summary>
-        Deleted
+        Deleted = 0
     }
 }

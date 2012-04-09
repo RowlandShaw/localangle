@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
+using System.Text;
 using LocalAngle.Net;
 
 namespace LocalAngle.Events
@@ -59,7 +60,7 @@ namespace LocalAngle.Events
         /// <value>
         /// The name.
         /// </value>
-        [DataMember]
+        [DataMember(IsRequired=true)]
         [Column]
         public string Name
         {
@@ -80,7 +81,7 @@ namespace LocalAngle.Events
         /// <value>
         /// The description.
         /// </value>
-        [DataMember]
+        [DataMember(IsRequired = true)]
         [Column]
         public string Description
         {
@@ -93,6 +94,16 @@ namespace LocalAngle.Events
                 OnPropertyChanged("Description", ref _description, value);
             }
         }
+
+        /// <summary>
+        /// Gets or sets the distance (in miles) from the search point used to load it
+        /// </summary>
+        /// <value>
+        /// The distance in UK miles.
+        /// </value>
+        /// <remarks>Only meaningful when populated during a search (so doesn't respect INotfifyProperty...).</remarks>
+        [DataMember]
+        public double Distance { get; set; }
 
         private string _venueName;
         /// <summary>
@@ -123,7 +134,7 @@ namespace LocalAngle.Events
         /// The last modified.
         /// </value>
         [DataMember]
-        [Column]
+        [Column(IsVersion = true)]
         public DateTime LastModified
         {
             get
@@ -133,6 +144,50 @@ namespace LocalAngle.Events
             set
             {
                 OnPropertyChanged("LastModified", ref _lastModified, value);
+            }
+        }
+
+        private double _latitude = 90;
+        /// <summary>
+        /// Gets or sets the latitude in decimal degrees.
+        /// </summary>
+        /// <value>
+        /// The latitude.
+        /// </value>
+        /// <remarks>Uses the WGS84 datum</remarks>
+        [DataMember]
+        [Column]
+        public double Latitude
+        { 
+            get 
+            { 
+                return _latitude;
+            }
+            set 
+            { 
+                OnPropertyChanged("Latitude", ref _latitude, value);
+            }
+        }
+
+        private double _longitude = 90;
+        /// <summary>
+        /// Gets or sets the longitude in decimal degrees.
+        /// </summary>
+        /// <value>
+        /// The longitude.
+        /// </value>
+        /// <remarks>Uses the WGS84 datum</remarks>
+        [DataMember]
+        [Column]
+        public double Longitude
+        {
+            get
+            {
+                return _longitude;
+            }
+            set
+            {
+                OnPropertyChanged("Longitude", ref _longitude, value);
             }
         }
 
@@ -162,7 +217,7 @@ namespace LocalAngle.Events
         /// <value>
         /// The start time.
         /// </value>
-        [DataMember]
+        [DataMember(IsRequired = true)]
         [Column]
         public DateTime StartTime
         {
@@ -183,7 +238,7 @@ namespace LocalAngle.Events
         /// <value>
         /// The end time.
         /// </value>
-        [DataMember]
+        [DataMember(IsRequired = true)]
         [Column]
         public DateTime EndTime
         {
@@ -273,9 +328,9 @@ namespace LocalAngle.Events
         /// <remarks>
         /// Intended for use by the JSON serialisers
         /// </remarks>
-        [DataMember]
+        [DataMember(Name = "Postcode")]
         [Column]
-        protected string Postcode
+        public string Postcode
         {
             get
             {
@@ -555,6 +610,30 @@ namespace LocalAngle.Events
         /// <remarks>If the postcode is not recognised by the server, it will fall back to making a guess based on the client IP address</remarks>
         public static IEnumerable<SpecialEvent> SearchNear(Postcode location, double range, DateTime since, string topic, IOAuthCredentials credentials)
         {
+            IAsyncResult res = BeginSearchNear(callback => { }, location, range, since, topic, credentials);
+#if SILVERLIGHT
+            while (!res.IsCompleted)
+            {
+                System.Threading.Thread.Sleep(100);
+            }
+#else
+            res.AsyncWaitHandle.WaitOne();
+#endif
+            return EndSearchNear(res);
+        }
+
+        /// <summary>
+        /// Begins an asynchronous searches for events near the specified location.
+        /// </summary>
+        /// <param name="location">The location to search near.</param>
+        /// <param name="range">The range in miles to search for events in.</param>
+        /// <param name="since">The date to bring back changes since.</param>
+        /// <param name="topic">The category of events to bring back.</param>
+        /// <param name="credentials">The credentials.</param>
+        /// <param name="callback">The callback to call when the results are ready to be read</param>
+        /// <returns></returns>
+        public static IAsyncResult BeginSearchNear(AsyncCallback callback, Postcode location, double range, DateTime since, string topic, IOAuthCredentials credentials)
+        {
             if (location == null)
             {
                 throw new ArgumentNullException("location", "You must specify a location to search near");
@@ -571,12 +650,8 @@ namespace LocalAngle.Events
             {
                 req.RequestParameters.Add(new RequestParameter("topic", topic));
             }
-            HttpWebResponse res = req.GetResponse() as HttpWebResponse;
 
-            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(IEnumerable<SpecialEvent>));
-            IEnumerable<SpecialEvent> retval = (IEnumerable<SpecialEvent>)ser.ReadObject(res.GetResponseStream());
-
-            return retval;
+            return req.BeginGetResponse(callback, req);
         }
 
         /// <summary>
@@ -615,6 +690,30 @@ namespace LocalAngle.Events
         /// <returns></returns>
         public static IEnumerable<SpecialEvent> SearchNear(IGeoLocation location, double range, DateTime since, string topic, IOAuthCredentials credentials)
         {
+            IAsyncResult res = BeginSearchNear( callback => {}, location, range, since, topic, credentials);
+#if SILVERLIGHT
+            while (!res.IsCompleted)
+            {
+                System.Threading.Thread.Sleep(100);
+            }
+#else
+            res.AsyncWaitHandle.WaitOne();
+#endif
+            return EndSearchNear(res);
+        }
+
+        /// <summary>
+        /// Begins an asynchronous searches for events near the specified location.
+        /// </summary>
+        /// <param name="location">The location to search near.</param>
+        /// <param name="range">The range in miles to search for events in.</param>
+        /// <param name="since">The date to bring back changes since.</param>
+        /// <param name="topic">The category of events to bring back.</param>
+        /// <param name="credentials">The credentials.</param>
+        /// <param name="callback">The callback to call when the results are ready to be read</param>
+        /// <returns></returns>
+        public static IAsyncResult BeginSearchNear(AsyncCallback callback, IGeoLocation location, double range, DateTime since, string topic, IOAuthCredentials credentials)
+        {
             if (location == null)
             {
                 throw new ArgumentNullException("location", "You must specify a location to search near");
@@ -632,8 +731,24 @@ namespace LocalAngle.Events
             {
                 req.RequestParameters.Add(new RequestParameter("topic", topic));
             }
-            HttpWebResponse res = req.GetResponse() as HttpWebResponse;
 
+            return req.BeginGetResponse(callback, req);
+        }
+
+        /// <summary>
+        /// Ends an asynchronous search for events near a location.
+        /// </summary>
+        /// <param name="asyncResult">The async result.</param>
+        /// <returns></returns>
+        public static IEnumerable<SpecialEvent> EndSearchNear(IAsyncResult asyncResult)
+        {
+            if (asyncResult == null)
+            {
+                throw new ArgumentNullException("asyncResult");
+            }
+
+            OAuthWebRequest req = (OAuthWebRequest)asyncResult.AsyncState;
+            HttpWebResponse res = req.EndGetResponse(asyncResult) as HttpWebResponse;
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(IEnumerable<SpecialEvent>));
             IEnumerable<SpecialEvent> retval = (IEnumerable<SpecialEvent>)ser.ReadObject(res.GetResponseStream());
 

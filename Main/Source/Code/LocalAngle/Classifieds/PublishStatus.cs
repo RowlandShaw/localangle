@@ -10,14 +10,14 @@ namespace LocalAngle.Classifieds
         /// <summary>
         /// The advert is still shown, as unsold
         /// </summary>
-        Active,
+        Active = 1,
         /// <summary>
         /// The advert is still shown, as sold
         /// </summary>
-        Sold,
+        Sold = 2,
         /// <summary>
         /// The advert is not to be shown
         /// </summary>
-        Deleted
+        Deleted = 0
     }
 }

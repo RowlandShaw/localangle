@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace LocalAngle
@@ -7,6 +9,7 @@ namespace LocalAngle
     /// Represents a UK Postcode
     /// </summary>
     /// <todo>TODO: Implment implicit conversion to a string, and explicit conversion from a string</todo>
+    [TypeConverter(typeof(PostcodeConverter))]
     public class Postcode
     {
         #region Constructors
@@ -140,5 +143,90 @@ namespace LocalAngle
         private static Regex Parse = new Regex(@"^\s*(((A[BL]|B[ABDHLNRSTX]?|C[ABFHMORTVW]|D[ADEGHLNTY]|E[HNX]?|F[KY]|G[LUY]?|H[ADGPRSUX]|I[GMPV]|JE|K[ATWY]|L[ADELNSU]?|M[EKL]?|N[EGNPRW]?|O[LX]|P[AEHLOR]|R[GHM]|S[AEGKLMNOPRSTY]?|T[ADFNQRSW]|UB|W[ADFNRSV]|YO|ZE)([1-9]?[0-9])|(((E|N|NW|SE|SW|W)(1)|(EC)([1-4])|(WC)([12]))([A-HJKMNPR-Y])|(SW|W)([2-9]|[1-9][0-9])|(EC)([1-9][0-9])))\s*([0-9])([ABD-HJLNP-UW-Z]{2}))\s*$", RegexOptions.IgnoreCase);
 
         #endregion
+    }
+
+    /// <summary>
+    /// Really naive type converter
+    /// </summary>
+    public class PostcodeConverter : TypeConverter
+    {
+        /// <summary>
+        /// Returns whether the type converter can convert an object from the specified type to the type of this converter.
+        /// </summary>
+        /// <param name="context">An object that provides a format context.</param>
+        /// <param name="sourceType">The type you want to convert from.</param>
+        /// <returns>
+        /// true if this converter can perform the conversion; otherwise, false.
+        /// </returns>
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            return (sourceType == typeof(string));
+        }
+
+        /// <summary>
+        /// Returns whether the type converter can convert an object to the specified type.
+        /// </summary>
+        /// <param name="context">An object that provides a format context.</param>
+        /// <param name="destinationType">The type you want to convert to.</param>
+        /// <returns>
+        /// true if this converter can perform the conversion; otherwise, false.
+        /// </returns>
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        {
+            return (destinationType == typeof(string));
+        }
+
+        /// <summary>
+        /// Converts from the specified value to the intended conversion type of the converter.
+        /// </summary>
+        /// <param name="context">An object that provides a format context.</param>
+        /// <param name="culture">The <see cref="T:System.Globalization.CultureInfo"/> to use as the current culture.</param>
+        /// <param name="value">The value to convert to the type of this converter.</param>
+        /// <returns>
+        /// The converted value.
+        /// </returns>
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        {
+            if (value == null)
+            {
+                return null;
+            }
+
+            if (CanConvertFrom(context, value.GetType()))
+            {
+                return new Postcode(value as string);
+            }
+            else
+            {
+                throw new InvalidOperationException();
+            }
+        }
+
+        /// <summary>
+        /// Converts the specified value object to the specified type.
+        /// </summary>
+        /// <param name="context">An object that provides a format context.</param>
+        /// <param name="culture">The <see cref="T:System.Globalization.CultureInfo"/> to use as the current culture.</param>
+        /// <param name="value">The object to convert.</param>
+        /// <param name="destinationType">The type to convert the object to.</param>
+        /// <returns>
+        /// The converted object.
+        /// </returns>
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        {
+            if (value == null)
+            {
+                return null;
+            }
+
+            if (CanConvertTo(context, value.GetType()))
+            {
+                return value.ToString();
+            }
+            else
+            {
+                throw new InvalidOperationException();
+            }
+        }
     }
 }
