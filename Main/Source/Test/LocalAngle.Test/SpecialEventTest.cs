@@ -85,6 +85,7 @@ namespace LocalAngle.Entities.Test
             target.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
             target.Tags.Add("gig");
             target.Tags.Add("jazz");
+            target.PublishStatus = PublishStatus.Active;
             col.Add(target);
 
             SpecialEvent target2 = new SpecialEvent();
@@ -93,6 +94,7 @@ namespace LocalAngle.Entities.Test
             target2.Location = new Postcode("IP1 5PH");
             target2.StartTime = new DateTime(2011, 11, 23, 11, 02, 00); // 1322046000000
             target2.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
+            target2.PublishStatus = PublishStatus.SoldOut;
             col.Add(target2);
 
             MemoryStream stream1 = new MemoryStream();
