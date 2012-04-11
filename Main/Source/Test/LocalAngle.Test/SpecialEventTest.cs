@@ -157,11 +157,10 @@ namespace LocalAngle.Entities.Test
 
         #region Comparison tests
 
-
         /// <summary>
         ///A test for op_LessThanOrEqual
         ///</summary>
-        [TestMethod()]
+        [TestMethod(), TestCategory("Comparison tests")]
         public void op_LessThanOrEqualTestWhenEqual()
         {
             SpecialEvent left = new SpecialEvent();
@@ -189,7 +188,7 @@ namespace LocalAngle.Entities.Test
         /// <summary>
         ///A test for op_LessThan
         ///</summary>
-        [TestMethod()]
+        [TestMethod(), TestCategory("Comparison tests")]
         public void op_LessThanTestWhenEqual()
         {
             SpecialEvent left = new SpecialEvent();
@@ -217,7 +216,7 @@ namespace LocalAngle.Entities.Test
         /// <summary>
         ///A test for op_Inequality
         ///</summary>
-        [TestMethod()]
+        [TestMethod(), TestCategory("Comparison tests")]
         public void op_InequalityTestWhenEqual()
         {
             SpecialEvent left = new SpecialEvent();
@@ -245,7 +244,7 @@ namespace LocalAngle.Entities.Test
         /// <summary>
         ///A test for op_Equality
         ///</summary>
-        [TestMethod()]
+        [TestMethod(), TestCategory("Comparison tests")]
         public void op_EqualityTestWhenEqual()
         {
             SpecialEvent left = new SpecialEvent();
@@ -273,7 +272,7 @@ namespace LocalAngle.Entities.Test
         /// <summary>
         ///A test for op_GreaterThanOrEqual
         ///</summary>
-        [TestMethod()]
+        [TestMethod(), TestCategory("Comparison tests")]
         public void op_GreaterThanOrEqualTestWhenEqual()
         {
             SpecialEvent left = new SpecialEvent();
@@ -301,7 +300,7 @@ namespace LocalAngle.Entities.Test
         /// <summary>
         ///A test for op_GreaterThan
         ///</summary>
-        [TestMethod()]
+        [TestMethod(), TestCategory("Comparison tests")]
         public void op_GreaterThanTestWhenEqual()
         {
             SpecialEvent left = new SpecialEvent();
@@ -329,7 +328,7 @@ namespace LocalAngle.Entities.Test
         /// <summary>
         ///A test for op_LessThanOrEqual
         ///</summary>
-        [TestMethod()]
+        [TestMethod(), TestCategory("Comparison tests")]
         public void op_LessThanOrEqualTestWhenRightGreater()
         {
             SpecialEvent left = new SpecialEvent();
@@ -357,7 +356,7 @@ namespace LocalAngle.Entities.Test
         /// <summary>
         ///A test for op_LessThan
         ///</summary>
-        [TestMethod()]
+        [TestMethod(), TestCategory("Comparison tests")]
         public void op_LessThanTestWhenRightGreater()
         {
             SpecialEvent left = new SpecialEvent();
@@ -385,7 +384,7 @@ namespace LocalAngle.Entities.Test
         /// <summary>
         ///A test for op_Inequality
         ///</summary>
-        [TestMethod()]
+        [TestMethod(), TestCategory("Comparison tests")]
         public void op_InequalityTestWhenRightGreater()
         {
             SpecialEvent left = new SpecialEvent();
@@ -413,7 +412,7 @@ namespace LocalAngle.Entities.Test
         /// <summary>
         ///A test for op_Equality
         ///</summary>
-        [TestMethod()]
+        [TestMethod(), TestCategory("Comparison tests")]
         public void op_EqualityTestWhenRightGreater()
         {
             SpecialEvent left = new SpecialEvent();
@@ -441,7 +440,7 @@ namespace LocalAngle.Entities.Test
         /// <summary>
         ///A test for op_GreaterThanOrEqual
         ///</summary>
-        [TestMethod()]
+        [TestMethod(), TestCategory("Comparison tests")]
         public void op_GreaterThanOrEqualTestWhenRightGreater()
         {
             SpecialEvent left = new SpecialEvent();
@@ -469,7 +468,7 @@ namespace LocalAngle.Entities.Test
         /// <summary>
         ///A test for op_GreaterThan
         ///</summary>
-        [TestMethod()]
+        [TestMethod(), TestCategory("Comparison tests")]
         public void op_GreaterThanTestWhenRightGreater()
         {
             SpecialEvent left = new SpecialEvent();

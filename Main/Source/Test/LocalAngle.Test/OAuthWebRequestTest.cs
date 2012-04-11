@@ -70,7 +70,7 @@ namespace LocalAngle.Net.Test
         /// <summary>
         /// Test using an echo service
         /// </summary>
-        [TestMethod()]
+        [TestMethod(), TestCategory("Echo tests")]
         public void GetLocalAngleTest()
         {
             Uri uri = new Uri("http://api.angle.uk.com/oauth/1.0/events/nearby");
@@ -104,7 +104,7 @@ namespace LocalAngle.Net.Test
         /// Test using an echo service
         /// </summary>
         /// <remarks>Caution, this server appears to URI decode twice, which can hide bugs in our code</remarks>
-        [TestMethod()]
+        [TestMethod(), TestCategory("Echo tests")]
         public void GetEchoMadGexTest()
         {
             Uri uri = new Uri("http://echo.lab.madgex.com/echo.ashx?method=test");
@@ -137,7 +137,7 @@ namespace LocalAngle.Net.Test
         /// Test using an echo service
         /// </summary>
         /// <remarks>This test server appears to be a bit pernickety, and has been double checked with Perl's Net::OAuth (which in turn, Twitter works with)</remarks>
-        [TestMethod()]
+        [TestMethod(), TestCategory("Echo tests")]
         public void GetEchoTermIeTest()
         {
             Uri uri = new Uri("http://term.ie/oauth/example/echo_api.php?method=test");

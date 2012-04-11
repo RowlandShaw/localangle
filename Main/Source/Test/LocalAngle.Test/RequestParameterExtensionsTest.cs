@@ -68,7 +68,7 @@ namespace LocalAngle.Net.Test
         /// <summary>
         ///A test for GetParameters
         ///</summary>
-        [TestMethod()]
+        [TestMethod(), TestCategory("URI parsing")]
         public void GetParametersTest()
         {
             Uri uri = new Uri("http://term.ie/oauth/example/echo_api.php?method=test");
@@ -88,7 +88,7 @@ namespace LocalAngle.Net.Test
         /// <summary>
         ///A test for GetParameters
         ///</summary>
-        [TestMethod()]
+        [TestMethod(), TestCategory("URI parsing")]
         public void GetEscapedParametersTest()
         {
             Uri uri = new Uri("http://term.ie/oauth/example/echo_api.php?method=test%20escaped+data");

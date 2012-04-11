@@ -4,13 +4,10 @@ using System.Runtime.Serialization;
 namespace LocalAngle
 {
     /// <summary>
-    /// Base implementation for INotifyPropertyChanged
+    /// Base implementation for INotifyPropertyChanged and INotifyPropertyChanging
     /// </summary>
     [DataContract]
-    public abstract class BindableBase : INotifyPropertyChanged
-#if !NETFX_CORE
-        , INotifyPropertyChanging
-#endif
+    public abstract class BindableBase : INotifyPropertyChanged, INotifyPropertyChanging
     {
         #region Public Events
 
@@ -19,12 +16,10 @@ namespace LocalAngle
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
-#if !NETFX_CORE
         /// <summary>
         /// Occurs when a property value is changing.
         /// </summary>
         public event PropertyChangingEventHandler PropertyChanging;
-#endif
 
         #endregion
 
@@ -44,9 +39,7 @@ namespace LocalAngle
             if (!object.Equals(storage, value))
             {
                 //T oldValue = storage;
-#if !NETFX_CORE
                 OnPropertyChanging(new PropertyChangingEventArgs(propertyName));
-#endif
                 storage = value;
                 OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
             }
@@ -58,25 +51,25 @@ namespace LocalAngle
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
         {
-            if (PropertyChanged != null)
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
             {
-                PropertyChanged(this, e);
+                handler(this, e);
             }
         }
 
-#if !NETFX_CORE
         /// <summary>
         /// Raises the <see cref="E:PropertyChanging"/> event.
         /// </summary>
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void OnPropertyChanging(PropertyChangingEventArgs e)
         {
-            if (PropertyChanging != null)
+            PropertyChangingEventHandler handler = PropertyChanging;
+            if (handler != null)
             {
-                PropertyChanging(this, e);
+                handler(this, e);
             }
         }
-#endif
 
         #endregion
     }
