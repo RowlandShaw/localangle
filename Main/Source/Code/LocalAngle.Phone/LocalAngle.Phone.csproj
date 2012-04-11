@@ -88,6 +88,9 @@
     </Compile>
     <Compile Include="..\LocalAngle\OAuthCredentials.cs" />
     <Compile Include="..\LocalAngle\Postcode.cs" />
+    <Compile Include="..\LocalAngle\PostcodeConverter.cs">
+      <Link>PostcodeConverter.cs</Link>
+    </Compile>
     <Compile Include="..\LocalAngle\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>

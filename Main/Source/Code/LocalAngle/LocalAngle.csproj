@@ -75,6 +75,7 @@
     <Compile Include="Net\OAuthSignatureMethod.cs" />
     <Compile Include="OAuthCredentials.cs" />
     <Compile Include="Postcode.cs" />
+    <Compile Include="PostcodeConverter.cs" />
     <Compile Include="PropertyComparer.cs" />
     <Compile Include="SortableList.cs" />
     <Compile Include="Net\OAuthWebRequest.cs" />

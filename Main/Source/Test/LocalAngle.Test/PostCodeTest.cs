@@ -66,7 +66,7 @@ namespace LocalAngle.Test
         /// <summary>
         ///A test for Unit
         ///</summary>
-        [TestMethod()]
+        [TestMethod(), TestCategory("Postcode parsing")]
         public void FormattingTest()
         {
             string expected = "BH6 4LP"; // TODO: Initialize to an appropriate value
@@ -78,7 +78,7 @@ namespace LocalAngle.Test
         /// <summary>
         ///A test for Unit
         ///</summary>
-        [TestMethod()]
+        [TestMethod(), TestCategory("Postcode parsing")]
         public void MinorAreaTest()
         {
             string expected = "BH6 4LP"; // TODO: Initialize to an appropriate value
@@ -90,7 +90,7 @@ namespace LocalAngle.Test
         /// <summary>
         ///A test for Unit
         ///</summary>
-        [TestMethod()]
+        [TestMethod(), TestCategory("Postcode parsing")]
         public void MajorAreaTest()
         {
             string expected = "B33 8TH"; // TODO: Initialize to an appropriate value
@@ -102,7 +102,7 @@ namespace LocalAngle.Test
         /// <summary>
         ///A test for Unit
         ///</summary>
-        [TestMethod()]
+        [TestMethod(), TestCategory("Postcode parsing")]
         public void LondonValidTests()
         {
             string expected = "W10 4AA"; // TODO: Initialize to an appropriate value
@@ -144,7 +144,7 @@ namespace LocalAngle.Test
         /// <summary>
         ///A test for Unit
         ///</summary>
-        [TestMethod(), ExpectedException(typeof(FormatException))]
+        [TestMethod(), TestCategory("Postcode parsing"), ExpectedException(typeof(FormatException))]
         public void CentralLondonInvalidTest()
         {
             string expected = "WC1 1AB"; // TODO: Initialize to an appropriate value
