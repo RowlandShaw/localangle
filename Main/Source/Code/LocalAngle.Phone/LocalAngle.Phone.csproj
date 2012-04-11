@@ -99,6 +99,7 @@
     </Compile>
     <Compile Include="GeoLocation.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="IsolatedStorageCredentialsStore.cs" />
     <Compile Include="Net\OAuthWebRequest.cs" />
   </ItemGroup>
   <ItemGroup>
