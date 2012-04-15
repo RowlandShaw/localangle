@@ -148,7 +148,6 @@
     <Compile Include="..\LocalAngle\Events\SpecialEvent.cs">
       <Link>Events\SpecialEvent.cs</Link>
     </Compile>
-    <Compile Include="GeoLocation.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Net\OAuthWebRequest.cs" />
     <Compile Include="System\ComponentModel\INotifyPropertyChanging.cs" />

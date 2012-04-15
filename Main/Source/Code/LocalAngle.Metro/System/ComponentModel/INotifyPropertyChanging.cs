@@ -8,7 +8,7 @@
         /// <summary>
         /// Occurs when a property value is changing.
         /// </summary>
-        event EventHandler<PropertyChangingEventArgs> PropertyChanging;
+        event PropertyChangingEventHandler PropertyChanging;
     }
 
     /// <summary>
@@ -22,4 +22,11 @@
         /// <param name="propertyName">The name of the property that is changing.</param>
         public PropertyChangingEventArgs(string propertyName) : base(propertyName) { }
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    public delegate void PropertyChangingEventHandler(object sender, PropertyChangingEventArgs e);
 }
