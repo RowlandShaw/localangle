@@ -9,6 +9,7 @@ using System.Net;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 
 namespace LocalAngle.Net
 {
@@ -360,7 +361,10 @@ namespace LocalAngle.Net
         public override WebResponse GetResponse()
         {
             IAsyncResult res = BeginGetResponse(callback => {}, null);
-            res.AsyncWaitHandle.WaitOne();
+            while (!res.IsCompleted)
+            {
+                Thread.SpinWait(1);
+            }
             return EndGetResponse(res);
         }
 
