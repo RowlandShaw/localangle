@@ -66,6 +66,7 @@ namespace LocalAngle.Net.Test
         //
         #endregion
 
+        #region Echo Tests
 
         /// <summary>
         /// Test using an echo service
@@ -165,6 +166,76 @@ namespace LocalAngle.Net.Test
 
             Assert.AreEqual(expected, actual);
         }
+
+        /// <summary>
+        /// Test using an echo service
+        /// </summary>
+        [TestMethod(), TestCategory("Echo tests")]
+        public void PostLocalAngleTest()
+        {
+            Uri uri = new Uri("http://api.angle.uk.com/oauth/1.0/events/nearby");
+            string consumerKey = "ngcA6zb9mcLwj15Hyjy0vA";
+            string consumerSecret = "jmOYyX43N3W5S0gHsX2lP7OzUPavVUEigTrsdvyirG4";
+            string token = "86389544-grD6t7NnRyVPyOFNwkH4ciL3rhdT2ayN1RmLMg1Q";
+            string tokenSecret = "6h45JPBeXaMq0TngKolfku6M2tB6gmTmIQshBZgL8i8";
+            string expected = @"[{""Description"":""Little bit of info about the event"",""EndTime"":""\/Date(1322046065000+0000)\/"",""Name"":""Test event name"",""Postcode"":""IP1 5PH"",""StartTime"":""\/Date(1322046000000+0000)\/""},{""Description"":""Little bit of info about the event"",""EndTime"":""\/Date(1322046065000+0000)\/"",""Name"":""Test event name"",""Postcode"":""IP1 5PH"",""StartTime"":""\/Date(1322046000000+0000)\/""}]";
+            OAuthWebRequest req = OAuthWebRequest.Create(uri, new OAuthCredentials(consumerKey, consumerSecret, token, tokenSecret));
+            req.RequestParameters.Add(new RequestParameter("location", "IP1 5PH"));
+            req.RequestParameters.Add(new RequestParameter("range", 0f.ToString()));
+            req.Method = "POST";
+
+            // First check the constructor did "the right thing"
+            Assert.AreEqual(consumerKey, req.OAuthCredentials.ConsumerKey);
+            Assert.AreEqual(consumerSecret, req.OAuthCredentials.ConsumerSecret);
+            Assert.AreEqual(token, req.OAuthCredentials.Token);
+            Assert.AreEqual(tokenSecret, req.OAuthCredentials.TokenSecret);
+
+            // Get the response
+            HttpWebResponse actualResponse = req.GetResponse() as HttpWebResponse;
+            Assert.IsNotNull(actualResponse);
+
+            // Read the message
+            StreamReader reader = new StreamReader(actualResponse.GetResponseStream());
+            string actual = reader.ReadToEnd();
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Test using an echo service
+        /// </summary>
+        /// <remarks>This test server appears to be a bit pernickety, and has been double checked with Perl's Net::OAuth (which in turn, Twitter works with)</remarks>
+        [TestMethod(), TestCategory("Echo tests")]
+        public void PostEchoTermIeTest()
+        {
+            Uri uri = new Uri("http://term.ie/oauth/example/echo_api.php?method=test");
+            string consumerKey = "key";
+            string consumerSecret = "secret";
+            string token = "accesskey";
+            string tokenSecret = "accesssecret";
+            string expected = "method=test";
+            OAuthCredentials creds = new OAuthCredentials(consumerKey, consumerSecret, token, tokenSecret);
+            OAuthWebRequest req = OAuthWebRequest.Create(uri, creds);
+            req.Method = "POST";
+
+            // First check the constructor did "the right thing"
+            Assert.AreEqual(consumerKey, req.OAuthCredentials.ConsumerKey);
+            Assert.AreEqual(consumerSecret, req.OAuthCredentials.ConsumerSecret);
+            Assert.AreEqual(token, req.OAuthCredentials.Token);
+            Assert.AreEqual(tokenSecret, req.OAuthCredentials.TokenSecret);
+
+            // Get the response
+            HttpWebResponse actualResponse = req.GetResponse() as HttpWebResponse;
+            Assert.IsNotNull(actualResponse);
+
+            // Read the message
+            StreamReader reader = new StreamReader(actualResponse.GetResponseStream());
+            string actual = reader.ReadToEnd();
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        #endregion
 
         #region Escaping test cases
 
