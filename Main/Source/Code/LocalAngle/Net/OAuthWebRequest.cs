@@ -451,6 +451,7 @@ namespace LocalAngle.Net
                 byte[] byteArray = Encoding.UTF8.GetBytes(postData);
                 Request.ContentLength = postData.Length;
 
+                ManualResetEvent wh = new ManualResetEvent(false);
                 IAsyncResult res = BeginGetRequestStream(callback =>
                 {
                     using (Stream req = EndGetRequestStream(callback))
@@ -458,13 +459,10 @@ namespace LocalAngle.Net
                         // Write to the request stream.
                         req.Write(byteArray, 0, postData.Length);
                     }
+                    wh.Set();
                 }, Request);
 
-                while (!res.IsCompleted)
-                {
-                    // this should be fairly quick, but it can still take some time (especially on a multi-core CPU)
-                    System.Threading.Thread.Sleep(10);
-                }
+                wh.WaitOne();
             }
         }
         
