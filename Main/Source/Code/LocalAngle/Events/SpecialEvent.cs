@@ -18,18 +18,6 @@ namespace LocalAngle.Events
     [Table]
     public class SpecialEvent : BindableBase, IComparable<SpecialEvent>, IEquatable<SpecialEvent>
     {
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SpecialEvent"/> class.
-        /// </summary>
-        public SpecialEvent()
-        {
-            Location = new Postcode();
-        }
-
-        #endregion
-
         #region Public Properties
 
         private string _eventId;
@@ -191,7 +179,7 @@ namespace LocalAngle.Events
             }
         }
 
-        private Postcode _location;
+        private Postcode _location = new Postcode();
         /// <summary>
         /// Gets or sets the location postal code.
         /// </summary>
@@ -611,14 +599,7 @@ namespace LocalAngle.Events
         public static IEnumerable<SpecialEvent> SearchNear(Postcode location, double range, DateTime since, string topic, IOAuthCredentials credentials)
         {
             IAsyncResult res = BeginSearchNear(callback => { }, location, range, since, topic, credentials);
-#if SILVERLIGHT
-            while (!res.IsCompleted)
-            {
-                System.Threading.Thread.Sleep(100);
-            }
-#else
             res.AsyncWaitHandle.WaitOne();
-#endif
             return EndSearchNear(res);
         }
 
