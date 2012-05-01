@@ -9,6 +9,7 @@ using System.Net;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 
 namespace LocalAngle.Net
 {
@@ -323,8 +324,13 @@ namespace LocalAngle.Net
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         public WebResponse GetResponse()
         {
-            IAsyncResult res = BeginGetResponse(callback => {}, null);
-            res.AsyncWaitHandle.WaitOne();
+            ManualResetEvent wh = new ManualResetEvent(false);
+            IAsyncResult res = BeginGetResponse(callback => 
+            {
+                wh.Set();
+            }, null);
+            wh.WaitOne();
+
             return EndGetResponse(res);
         }
 
@@ -405,18 +411,23 @@ namespace LocalAngle.Net
             {
                 // TODO: Would need to do something magical if we were to support multi-part uploads here.
                 Request.ContentType = "application/x-www-form-urlencoded";
+
+                // Convert the string into a byte array.
+                string postData = NormalizeParameters(signingParameters);
+                byte[] byteArray = Encoding.UTF8.GetBytes(postData);
+
+                ManualResetEvent wh = new ManualResetEvent(false);
                 IAsyncResult res = BeginGetRequestStream(callback =>
                 {
                     using (Stream req = EndGetRequestStream(callback))
                     {
-                        using (StreamWriter writer = new StreamWriter(req))
-                        {
-                            writer.Write(NormalizeParameters(signingParameters));
-                        }
+                        // Write to the request stream.
+                        req.Write(byteArray, 0, postData.Length);
                     }
-                }, null);
+                    wh.Set();
+                }, Request);
 
-                res.AsyncWaitHandle.WaitOne();
+                wh.WaitOne();
             }
         }
         

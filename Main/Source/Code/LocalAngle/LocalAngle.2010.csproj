@@ -70,6 +70,8 @@
     <Compile Include="PostcodeConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyComparer.cs" />
+    <Compile Include="Recruitment\Employer.cs" />
+    <Compile Include="Recruitment\Position.cs" />
     <Compile Include="SortableList.cs" />
   </ItemGroup>
   <ItemGroup>
