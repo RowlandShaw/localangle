@@ -19,9 +19,9 @@ namespace LocalAngle
         /// </summary>
         Day,
         /// <summary>
-        /// Recurs every week day
+        /// Recurs every day of the working week
         /// </summary>
-        WeekDay,
+        Weekday,
         /// <summary>
         /// Recurs every seven days
         /// </summary>

@@ -480,10 +480,25 @@ namespace LocalAngle.Events
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public static bool operator ==(SpecialEvent left, SpecialEvent right)
         {
-            return object.ReferenceEquals(left,right) || left.Equals(right);
+            if( object.ReferenceEquals(left, right) )
+            {
+                return true;
+            }
+
+            if (!object.ReferenceEquals(left, null))
+            {
+                return left.Equals(right);
+            }
+            else if (!object.ReferenceEquals(right, null))
+            {
+                return right.Equals(left);
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>

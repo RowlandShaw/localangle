@@ -13,11 +13,11 @@ namespace Microsoft.VisualStudio.TestTools.UnitTesting
         /// All a bit of a mock
         /// </summary>
         /// <param name="testCategory">VS2010 onwards uses this to categorise tests</param>
-        public TestCategoryAttribute(string testCategory);
+        public TestCategoryAttribute(string testCategory) { }
 
         /// <summary>
         /// If we actually bothered to implement this, this would return the list of categories
         /// </summary>
-        public IList<string> TestCategories { get; }
+        public IList<string> TestCategories { get { throw new NotImplementedException(); } }
     }
 }
