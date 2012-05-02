@@ -52,6 +52,9 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\LocalAngle.Test\RemunerationRangeTest.cs">
+      <Link>RemunerationRangeTest.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\LocalAngle.Test\OAuthWebRequestTest.cs" />
     <Compile Include="..\LocalAngle.Test\PostCodeTest.cs" />

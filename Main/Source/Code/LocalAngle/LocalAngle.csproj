@@ -77,6 +77,10 @@
     <Compile Include="Postcode.cs" />
     <Compile Include="PostcodeConverter.cs" />
     <Compile Include="PropertyComparer.cs" />
+    <Compile Include="Recruitment\Employer.cs" />
+    <Compile Include="Recruitment\Position.cs" />
+    <Compile Include="Recruitment\RenumerationRange.cs" />
+    <Compile Include="Recurrence.cs" />
     <Compile Include="SortableList.cs" />
     <Compile Include="Net\OAuthWebRequest.cs" />
     <Compile Include="Net\RequestParameter.cs" />

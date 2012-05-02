@@ -142,7 +142,7 @@ namespace LocalAngle.Recruitment
 
                 bob.Append(FormatCurrency(LowerBound.Value));
 
-                if (UpperBound.HasValue)
+                if (UpperBound.HasValue && LowerBound.Value != UpperBound.Value)
                 {
                     bob.Append(" - ");
 
@@ -152,7 +152,7 @@ namespace LocalAngle.Recruitment
                 if (Period != Recurrence.Year)
                 {
                     bob.Append(" per ");
-                    bob.Append(bob.ToString());
+                    bob.Append(Period.ToString());
                 }
 
                 return bob.ToString();

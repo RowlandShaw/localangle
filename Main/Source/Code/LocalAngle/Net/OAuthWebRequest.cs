@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -54,7 +53,7 @@ namespace LocalAngle.Net
         /// </summary>
         /// <param name="uri">The URI.</param>
         /// <param name="credentials">The credentials.</param>
-        [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification= "OAuth requires the protocol be normalised in lower case.")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = "OAuth requires the protocol be normalised in lower case.")]
         public OAuthWebRequest(Uri uri, IOAuthCredentials credentials)
         {
             if (uri == null)
@@ -452,7 +451,7 @@ namespace LocalAngle.Net
                 Request.ContentLength = postData.Length;
 
                 ManualResetEvent wh = new ManualResetEvent(false);
-                IAsyncResult res = BeginGetRequestStream(callback =>
+                BeginGetRequestStream(callback =>
                 {
                     using (Stream req = EndGetRequestStream(callback))
                     {
