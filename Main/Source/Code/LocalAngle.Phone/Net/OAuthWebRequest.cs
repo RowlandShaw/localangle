@@ -417,7 +417,7 @@ namespace LocalAngle.Net
                 byte[] byteArray = Encoding.UTF8.GetBytes(postData);
 
                 ManualResetEvent wh = new ManualResetEvent(false);
-                IAsyncResult res = BeginGetRequestStream(callback =>
+                BeginGetRequestStream(callback =>
                 {
                     using (Stream req = EndGetRequestStream(callback))
                     {
