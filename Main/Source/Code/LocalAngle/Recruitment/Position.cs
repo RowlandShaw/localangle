@@ -56,7 +56,7 @@ namespace LocalAngle.Recruitment
             }
             set
             {
-                OnPropertyChanged( "Title", ref _title, value)
+                OnPropertyChanged("Title", ref _title, value);
             }
         }
 
@@ -125,8 +125,43 @@ namespace LocalAngle.Recruitment
             }
         }
 
-        private string _rate;
+        private RemunerationRange _rate;
+        /// <summary>
+        /// Gets or sets the pay range.
+        /// </summary>
+        /// <value>
+        /// The pay range.
+        /// </value>
+        public RemunerationRange PayRange
+        {
+            get
+            {
+                return _rate;
+            }
+            set
+            {
+                OnPropertyChanged("PayRange", ref _rate, value);
+            }
+        }
+
         private string _reference;
+        /// <summary>
+        /// Gets or sets the reference number for this advert.
+        /// </summary>
+        /// <value>
+        /// The reference.
+        /// </value>
+        public string Reference
+        {
+            get
+            {
+                return _reference;
+            }
+            set
+            {
+                OnPropertyChanged("Reference", ref _reference, value);
+            }
+        }
 
     }
 }

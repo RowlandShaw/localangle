@@ -13,6 +13,9 @@ using System.Windows.Shapes;
 
 namespace LocalAngle
 {
+    /// <summary>
+    /// Represents a basic store for OAuth credentials using Isolated storage
+    /// </summary>
     public class IsolatedStorageCredentialsStore : BindableBase, IOAuthCredentials
     {
         #region Constructor

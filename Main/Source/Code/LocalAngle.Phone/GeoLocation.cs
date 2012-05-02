@@ -64,12 +64,32 @@ namespace LocalAngle
         /// <returns></returns>
         public static GeoLocation FromGeoCoordinate(GeoCoordinate position)
         {
+            return position;
+        }
+
+        /// <summary>
+        /// Convert to framework type
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        public static implicit operator GeoCoordinate(GeoLocation position)
+        {
             if (position == null)
-            {
+            { 
                 return null;
             }
 
-            return new GeoLocation(position.Latitude, position.Longitude);
+            return new GeoCoordinate(position.Latitude, position.Longitude);
+        }
+
+        /// <summary>
+        /// convert from framework type
+        /// </summary>
+        /// <param name="position">The position.</param>
+        /// <returns></returns>
+        public static GeoCoordinate ToGeoCoordinate(GeoLocation position)
+        {
+            return position;
         }
 
         #endregion

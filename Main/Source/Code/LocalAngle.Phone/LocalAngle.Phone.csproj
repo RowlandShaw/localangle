@@ -100,6 +100,18 @@
     <Compile Include="..\LocalAngle\Events\SpecialEvent.cs">
       <Link>Events\SpecialEvent.cs</Link>
     </Compile>
+    <Compile Include="..\LocalAngle\Recruitment\Employer.cs">
+      <Link>Recruitment\Employer.cs</Link>
+    </Compile>
+    <Compile Include="..\LocalAngle\Recruitment\Position.cs">
+      <Link>Recruitment\Position.cs</Link>
+    </Compile>
+    <Compile Include="..\LocalAngle\Recruitment\RenumerationRange.cs">
+      <Link>Recruitment\RenumerationRange.cs</Link>
+    </Compile>
+    <Compile Include="..\LocalAngle\Recurrence.cs">
+      <Link>Recurrence.cs</Link>
+    </Compile>
     <Compile Include="GeoLocation.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IsolatedStorageCredentialsStore.cs" />

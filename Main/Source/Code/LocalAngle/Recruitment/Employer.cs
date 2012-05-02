@@ -11,6 +11,9 @@ using LocalAngle.Net;
 
 namespace LocalAngle.Recruitment
 {
+    /// <summary>
+    /// Represents a Employer
+    /// </summary>
     public class Employer : BindableBase
     {
         #region Public Properties 
