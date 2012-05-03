@@ -116,10 +116,16 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IsolatedStorageCredentialsStore.cs" />
     <Compile Include="Net\OAuthWebRequest.cs" />
+    <Compile Include="System\ComponentModel\DataAnnotations\RequiredAttribute.cs" />
+    <Compile Include="System\ComponentModel\DataAnnotations\ValidationAttribute.cs" />
+    <Compile Include="System\ComponentModel\DataAnnotations\ValidationContext.cs" />
+    <Compile Include="System\ComponentModel\DataAnnotations\ValidationResult.cs" />
+    <Compile Include="System\ComponentModel\DisplayNameAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\LocalAngle\CodeAnalysisDictionary.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions />
