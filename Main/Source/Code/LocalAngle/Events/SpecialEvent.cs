@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Linq.Mapping;
 using System.Globalization;
 using System.Linq;
@@ -49,7 +51,9 @@ namespace LocalAngle.Events
         /// The name.
         /// </value>
         [DataMember(IsRequired=true)]
+        [Required]
         [Column]
+        [DisplayName("Event name")]
         public string Name
         {
             get
@@ -70,7 +74,9 @@ namespace LocalAngle.Events
         /// The description.
         /// </value>
         [DataMember(IsRequired = true)]
+        [Required]
         [Column]
+        [DisplayName("Description")]
         public string Description
         {
             get
@@ -100,8 +106,10 @@ namespace LocalAngle.Events
         /// <value>
         /// The name of the venue.
         /// </value>
-        [DataMember]
+        [DataMember(IsRequired = true)]
+        [Required]
         [Column]
+        [DisplayName("Venue")]
         public string VenueName
         {
             get
@@ -206,7 +214,9 @@ namespace LocalAngle.Events
         /// The start time.
         /// </value>
         [DataMember(IsRequired = true)]
+        [Required]
         [Column]
+        [DisplayName("Start")]
         public DateTime StartTime
         {
             get
@@ -227,7 +237,9 @@ namespace LocalAngle.Events
         /// The end time.
         /// </value>
         [DataMember(IsRequired = true)]
+        [Required]
         [Column]
+        [DisplayName("End")]
         public DateTime EndTime
         {
             get
@@ -291,6 +303,7 @@ namespace LocalAngle.Events
         /// </value>
         [DataMember]
         [Column]
+        [DisplayName("Online ticketing")]
         public Uri TicketUri
         {
             get
@@ -303,10 +316,6 @@ namespace LocalAngle.Events
             }
         }
 
-        #endregion
-
-        #region Protected Properties
-
         /// <summary>
         /// Gets or sets the postcode.
         /// </summary>
@@ -318,6 +327,7 @@ namespace LocalAngle.Events
         /// </remarks>
         [DataMember(Name = "Postcode")]
         [Column]
+        [DisplayName("Venue postal code")]
         public string Postcode
         {
             get
