@@ -111,6 +111,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\LocalAngle.Phone\System\ComponentModel\DisplayNameAttribute.cs">
+      <Link>System\ComponentModel\DisplayNameAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\LocalAngle\BindableBase.cs" />
     <Compile Include="..\LocalAngle\Cache.cs" />
     <Compile Include="..\LocalAngle\CacheEntry.cs" />
