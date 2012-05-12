@@ -39,7 +39,7 @@ namespace LocalAngle.Events
             }
             set
             {
-                OnPropertyChanged("AdvertId", ref _eventId, value);
+                OnPropertyChanged("EventId", ref _eventId, value);
             }
         }
 
