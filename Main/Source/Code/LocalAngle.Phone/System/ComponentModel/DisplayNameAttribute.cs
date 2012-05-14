@@ -6,7 +6,7 @@ namespace System.ComponentModel
     /// <summary>
     /// Represents a Display name attribute
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Event)]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes"), AttributeUsage(AttributeTargets.Class | AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Event)]
     public class DisplayNameAttribute : Attribute
     {
         /// <summary>
