@@ -5,7 +5,7 @@ namespace System.ComponentModel.DataAnnotations
     /// <summary>
     /// Specifies that a data field value is required.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1813:AvoidUnsealedAttributes"), AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
     public class RequiredAttribute : ValidationAttribute
     {
         /// <summary>

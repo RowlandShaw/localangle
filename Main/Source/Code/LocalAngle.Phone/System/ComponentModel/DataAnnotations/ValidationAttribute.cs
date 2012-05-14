@@ -55,6 +55,7 @@ namespace System.ComponentModel.DataAnnotations
         /// <param name="value">The value to validate.</param>
         /// <param name="validationContext">The context information about the validation operation.</param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "value"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "validationContext")]
         public ValidationResult GetValidationResult(object value, ValidationContext validationContext) { throw new NotImplementedException(); }
 
         /// <summary>
@@ -71,6 +72,7 @@ namespace System.ComponentModel.DataAnnotations
         /// </summary>
         /// <param name="value">The value of the object to validate.</param>
         /// <param name="name">The name to include in the error message.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "value"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "name")]
         public void Validate(object value, string name) { throw new NotImplementedException(); }
         
         /// <summary>
@@ -78,6 +80,7 @@ namespace System.ComponentModel.DataAnnotations
         /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="validationContext">The validation context.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "value"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "validationContext")]
         public void Validate(object value, ValidationContext validationContext) { throw new NotImplementedException(); }
     }
 }
