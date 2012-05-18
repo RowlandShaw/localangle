@@ -1,15 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
 using System.IO.IsolatedStorage;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace LocalAngle
 {
@@ -98,9 +92,26 @@ namespace LocalAngle
         /// </summary>
         private IsolatedStorageSettings isolatedStore;
 
+        private byte[] _entropy;
+        /// <summary>
+        /// Gets the entropy for protecting the user token/secret.
+        /// </summary>
+        private byte[] Entropy
+        {
+            get
+            {
+                if (_entropy == null)
+                {
+                    _entropy = Encoding.UTF8.GetBytes(ConsumerSecret);
+                }
+
+                return _entropy;
+            }
+        }
+
         #endregion
 
-        #region " Protected Methods "
+        #region Protected Methods
 
         /// <summary>
         /// Update a setting value for our application. If the setting does not
@@ -109,26 +120,28 @@ namespace LocalAngle
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        protected bool AddOrUpdateValue(string key, Object value)
+        protected bool AddOrUpdateValue(string key, string value)
         {
             bool valueChanged = false;
+            string encryptedValue = Convert.ToBase64String(ProtectedData.Protect(Encoding.UTF8.GetBytes(value), Entropy));
 
             if (isolatedStore.Contains(key))
             {
                 // If the key exists
-                if (isolatedStore[key] != value)
+                if ((string)isolatedStore[key] != encryptedValue)
                 {
                     // If the value has changed, store the new value
-                    isolatedStore[key] = value;
+                    isolatedStore[key] = encryptedValue;
                     valueChanged = true;
                 }
             }
             else
             {
                // Otherwise create the key.
-                isolatedStore.Add(key, value);
+                isolatedStore.Add(key, encryptedValue);
                 valueChanged = true;
             }
+            isolatedStore.Save();
 
             return valueChanged;
         }
@@ -137,16 +150,20 @@ namespace LocalAngle
         /// Get the current value of the setting, or if it is not found, set the 
         /// setting to the default setting.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
         /// <param name="defaultValue"></param>
         /// <returns></returns>
-        protected T GetValueOrDefault<T>(string key, T defaultValue)
+        protected string GetValueOrDefault(string key, string defaultValue)
         {
             if (isolatedStore.Contains(key))
             {
                 // If the key exists, retrieve the value.
-                return (T)isolatedStore[key];
+                byte[] decryptedBytes = ProtectedData.Unprotect(Convert.FromBase64String((string)isolatedStore[key]), Entropy);
+                using (MemoryStream ms = new MemoryStream(decryptedBytes))
+                {
+                    TextReader reader = new StreamReader(ms, Encoding.UTF8);
+                    return reader.ReadToEnd();
+                }
             }
             else
             {
@@ -159,13 +176,12 @@ namespace LocalAngle
         /// Checks if a property already matches a desired value.  Sets the property and
         /// notifies listeners only when necessary.
         /// </summary>
-        /// <typeparam name="T">Type of the property.</typeparam>
         /// <param name="propertyName">Name of the property used to notify listeners.</param>
         /// <param name="value">Desired value for the property.</param>
-        protected void OnPropertyChanged<T>(string propertyName, T value)
+        protected void OnPropertyChanged(string propertyName, string value)
         {
             string key = KeyForProperty(propertyName);
-            T oldValue = GetValueOrDefault(key, default(T));
+            string oldValue = GetValueOrDefault(key, string.Empty);
 
             if (!object.Equals(oldValue, value))
             {
