@@ -21,6 +21,9 @@ namespace LocalAngle
         double Longitude { get; }
     }
 
+    /// <summary>
+    /// Extensions for our <see cref="IGeoLocation"/> interface
+    /// </summary>
     public static class GeoLocationExtensions
     {
         /// <summary>
