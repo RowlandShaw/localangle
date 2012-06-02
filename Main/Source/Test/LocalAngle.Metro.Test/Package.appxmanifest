@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
-  <Identity Name="2b05bae0-7518-4a75-8e00-5fe0bc1b9b86" Publisher="CN=rshaw" Version="1.0.0.0" />
+  <Identity Name="8cd43bae-40f2-4a17-ab47-60489108e5b6" Publisher="CN=Rowland" Version="1.0.0.0" />
   <Properties>
     <DisplayName>LocalAngle.Metro.Test</DisplayName>
-    <PublisherDisplayName>rshaw</PublisherDisplayName>
+    <PublisherDisplayName>Rowland</PublisherDisplayName>
     <Logo>Images\UnitTestStoreLogo.png</Logo>
     <Description>LocalAngle.Metro.Test</Description>
   </Properties>
@@ -27,6 +27,7 @@
     </Application>
   </Applications>
   <Capabilities>
+    <Capability Name="picturesLibrary" />
     <Capability Name="internetClient" />
     <DeviceCapability Name="location" />
   </Capabilities>
