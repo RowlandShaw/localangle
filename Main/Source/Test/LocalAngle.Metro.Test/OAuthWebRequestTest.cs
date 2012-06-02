@@ -1,9 +1,8 @@
-﻿using LocalAngle.Net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.Net;
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using LocalAngle.Net;
 
 namespace LocalAngle.Net.Test
 {

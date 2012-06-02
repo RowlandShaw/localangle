@@ -6,15 +6,11 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Runtime.Serialization;
-using System.Threading;
-using System.Threading.Tasks;
-using Windows.Security.Authentication.Web;
-using Windows.Security.Cryptography.Core;
-using Windows.Security.Cryptography;
-using Windows.Storage.Streams;
 using System.Text;
 using System.Threading;
+using Windows.Security.Cryptography;
+using Windows.Security.Cryptography.Core;
+using Windows.Storage.Streams;
 
 namespace LocalAngle.Net
 {
@@ -431,7 +427,7 @@ namespace LocalAngle.Net
                 byte[] byteArray = Encoding.UTF8.GetBytes(postData);
 
                 ManualResetEvent wh = new ManualResetEvent(false);
-                IAsyncResult res = BeginGetRequestStream(callback =>
+                BeginGetRequestStream(callback =>
                 {
                     using (Stream req = EndGetRequestStream(callback))
                     {
