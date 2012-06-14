@@ -16,7 +16,7 @@ namespace LocalAngle.Recruitment
     /// </summary>
     [DataContract]
     [Table]
-    public class Position : BindableBase
+    public class Position : BindableBase, IGeoLocation
     {
         private Guid _jobId;
         /// <summary>
@@ -47,7 +47,7 @@ namespace LocalAngle.Recruitment
         /// The title.
         /// </value>
         [DataMember]
-        [Column(CanBeNull=false)]
+        [Column(CanBeNull=false, DbType="NVARCHAR(255)")]
         public string Title
         {
             get
@@ -60,6 +60,26 @@ namespace LocalAngle.Recruitment
             }
         }
 
+        private string _contact;
+        /// <summary>
+        /// Gets or sets the contact details.
+        /// </summary>
+        /// <value>
+        /// The contact details.
+        /// </value>
+        [DataMember]
+        [Column(DbType = "NVARCHAR(255)")]
+        public string ContactDetails
+        {
+            get
+            {
+                return _contact;
+            }
+            protected set
+            {
+                OnPropertyChanged("ContactDetails", ref _contact, value);
+            }
+        }
         private DateTime? _closingDate;
         /// <summary>
         /// Gets or sets the closing date for applications for the position.
@@ -90,7 +110,7 @@ namespace LocalAngle.Recruitment
         /// The description.
         /// </value>
         [DataMember(IsRequired = true)]
-        [Column]
+        [Column(DbType = "NTEXT")]
         public string Description
         {
             get
@@ -100,6 +120,50 @@ namespace LocalAngle.Recruitment
             set
             {
                 OnPropertyChanged("Description", ref _description, value);
+            }
+        }
+
+        private double _latitude = 90;
+        /// <summary>
+        /// Gets or sets the latitude in decimal degrees.
+        /// </summary>
+        /// <value>
+        /// The latitude.
+        /// </value>
+        /// <remarks>Uses the WGS84 datum</remarks>
+        [DataMember]
+        [Column]
+        public double Latitude
+        {
+            get
+            {
+                return _latitude;
+            }
+            set
+            {
+                OnPropertyChanged("Latitude", ref _latitude, value);
+            }
+        }
+
+        private double _longitude = 90;
+        /// <summary>
+        /// Gets or sets the longitude in decimal degrees.
+        /// </summary>
+        /// <value>
+        /// The longitude.
+        /// </value>
+        /// <remarks>Uses the WGS84 datum</remarks>
+        [DataMember]
+        [Column]
+        public double Longitude
+        {
+            get
+            {
+                return _longitude;
+            }
+            set
+            {
+                OnPropertyChanged("Longitude", ref _longitude, value);
             }
         }
 
@@ -151,6 +215,8 @@ namespace LocalAngle.Recruitment
         /// <value>
         /// The reference.
         /// </value>
+        [DataMember]
+        [Column]
         public string Reference
         {
             get
