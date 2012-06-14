@@ -52,7 +52,7 @@ namespace LocalAngle.Events
         /// </value>
         [DataMember(IsRequired=true)]
         [Required]
-        [Column]
+        [Column(DbType = "NVARCHAR(255)")]
         [DisplayName("Event name")]
         public string Name
         {
@@ -75,7 +75,7 @@ namespace LocalAngle.Events
         /// </value>
         [DataMember(IsRequired = true)]
         [Required]
-        [Column]
+        [Column(DbType = "NTEXT")]
         [DisplayName("Description")]
         public string Description
         {
@@ -108,7 +108,7 @@ namespace LocalAngle.Events
         /// </value>
         [DataMember]
         [Required]
-        [Column]
+        [Column(DbType="NVARCHAR(255)")]
         [DisplayName("Venue")]
         public string VenueName
         {
@@ -326,7 +326,7 @@ namespace LocalAngle.Events
         /// Intended for use by the JSON serialisers
         /// </remarks>
         [DataMember(Name = "Postcode")]
-        [Column]
+        [Column(DbType = "NVARCHAR(8)")]
         [DisplayName("Venue postal code")]
         public string Postcode
         {

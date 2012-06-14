@@ -12,7 +12,7 @@ namespace LocalAngle.Classifieds
     /// <summary>
     /// Represents a classified advert
     /// </summary>
-    public class Freead : BindableBase
+    public class Freead : BindableBase, IGeoLocation
     {
         #region Public Properties
 
@@ -45,7 +45,7 @@ namespace LocalAngle.Classifieds
         /// The contact details.
         /// </value>
         [DataMember]
-        [Column]
+        [Column(DbType = "NVARCHAR(255)")]
         public string ContactDetails
         {
             get
@@ -66,7 +66,7 @@ namespace LocalAngle.Classifieds
         /// The description.
         /// </value>
         [DataMember]
-        [Column]
+        [Column(DbType = "NTEXT")]
         public string Description
         {
             get
@@ -93,6 +93,50 @@ namespace LocalAngle.Classifieds
             }
         }
 
+        private double _latitude = 90;
+        /// <summary>
+        /// Gets or sets the latitude in decimal degrees.
+        /// </summary>
+        /// <value>
+        /// The latitude.
+        /// </value>
+        /// <remarks>Uses the WGS84 datum</remarks>
+        [DataMember]
+        [Column]
+        public double Latitude
+        {
+            get
+            {
+                return _latitude;
+            }
+            set
+            {
+                OnPropertyChanged("Latitude", ref _latitude, value);
+            }
+        }
+
+        private double _longitude = 90;
+        /// <summary>
+        /// Gets or sets the longitude in decimal degrees.
+        /// </summary>
+        /// <value>
+        /// The longitude.
+        /// </value>
+        /// <remarks>Uses the WGS84 datum</remarks>
+        [DataMember]
+        [Column]
+        public double Longitude
+        {
+            get
+            {
+                return _longitude;
+            }
+            set
+            {
+                OnPropertyChanged("Longitude", ref _longitude, value);
+            }
+        }
+
         private DateTime _lastModified;
         /// <summary>
         /// Gets or sets the last modification time.
@@ -101,7 +145,7 @@ namespace LocalAngle.Classifieds
         /// The last modified.
         /// </value>
         [DataMember]
-        [Column(IsVersion = true)]
+        [Column]
         public DateTime LastModified
         {
             get
@@ -122,7 +166,7 @@ namespace LocalAngle.Classifieds
         /// The name.
         /// </value>
         [DataMember]
-        [Column]
+        [Column(DbType = "NVARCHAR(255)")]
         public string Name
         {
             get
