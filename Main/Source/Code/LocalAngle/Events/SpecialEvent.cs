@@ -18,11 +18,11 @@ namespace LocalAngle.Events
     /// </summary>
     [DataContract]
     [Table]
-    public class SpecialEvent : BindableBase, IComparable<SpecialEvent>, IEquatable<SpecialEvent>
+    public class SpecialEvent : BindableBase, IComparable<SpecialEvent>, IEquatable<SpecialEvent>, IGeoLocation
     {
         #region Public Properties
 
-        private string _eventId;
+        private int _eventId;
         /// <summary>
         /// Gets or sets a unique identifier for the event.
         /// </summary>
@@ -31,7 +31,7 @@ namespace LocalAngle.Events
         /// </value>
         [DataMember]
         [Column(IsPrimaryKey = true)]
-        public string EventId
+        public int EventId
         {
             get
             {
@@ -106,7 +106,7 @@ namespace LocalAngle.Events
         /// <value>
         /// The name of the venue.
         /// </value>
-        [DataMember(IsRequired = true)]
+        [DataMember]
         [Required]
         [Column]
         [DisplayName("Venue")]
@@ -130,7 +130,7 @@ namespace LocalAngle.Events
         /// The last modified.
         /// </value>
         [DataMember]
-        [Column(IsVersion = true)]
+        [Column]
         public DateTime LastModified
         {
             get
@@ -302,7 +302,7 @@ namespace LocalAngle.Events
         /// The ticket URI.
         /// </value>
         [DataMember]
-        [Column]
+        [Column(DbType="NVARCHAR(250)")]
         [DisplayName("Online ticketing")]
         public Uri TicketUri
         {
@@ -359,6 +359,10 @@ namespace LocalAngle.Events
         /// Greater than zero
         /// This object is greater than <paramref name="other"/>.
         /// </returns>
+        /// <remarks>
+        /// This only evaluates the natural key -- if data were duplicated in the DB, they would be compare as the same, 
+        /// even though <see cref="Equals"/> would report them as different records
+        /// </remarks>
         public int CompareTo(SpecialEvent other)
         {
             if (object.ReferenceEquals(this, other))
@@ -413,7 +417,7 @@ namespace LocalAngle.Events
         /// </returns>
         public bool Equals(SpecialEvent other)
         {
-            return CompareTo(other) == 0;
+            return (CompareTo(other) == 0) && (EventId == other.EventId);
         }
 
         /// <summary>
