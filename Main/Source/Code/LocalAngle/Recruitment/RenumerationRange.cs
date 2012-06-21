@@ -176,9 +176,9 @@ namespace LocalAngle.Recruitment
         {
             if (IsApproximate && value > 1000)
             {
-                value = decimal.Round(value / 1000, 1);
+                value = Math.Round(value / 1000, 1);
 
-                if (value == decimal.Round(value, 0))
+                if (value == Math.Round(value / 1000, 0))
                 {
                     return (Currency.Length == 1 ? Currency : "") + value.ToString("f0", CultureInfo.CurrentCulture) + "K" + (Currency.Length > 1 ? " " + Currency : "");
                 }
