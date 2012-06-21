@@ -10,14 +10,18 @@ namespace LocalAngle.Classifieds
         /// <summary>
         /// Item for sale
         /// </summary>
-        ForSale,
+        ForSale = 1,
         /// <summary>
         /// Item wanted
         /// </summary>
-        Wanted,
+        Wanted = 2,
         /// <summary>
         /// Missing pet
         /// </summary>
-        Missing
+        Missing = 3,
+        /// <summary>
+        /// Free-cycling
+        /// </summary>
+        FreeCycle = 4
     }
 }

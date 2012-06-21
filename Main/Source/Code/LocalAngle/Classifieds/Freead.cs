@@ -39,6 +39,26 @@ namespace LocalAngle.Classifieds
             }
         }
 
+        private AdvertType _advertType = AdvertType.ForSale;
+        /// <summary>
+        /// Gets or sets the type of the advert.
+        /// </summary>
+        /// <value>
+        /// The type of the advert.
+        /// </value>
+        [Column(DbType="INT DEFAULT 1")]
+        public AdvertType AdvertType
+        {
+            get
+            {
+                return _advertType;
+            }
+            set
+            {
+                OnPropertyChanged("AdvertType", ref _advertType, value);
+            }
+        }
+
         private string _contact;
         /// <summary>
         /// Gets or sets the contact details.
