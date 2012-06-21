@@ -417,6 +417,11 @@ namespace LocalAngle.Events
         /// </returns>
         public bool Equals(SpecialEvent other)
         {
+            if (other == null)
+            {
+                return false;
+            }
+
             return (CompareTo(other) == 0) && (EventId == other.EventId);
         }
 
