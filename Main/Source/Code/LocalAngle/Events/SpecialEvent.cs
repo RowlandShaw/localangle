@@ -75,7 +75,7 @@ namespace LocalAngle.Events
         /// </value>
         [DataMember(IsRequired = true)]
         [Required]
-        [Column(DbType = "NTEXT")]
+        [Column(DbType = "NTEXT", UpdateCheck = UpdateCheck.Never)]
         [DisplayName("Description")]
         public string Description
         {
@@ -98,6 +98,22 @@ namespace LocalAngle.Events
         /// <remarks>Only meaningful when populated during a search (so doesn't respect INotfifyProperty...).</remarks>
         [DataMember]
         public double Distance { get; set; }
+
+        /// <summary>
+        /// Gets the URI for the event details for attribution.
+        /// </summary>
+        /// <remarks>
+        /// Under the terms of use for the public API, any use of the event data in an electronic form must include a hyperlink to the event.
+        /// It is desirable that any printed use of the event data incorporate a link, either textual, as a QR code, or both, if practical. 
+        /// Displaying a URL, or using it as a hyperlink is enough to satisfy local.angle's attribution requirement of the licence to use the data.
+        /// </remarks>
+        public Uri EventUri
+        {
+            get
+            {
+                return new Uri("http://r.angle.uk.com/ev/" + EventId.ToString(CultureInfo.InvariantCulture), UriKind.Absolute);
+            }
+        }
 
         private string _venueName;
         /// <summary>
