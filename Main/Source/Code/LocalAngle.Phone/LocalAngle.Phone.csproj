@@ -116,6 +116,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IsolatedStorageCredentialsStore.cs" />
     <Compile Include="Net\OAuthWebRequest.cs" />
+    <Compile Include="PostcodeDetails.cs" />
     <Compile Include="System\ComponentModel\DataAnnotations\RequiredAttribute.cs" />
     <Compile Include="System\ComponentModel\DataAnnotations\ValidationAttribute.cs" />
     <Compile Include="System\ComponentModel\DataAnnotations\ValidationContext.cs" />

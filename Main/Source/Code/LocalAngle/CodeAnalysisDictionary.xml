@@ -3,7 +3,10 @@
 	<Words>
 		<Recognized>
 			<Word>Auth</Word>
+			<Word>Favourite</Word>
 			<Word>Freead</Word>
+			<Word>Freeads</Word>
+			<Word>Initialise</Word>
 			<Word>Hmac</Word>
 			<Word>Sha</Word>
 			<Word>Sortable</Word>

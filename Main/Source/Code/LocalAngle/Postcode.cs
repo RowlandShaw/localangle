@@ -138,6 +138,19 @@ namespace LocalAngle
             return postcode.ToString();
         }
 
+        /// <summary>
+        /// Determines whether the specified value is valid.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified value is valid; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsValid( string value )
+        {
+            var results = Postcode.Parse.Match(value);
+            return results.Success;
+        }
+
         #endregion
 
         #region Private Static Properties
