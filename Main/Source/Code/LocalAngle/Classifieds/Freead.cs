@@ -12,11 +12,13 @@ namespace LocalAngle.Classifieds
     /// <summary>
     /// Represents a classified advert
     /// </summary>
+    [DataContract]
+    [Table]
     public class Freead : BindableBase, IGeoLocation
     {
         #region Public Properties
 
-        private string _advertId;
+        private int _advertId;
         /// <summary>
         /// Gets or sets a unique identifier for the classified advert.
         /// </summary>
@@ -25,13 +27,13 @@ namespace LocalAngle.Classifieds
         /// </value>
         [DataMember]
         [Column(IsPrimaryKey = true)]
-        public string AdvertId
+        public int AdvertId
         {
             get
             {
                 return _advertId;
             }
-            protected set
+            set
             {
                 OnPropertyChanged("AdvertId", ref _advertId, value);
             }
@@ -52,7 +54,7 @@ namespace LocalAngle.Classifieds
             {
                 return _contact;
             }
-            protected set
+            set
             {
                 OnPropertyChanged("ContactDetails", ref _contact, value);
             }
@@ -73,7 +75,7 @@ namespace LocalAngle.Classifieds
             {
                 return _description;
             }
-            protected set
+            set
             {
                 OnPropertyChanged("Description", ref _description, value);
             }
@@ -173,7 +175,7 @@ namespace LocalAngle.Classifieds
             {
                 return _name;
             }
-            protected set
+            set
             {
                 OnPropertyChanged("Name", ref _name, value);
             }
@@ -215,7 +217,7 @@ namespace LocalAngle.Classifieds
             {
                 return _renewalDate;
             }
-            protected set
+            set
             {
                 OnPropertyChanged("RenewalDate", ref _renewalDate, value);
             }
@@ -232,7 +234,7 @@ namespace LocalAngle.Classifieds
         /// <remarks>If the advert was not published using the same credentials, the server reserves the right to do nothing.</remarks>
         public void Renew(IOAuthCredentials credentials)
         {
-            if (AdvertId == null)
+            if (AdvertId == 0)
             {
                 // You cannot renew an advert that hasn't been published, but you can publish it instead.
                 Save(credentials);
@@ -246,7 +248,7 @@ namespace LocalAngle.Classifieds
 
             OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/freead/renew"), credentials);
             req.Method = "POST";
-            req.RequestParameters.Add(new RequestParameter("advertid", AdvertId));
+            req.RequestParameters.Add(new RequestParameter("advertid", AdvertId.ToString(CultureInfo.InvariantCulture)));
             HttpWebResponse res = req.GetResponse() as HttpWebResponse;
 
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(Freead));
@@ -309,12 +311,13 @@ namespace LocalAngle.Classifieds
         /// <summary>
         /// Begins an asynchronous searches for classified adverts near the specified location.
         /// </summary>
+        /// <param name="callback">The callback to call when the results are ready to be read</param>
         /// <param name="location">The location to search near.</param>
         /// <param name="range">The range in miles to search for classified adverts in.</param>
         /// <param name="since">The date to bring back changes since.</param>
         /// <param name="credentials">The credentials.</param>
         /// <returns></returns>
-        public static IAsyncResult BeginSearchNear(Postcode location, double range, DateTime since, IOAuthCredentials credentials)
+        public static IAsyncResult BeginSearchNear(AsyncCallback callback, Postcode location, double range, DateTime since, IOAuthCredentials credentials)
         {
             if (location == null)
             {
@@ -329,18 +332,19 @@ namespace LocalAngle.Classifieds
                 req.RequestParameters.Add(new RequestParameter("since", since.ToUnixTime().ToString(CultureInfo.InvariantCulture)));
             }
 
-            return req.BeginGetResponse(callback => { }, req);
+            return req.BeginGetResponse(callback, req);
         }
 
         /// <summary>
         /// Begins an asynchronous searches for classified adverts near the specified location.
         /// </summary>
+        /// <param name="callback">The callback to call when the results are ready to be read</param>
         /// <param name="location">The location to search near.</param>
         /// <param name="range">The range in miles to search for classified adverts in.</param>
         /// <param name="since">The date to bring back changes since.</param>
         /// <param name="credentials">The credentials.</param>
         /// <returns></returns>
-        public static IAsyncResult BeginSearchNear(IGeoLocation location, double range, DateTime since, IOAuthCredentials credentials)
+        public static IAsyncResult BeginSearchNear(AsyncCallback callback, IGeoLocation location, double range, DateTime since, IOAuthCredentials credentials)
         {
             if (location == null)
             {
@@ -356,7 +360,7 @@ namespace LocalAngle.Classifieds
                 req.RequestParameters.Add(new RequestParameter("since", since.ToUnixTime().ToString(CultureInfo.InvariantCulture)));
             }
 
-            return req.BeginGetResponse(callback => { }, req);
+            return req.BeginGetResponse(callback, req);
         }
 
         /// <summary>
@@ -401,7 +405,7 @@ namespace LocalAngle.Classifieds
         /// <returns></returns>
         public static IEnumerable<Freead> SearchNear(Postcode location, double range, DateTime since, IOAuthCredentials credentials)
         {
-            IAsyncResult res = BeginSearchNear(location, range, since, credentials);
+            IAsyncResult res = BeginSearchNear(callback => { }, location, range, since, credentials);
             res.AsyncWaitHandle.WaitOne();
             return EndSearchNear(res);
         }
@@ -428,7 +432,7 @@ namespace LocalAngle.Classifieds
         /// <returns></returns>
         public static IEnumerable<Freead> SearchNear(IGeoLocation location, double range, DateTime since, IOAuthCredentials credentials)
         {
-            IAsyncResult res = BeginSearchNear(location, range, since, credentials);
+            IAsyncResult res = BeginSearchNear(callback => {}, location, range, since, credentials);
             res.AsyncWaitHandle.WaitOne();
             return EndSearchNear(res);
         }
