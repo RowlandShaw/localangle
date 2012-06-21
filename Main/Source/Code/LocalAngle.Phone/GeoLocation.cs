@@ -11,7 +11,7 @@ namespace LocalAngle
     /// </summary>
     public class GeoLocation : IGeoLocation
     {
-        #region
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GeoLocation"/> class.

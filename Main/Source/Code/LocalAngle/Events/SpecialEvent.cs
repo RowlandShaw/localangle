@@ -62,7 +62,7 @@ namespace LocalAngle.Events
             }
             set
             {
-                OnPropertyChanged("Name", ref _name, value);
+                OnPropertyChanged("Name", ref _name, (value == null ? string.Empty : value.Trim()));
             }
         }
 
@@ -85,7 +85,7 @@ namespace LocalAngle.Events
             }
             set
             {
-                OnPropertyChanged("Description", ref _description, value);
+                OnPropertyChanged("Description", ref _description, (value == null ? string.Empty : value.Trim()));
             }
         }
 
@@ -118,7 +118,7 @@ namespace LocalAngle.Events
             }
             set
             {
-                OnPropertyChanged("VenueName", ref _venueName, value);
+                OnPropertyChanged("VenueName", ref _venueName, (value == null ? string.Empty : value.Trim()));
             }
         }
 
