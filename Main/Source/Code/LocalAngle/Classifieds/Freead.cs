@@ -68,7 +68,7 @@ namespace LocalAngle.Classifieds
         /// The description.
         /// </value>
         [DataMember]
-        [Column(DbType = "NTEXT")]
+        [Column(DbType = "NTEXT", UpdateCheck = UpdateCheck.Never)]
         public string Description
         {
             get

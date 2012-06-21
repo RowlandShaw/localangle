@@ -110,7 +110,7 @@ namespace LocalAngle.Recruitment
         /// The description.
         /// </value>
         [DataMember(IsRequired = true)]
-        [Column(DbType = "NTEXT")]
+        [Column(DbType = "NTEXT", UpdateCheck = UpdateCheck.Never)]
         public string Description
         {
             get
