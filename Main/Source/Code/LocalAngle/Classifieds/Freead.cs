@@ -396,7 +396,17 @@ namespace LocalAngle.Classifieds
             }
 
             OAuthWebRequest req = (OAuthWebRequest)asyncResult.AsyncState;
-            HttpWebResponse res = req.EndGetResponse(asyncResult) as HttpWebResponse;
+            HttpWebResponse res;
+            try
+            {
+                res = req.EndGetResponse(asyncResult) as HttpWebResponse;
+            }
+            catch (WebException)
+            {
+                // Sometimes we're seeing a 404, even though the server is not reporting one.
+                return null;
+            }
+
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(IEnumerable<Freead>));
 
             try
@@ -406,6 +416,7 @@ namespace LocalAngle.Classifieds
             }
             catch (ArgumentNullException)
             {
+                // Sometimes we're seeing an ArgumentNullException, even though ser and the stream returned are not null
             }
 
             return null;
