@@ -57,6 +57,8 @@
     <Compile Include="Classifieds\PublishStatus.cs" />
     <Compile Include="Comparer.cs" />
     <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="Diagnostics\DebugOutStream.cs" />
+    <Compile Include="Diagnostics\DebugStreamWriter.cs" />
     <Compile Include="Events\PublishStatus.cs" />
     <Compile Include="Events\SpecialEvent.cs" />
     <Compile Include="GlobalSuppressions.cs" />
@@ -69,6 +71,7 @@
     <Compile Include="OAuthCredentials.cs" />
     <Compile Include="Postcode.cs" />
     <Compile Include="PostcodeConverter.cs" />
+    <Compile Include="PostcodeDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyComparer.cs" />
     <Compile Include="Recruitment\Employer.cs" />

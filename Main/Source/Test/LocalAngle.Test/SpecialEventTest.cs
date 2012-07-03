@@ -152,7 +152,7 @@ namespace LocalAngle.Entities.Test
             target.Location = new Postcode("IP1 3RL"); // Completely made up postcode, but should be syntactically valid (heck, it might even be a real one)
             target.Tags.Add("gig"); // Pretend to be a live music event
             target.Save(uatCredentials);
-            Assert.IsTrue(!string.IsNullOrEmpty(target.EventId));
+            Assert.IsTrue(target.EventId > 0);
         }
 
         #region Comparison tests
