@@ -72,6 +72,12 @@
     </Compile>
     <Compile Include="..\LocalAngle\Comparer.cs" />
     <Compile Include="..\LocalAngle\DateTimeExtensions.cs" />
+    <Compile Include="..\LocalAngle\Diagnostics\DebugOutStream.cs">
+      <Link>Diagnostics\DebugOutStream.cs</Link>
+    </Compile>
+    <Compile Include="..\LocalAngle\Diagnostics\DebugStreamWriter.cs">
+      <Link>Diagnostics\DebugStreamWriter.cs</Link>
+    </Compile>
     <Compile Include="..\LocalAngle\Events\PublishStatus.cs">
       <Link>Events\PublishStatus.cs</Link>
     </Compile>
@@ -113,10 +119,12 @@
       <Link>Recurrence.cs</Link>
     </Compile>
     <Compile Include="GeoLocation.cs" />
+    <Compile Include="..\LocalAngle\PostcodeDetails.cs">
+      <Link>PostcodeDetails.cs</Link>
+    </Compile>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IsolatedStorageCredentialsStore.cs" />
     <Compile Include="Net\OAuthWebRequest.cs" />
-    <Compile Include="PostcodeDetails.cs" />
     <Compile Include="System\ComponentModel\DataAnnotations\RequiredAttribute.cs" />
     <Compile Include="System\ComponentModel\DataAnnotations\ValidationAttribute.cs" />
     <Compile Include="System\ComponentModel\DataAnnotations\ValidationContext.cs" />
