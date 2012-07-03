@@ -46,7 +46,7 @@ namespace LocalAngle.Classifieds
         /// <value>
         /// The type of the advert.
         /// </value>
-        [Column(DbType="INT DEFAULT 1")]
+        [Column(DbType = "INT", UpdateCheck = UpdateCheck.Never)]
         public AdvertType AdvertType
         {
             get
@@ -67,7 +67,7 @@ namespace LocalAngle.Classifieds
         /// The contact details.
         /// </value>
         [DataMember]
-        [Column(DbType = "NVARCHAR(255)")]
+        [Column(DbType = "NVARCHAR(255)", UpdateCheck = UpdateCheck.Never)]
         public string ContactDetails
         {
             get
@@ -124,7 +124,7 @@ namespace LocalAngle.Classifieds
         /// </value>
         /// <remarks>Uses the WGS84 datum</remarks>
         [DataMember]
-        [Column]
+        [Column(UpdateCheck= UpdateCheck.Never)]
         public double Latitude
         {
             get
@@ -146,7 +146,7 @@ namespace LocalAngle.Classifieds
         /// </value>
         /// <remarks>Uses the WGS84 datum</remarks>
         [DataMember]
-        [Column]
+        [Column(UpdateCheck= UpdateCheck.Never)]
         public double Longitude
         {
             get
@@ -167,7 +167,7 @@ namespace LocalAngle.Classifieds
         /// The last modified.
         /// </value>
         [DataMember]
-        [Column]
+        [Column(UpdateCheck= UpdateCheck.Never)]
         public DateTime LastModified
         {
             get
@@ -188,7 +188,7 @@ namespace LocalAngle.Classifieds
         /// The name.
         /// </value>
         [DataMember]
-        [Column(DbType = "NVARCHAR(255)")]
+        [Column(DbType = "NVARCHAR(255)", UpdateCheck = UpdateCheck.Never)]
         public string Name
         {
             get
@@ -209,7 +209,7 @@ namespace LocalAngle.Classifieds
         /// The publish status.
         /// </value>
         [DataMember]
-        [Column]
+        [Column(UpdateCheck= UpdateCheck.Never)]
         public PublishStatus PublishStatus
         {
             get
@@ -230,7 +230,7 @@ namespace LocalAngle.Classifieds
         /// The time when the advert will natuarally expire
         /// </value>
         [DataMember]
-        [Column]
+        [Column(UpdateCheck= UpdateCheck.Never)]
         public DateTime RenewalDate
         {
             get
@@ -398,9 +398,17 @@ namespace LocalAngle.Classifieds
             OAuthWebRequest req = (OAuthWebRequest)asyncResult.AsyncState;
             HttpWebResponse res = req.EndGetResponse(asyncResult) as HttpWebResponse;
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(IEnumerable<Freead>));
-            IEnumerable<Freead> retval = (IEnumerable<Freead>)ser.ReadObject(res.GetResponseStream());
 
-            return retval;
+            try
+            {
+                IEnumerable<Freead> retval = (IEnumerable<Freead>)ser.ReadObject(res.GetResponseStream());
+                return retval;
+            }
+            catch (ArgumentNullException)
+            {
+            }
+
+            return null;
         }
 
         /// <summary>

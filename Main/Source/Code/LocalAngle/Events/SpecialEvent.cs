@@ -52,7 +52,7 @@ namespace LocalAngle.Events
         /// </value>
         [DataMember(IsRequired=true)]
         [Required]
-        [Column(DbType = "NVARCHAR(255)")]
+        [Column(DbType = "NVARCHAR(255)", UpdateCheck = UpdateCheck.Never)]
         [DisplayName("Event name")]
         public string Name
         {
@@ -124,7 +124,7 @@ namespace LocalAngle.Events
         /// </value>
         [DataMember]
         [Required]
-        [Column(DbType="NVARCHAR(255)")]
+        [Column(DbType = "NVARCHAR(255)", UpdateCheck = UpdateCheck.Never)]
         [DisplayName("Venue")]
         public string VenueName
         {
@@ -146,7 +146,7 @@ namespace LocalAngle.Events
         /// The last modified.
         /// </value>
         [DataMember]
-        [Column]
+        [Column(UpdateCheck= UpdateCheck.Never)]
         public DateTime LastModified
         {
             get
@@ -168,7 +168,7 @@ namespace LocalAngle.Events
         /// </value>
         /// <remarks>Uses the WGS84 datum</remarks>
         [DataMember]
-        [Column]
+        [Column(UpdateCheck= UpdateCheck.Never)]
         public double Latitude
         { 
             get 
@@ -190,7 +190,7 @@ namespace LocalAngle.Events
         /// </value>
         /// <remarks>Uses the WGS84 datum</remarks>
         [DataMember]
-        [Column]
+        [Column(UpdateCheck= UpdateCheck.Never)]
         public double Longitude
         {
             get
@@ -231,7 +231,7 @@ namespace LocalAngle.Events
         /// </value>
         [DataMember(IsRequired = true)]
         [Required]
-        [Column]
+        [Column(UpdateCheck= UpdateCheck.Never)]
         [DisplayName("Start")]
         public DateTime StartTime
         {
@@ -254,7 +254,7 @@ namespace LocalAngle.Events
         /// </value>
         [DataMember(IsRequired = true)]
         [Required]
-        [Column]
+        [Column(UpdateCheck= UpdateCheck.Never)]
         [DisplayName("End")]
         public DateTime EndTime
         {
@@ -276,7 +276,7 @@ namespace LocalAngle.Events
         /// The publish status.
         /// </value>
         [DataMember]
-        [Column]
+        [Column(UpdateCheck= UpdateCheck.Never)]
         public PublishStatus PublishStatus
         {
             get
@@ -318,7 +318,7 @@ namespace LocalAngle.Events
         /// The ticket URI.
         /// </value>
         [DataMember]
-        [Column(DbType="NVARCHAR(250)")]
+        [Column(DbType = "NVARCHAR(250)", UpdateCheck = UpdateCheck.Never)]
         [DisplayName("Online ticketing")]
         public Uri TicketUri
         {
@@ -342,7 +342,7 @@ namespace LocalAngle.Events
         /// Intended for use by the JSON serialisers
         /// </remarks>
         [DataMember(Name = "Postcode")]
-        [Column(DbType = "NVARCHAR(8)")]
+        [Column(DbType = "NVARCHAR(8)", UpdateCheck = UpdateCheck.Never)]
         [DisplayName("Venue postal code")]
         public string Postcode
         {
@@ -781,9 +781,17 @@ namespace LocalAngle.Events
             OAuthWebRequest req = (OAuthWebRequest)asyncResult.AsyncState;
             HttpWebResponse res = req.EndGetResponse(asyncResult) as HttpWebResponse;
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(IEnumerable<SpecialEvent>));
-            IEnumerable<SpecialEvent> retval = (IEnumerable<SpecialEvent>)ser.ReadObject(res.GetResponseStream());
 
-            return retval;
+            try
+            {
+                IEnumerable<SpecialEvent> retval = (IEnumerable<SpecialEvent>)ser.ReadObject(res.GetResponseStream());
+                return retval;
+            }
+            catch (ArgumentNullException)
+            {
+            }
+
+            return null;
         }
 
         #endregion
