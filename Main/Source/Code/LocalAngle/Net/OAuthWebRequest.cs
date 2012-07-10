@@ -107,6 +107,25 @@ namespace LocalAngle.Net
 
         #region Public Properties
 
+        private string _contentType = "application/x-www-form-urlencoded";
+        /// <summary>
+        /// Gets or sets the content type of the request data being sent.
+        /// </summary>
+        /// <returns>
+        /// The content type of the request data.
+        /// </returns>
+        public override string ContentType 
+        {
+            get
+            {
+                return _contentType;
+            }
+            set
+            {
+                _contentType = value;
+            }
+        }
+
         /// <summary>
         /// Gets or sets the OAuth credentials.
         /// </summary>
@@ -388,10 +407,11 @@ namespace LocalAngle.Net
                 throw new InvalidOperationException("Unable to sign a request without a consumer key");
             }
 
+            bool isStandardForm = (string.Compare(ContentType, "application/x-www-form-urlencoded", StringComparison.InvariantCultureIgnoreCase) == 0);
             // Decouple from externally visible parameters
             // TODO: consider changing to use a list that maintains order.
-            // TODO: If we support multipart uploads, Twitter reckons you don't include anything other than the oauth fields in the signature
-            List<RequestParameter> signingParameters = new List<RequestParameter>(RequestParameters);
+            // To support multipart uploads, Twitter reckons you don't include anything other than the oauth fields in the signature
+            List<RequestParameter> signingParameters = (isStandardForm ? new List<RequestParameter>(RequestParameters) : new List<RequestParameter>());
 
             // Add in OAuth parameters
             signingParameters.Add(new RequestParameter("oauth_consumer_key", EscapeDataString(OAuthCredentials.ConsumerKey)));
@@ -443,25 +463,73 @@ namespace LocalAngle.Net
             else if (string.Compare(Method, "POST", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 // TODO: Would need to do something magical if we were to support multi-part uploads here.
-                Request.ContentType = "application/x-www-form-urlencoded";
+                Request.ContentType = ContentType;
 
-                // Convert the string into a byte array.
-                string postData = NormalizeParameters(signingParameters);
-                byte[] byteArray = Encoding.UTF8.GetBytes(postData);
-                Request.ContentLength = postData.Length;
-
-                ManualResetEvent wh = new ManualResetEvent(false);
-                BeginGetRequestStream(callback =>
+                if (isStandardForm)
                 {
-                    using (Stream req = EndGetRequestStream(callback))
-                    {
-                        // Write to the request stream.
-                        req.Write(byteArray, 0, postData.Length);
-                    }
-                    wh.Set();
-                }, Request);
+                    // Convert the string into a byte array.
+                    string postData = NormalizeParameters(signingParameters);
+                    byte[] byteArray = Encoding.UTF8.GetBytes(postData);
+                    Request.ContentLength = postData.Length;
 
-                wh.WaitOne();
+                    ManualResetEvent wh = new ManualResetEvent(false);
+                    BeginGetRequestStream(callback =>
+                    {
+                        using (Stream req = EndGetRequestStream(callback))
+                        {
+                            // Write to the request stream.
+                            req.Write(byteArray, 0, postData.Length);
+                        }
+                        wh.Set();
+                    }, Request);
+
+                    wh.WaitOne();
+                }
+                else
+                {
+                    /*
+POST /1/help/test.json HTTP/1.1
+
+Authorization: OAuth oauth_consumer_key="123",oauth_signature_method="HMAC-SHA1",oauth_timestamp="123",oauth_nonce="123",oauth_version="1.0",oauth_token="123",oauth_signature="123"
+MIME-Version: 1.0
+Host: api.twitter.com
+Content-Length: 28423
+Content-Type: multipart/form-data; type="application/x-www-form-urlencoded"; start=""; boundary="--0246824681357ACXZabcxyz"
+Connection: Keep-Alive
+
+----0246824681357ACXZabcxyz
+Content-Type: image/png
+Content-Transfer-Encoding: binary
+Content-ID: <start-many-tiles.png>
+Content-Disposition: form-data; name="test"; filename="start-many-tiles.png"
+
+<BINARY DATA>
+----0246824681357ACXZabcxyz--
+
+                     */
+
+                    // Convert the string into a byte array.
+                    Request.Headers["Authorization"] = "OAuth " + (string.Join(",", (from RequestParameter p in signingParameters select string.Format(CultureInfo.InvariantCulture, "{0}=\"{1}\"", EscapeDataString(p.Name), EscapeDataString(p.Value))).ToArray()));
+                    string postData = string.Empty;
+                    byte[] byteArray = Encoding.UTF8.GetBytes(postData);
+                    Request.ContentLength = postData.Length;
+
+                    ManualResetEvent wh = new ManualResetEvent(false);
+                    BeginGetRequestStream(callback =>
+                    {
+                        using (Stream req = EndGetRequestStream(callback))
+                        {
+                            // Write to the request stream.
+                            req.Write(byteArray, 0, postData.Length);
+                        }
+                        wh.Set();
+                    }, Request);
+
+                    wh.WaitOne();
+
+                    // TODO: Handle the RequestParameters
+                    throw new NotSupportedException();
+                }
             }
         }
         

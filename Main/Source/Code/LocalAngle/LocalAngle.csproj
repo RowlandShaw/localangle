@@ -70,8 +70,11 @@
     <Compile Include="Classifieds\Freead.cs" />
     <Compile Include="Comparer.cs" />
     <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="Diagnostics\DebugOutStream.cs" />
+    <Compile Include="Diagnostics\DebugStreamWriter.cs" />
     <Compile Include="Events\PublishStatus.cs" />
     <Compile Include="Events\SpecialEvent.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ICacheable.cs" />
     <Compile Include="IGeoLocation.cs" />
     <Compile Include="IOAuthCredentials.cs" />
@@ -79,6 +82,7 @@
     <Compile Include="OAuthCredentials.cs" />
     <Compile Include="Postcode.cs" />
     <Compile Include="PostcodeConverter.cs" />
+    <Compile Include="PostcodeDetails.cs" />
     <Compile Include="PropertyComparer.cs" />
     <Compile Include="Recruitment\Employer.cs" />
     <Compile Include="Recruitment\Position.cs" />
