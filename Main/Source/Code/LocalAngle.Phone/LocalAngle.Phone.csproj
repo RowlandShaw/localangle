@@ -89,6 +89,9 @@
     <Compile Include="..\LocalAngle\Net\OAuthSignatureMethod.cs">
       <Link>Net\OAuthSignatureMethod.cs</Link>
     </Compile>
+    <Compile Include="..\LocalAngle\Net\RequestFileParameter.cs">
+      <Link>Net\RequestFileParameter.cs</Link>
+    </Compile>
     <Compile Include="..\LocalAngle\Net\RequestParameter.cs">
       <Link>Net\RequestParameter.cs</Link>
     </Compile>

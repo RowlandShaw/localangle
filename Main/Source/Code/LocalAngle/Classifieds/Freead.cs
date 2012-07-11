@@ -248,6 +248,14 @@ namespace LocalAngle.Classifieds
         #region Public Methods
 
         /// <summary>
+        /// Adds an image.
+        /// </summary>
+        /// <param name="image">The image.</param>
+        public void AddImage(RequestFileParameter image)
+        {
+        }
+
+        /// <summary>
         /// Renews the advert using the specified credentials.
         /// </summary>
         /// <param name="credentials">The credentials.</param>

@@ -107,6 +107,14 @@ namespace LocalAngle.Net
 
         #region Public Properties
 
+        /// <summary>
+        /// Gets the file attachments to be uploaded.
+        /// </summary>
+        /// <remarks>
+        /// Callers wanting parameters to be sent will need to explicitly set the <see cref="ContentType" /> to be "multipart/form-data"
+        /// </remarks>
+        public IList<RequestFileParameter> Attachments { get; private set; }
+
         private string _contentType = "application/x-www-form-urlencoded";
         /// <summary>
         /// Gets or sets the content type of the request data being sent.
