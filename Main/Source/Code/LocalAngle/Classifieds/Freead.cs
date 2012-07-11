@@ -6,6 +6,7 @@ using System.Net;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using LocalAngle.Net;
+using System.IO;
 
 namespace LocalAngle.Classifieds
 {
@@ -245,14 +246,74 @@ namespace LocalAngle.Classifieds
 
         #endregion
 
+        #region Private Properties
+
+        /// <summary>
+        /// Gets the image to display.
+        /// </summary>
+        protected RequestFileParameter ImageToSend { get; private set; }
+
+        #endregion
+
         #region Public Methods
 
         /// <summary>
-        /// Adds an image.
+        /// Adds the image.
         /// </summary>
-        /// <param name="image">The image.</param>
-        public void AddImage(RequestFileParameter image)
+        /// <param name="imageFile">The image file.</param>
+        public void AddImage(FileInfo imageFile)
         {
+            if (imageFile == null)
+            {
+                throw new ArgumentNullException("imageFile", "An image file must be specified");
+            }
+
+            if (!imageFile.Exists)
+            {
+                throw new ArgumentOutOfRangeException("imageFile", string.Format("Unable to locate image at '{0}'.", imageFile.FullName));
+            }
+
+            if (imageFile.Length > MaximumImageSize)
+            {
+                throw new ArgumentOutOfRangeException("imageFile", string.Format("Images are not permitted to be larger than {1} bytes. The specifed file was {0} bytes long.", imageFile.Length, MaximumImageSize));
+            }
+
+            string fileExtension = Path.GetExtension(imageFile.FullName);
+            string mimeType = null;
+
+            // Make a guess on the mime tpye based on the file extensions -- as we're the API only supports a limited set,
+            // only check for supported types
+            if (string.Compare(".png", fileExtension, StringComparison.InvariantCultureIgnoreCase) == 0)
+            {
+                mimeType = "image/png";
+            }
+            else if (string.Compare(".jpg", fileExtension, StringComparison.InvariantCultureIgnoreCase) == 0 || string.Compare(".jpeg", fileExtension, StringComparison.InvariantCultureIgnoreCase) == 0)
+            {
+                mimeType = "image/jepg";
+            }
+            else if (string.Compare(".gif", fileExtension, StringComparison.InvariantCultureIgnoreCase) == 0)
+            {
+                mimeType = "image/gif";
+            }
+
+            if (string.IsNullOrEmpty(mimeType))
+            {
+                throw new ArgumentOutOfRangeException("imageFile", string.Format("'{0}' is not a recognised image file type.", imageFile.FullName));
+            }
+
+            AddImage( imageFile.FullName, mimeType, (int)imageFile.Length, imageFile.OpenRead());
+        }
+
+        /// <summary>
+        /// Adds the image.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="contentType">Type of the content.</param>
+        /// <param name="contentLength">Length of the content.</param>
+        /// <param name="content">The content.</param>
+        public void AddImage(string fileName, string contentType, int contentLength, Stream content)
+        {
+            ImageToSend = new RequestFileParameter("image", fileName, contentType, contentLength, content);
         }
 
         /// <summary>
@@ -331,6 +392,15 @@ namespace LocalAngle.Classifieds
 
             throw new NotImplementedException();
         }
+
+        #endregion
+
+        #region Public Static Properties
+
+        /// <summary>
+        /// The maximum file size for image attachments, in bytes
+        /// </summary>
+        public const int MaximumImageSize = 1024 * 1024;
 
         #endregion
 
