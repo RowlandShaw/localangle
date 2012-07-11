@@ -79,6 +79,7 @@
     <Compile Include="IGeoLocation.cs" />
     <Compile Include="IOAuthCredentials.cs" />
     <Compile Include="Net\OAuthSignatureMethod.cs" />
+    <Compile Include="Net\RequestFileParameter.cs" />
     <Compile Include="OAuthCredentials.cs" />
     <Compile Include="Postcode.cs" />
     <Compile Include="PostcodeConverter.cs" />

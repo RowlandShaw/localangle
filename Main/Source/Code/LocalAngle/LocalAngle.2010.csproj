@@ -67,6 +67,7 @@
     <Compile Include="IOAuthCredentials.cs" />
     <Compile Include="Net\OAuthSignatureMethod.cs" />
     <Compile Include="Net\OAuthWebRequest.cs" />
+    <Compile Include="Net\RequestFileParameter.cs" />
     <Compile Include="Net\RequestParameter.cs" />
     <Compile Include="OAuthCredentials.cs" />
     <Compile Include="Postcode.cs" />
