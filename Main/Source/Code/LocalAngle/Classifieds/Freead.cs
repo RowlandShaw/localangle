@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using LocalAngle.Net;
 using System.IO;
+using System.ComponentModel;
 
 namespace LocalAngle.Classifieds
 {
@@ -69,6 +70,7 @@ namespace LocalAngle.Classifieds
         /// </value>
         [DataMember]
         [Column(DbType = "NVARCHAR(255)", UpdateCheck = UpdateCheck.Never)]
+        [DisplayName("Contact details")]
         public string ContactDetails
         {
             get
@@ -88,8 +90,9 @@ namespace LocalAngle.Classifieds
         /// <value>
         /// The description.
         /// </value>
-        [DataMember]
         [Column(DbType = "NTEXT", UpdateCheck = UpdateCheck.Never)]
+        [DataMember]
+        [DisplayName("Item description")]
         public string Description
         {
             get
@@ -99,6 +102,23 @@ namespace LocalAngle.Classifieds
             set
             {
                 OnPropertyChanged("Description", ref _description, value);
+            }
+        }
+
+        [DataMember(Name = "ImageUri")]
+        private Uri _imageUri;
+        /// <summary>
+        /// Gets or sets the URI for ticketing information.
+        /// </summary>
+        /// <value>
+        /// The ticket URI.
+        /// </value>
+        [Column(DbType = "NVARCHAR(250)", UpdateCheck = UpdateCheck.Never)]
+        public Uri ImageUri
+        {
+            get
+            {
+                return _imageUri;
             }
         }
 
@@ -211,6 +231,7 @@ namespace LocalAngle.Classifieds
         /// </value>
         [DataMember]
         [Column(UpdateCheck= UpdateCheck.Never)]
+        [DisplayName("Status")]
         public PublishStatus PublishStatus
         {
             get

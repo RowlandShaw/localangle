@@ -10,7 +10,7 @@ namespace LocalAngle.Net
     /// <summary>
     /// Represents a file upload request parmeter used in HttpWebRequests, as part of a multipart POST request
     /// </summary>
-    public class RequestFileParameter
+    internal class RequestFileParameter
     {
         #region Constructors
 
