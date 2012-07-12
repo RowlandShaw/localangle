@@ -278,6 +278,7 @@ namespace LocalAngle.Classifieds
 
         #region Public Methods
 
+#if !NETFX_CORE
         /// <summary>
         /// Adds the image.
         /// </summary>
@@ -324,6 +325,7 @@ namespace LocalAngle.Classifieds
 
             AddImage( imageFile.FullName, mimeType, (int)imageFile.Length, imageFile.OpenRead());
         }
+#endif
 
         /// <summary>
         /// Adds the image.
