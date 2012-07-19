@@ -113,7 +113,7 @@ namespace LocalAngle.Classifieds
         /// <value>
         /// The ticket URI.
         /// </value>
-        [Column(DbType = "NVARCHAR(250)", UpdateCheck = UpdateCheck.Never)]
+        [Column(DbType = "NVARCHAR(250)", UpdateCheck = UpdateCheck.Never, Storage="_imageUri")]
         public Uri ImageUri
         {
             get
