@@ -168,6 +168,7 @@
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Net\OAuthWebRequest.cs" />
+    <Compile Include="System\ComponentModel\DescriptionAttribute.cs" />
     <Compile Include="System\ComponentModel\INotifyPropertyChanging.cs" />
     <Compile Include="System\Data\Linq\Mapping\ColumnAttribute.cs" />
     <Compile Include="System\Data\Linq\Mapping\TableAttribute.cs" />
