@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attractions\Hotel.cs" />
     <Compile Include="BindableBase.cs" />
     <Compile Include="Cache.cs" />
     <Compile Include="CacheEntry.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="Diagnostics\DebugOutStream.cs" />
     <Compile Include="Diagnostics\DebugStreamWriter.cs" />
+    <Compile Include="Eatndrink\Establishment.cs" />
     <Compile Include="Events\PublishStatus.cs" />
     <Compile Include="Events\SpecialEvent.cs" />
     <Compile Include="GlobalSuppressions.cs" />
