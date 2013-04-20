@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Linq.Mapping;
 using System.Globalization;
-using System.Linq;
-using System.Net;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
 using System.Text;
-using LocalAngle.Net;
 
 namespace LocalAngle.Recruitment
 {

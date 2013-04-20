@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Linq.Mapping;
-using System.Globalization;
-using System.Linq;
-using System.Net;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
-using System.Text;
-using LocalAngle.Net;
 
 namespace LocalAngle.Recruitment
 {
     /// <summary>
     /// Represents a Employer
     /// </summary>
+    [DataContract]
+    [Table]
     public class Employer : BindableBase
     {
         #region Public Properties 
@@ -124,6 +119,5 @@ namespace LocalAngle.Recruitment
         }
 
         #endregion
-
     }
 }
