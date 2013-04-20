@@ -515,6 +515,12 @@ namespace LocalAngle.Classifieds
 
             try
             {
+                /* MemoryStream memoryStream = new MemoryStream();
+                StreamReader responseReader = new StreamReader(res.GetResponseStream());
+                StreamWriter memoryWriter = new StreamWriter(memoryStream);
+                string resp = responseReader.ReadToEnd();
+                memoryWriter.Write(resp);
+                memoryStream.Position = 0; */
                 IEnumerable<Freead> retval = (IEnumerable<Freead>)ser.ReadObject(res.GetResponseStream());
                 return retval;
             }
