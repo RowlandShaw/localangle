@@ -51,7 +51,7 @@ namespace LocalAngle.Net
             }
 
             this.ContentType = contentType;
-            this.FileName = FileName;
+            this.FileName = fileName;
             this.Name = name;
 
             byte[] rawData = new byte[contentLength];
@@ -134,7 +134,7 @@ namespace LocalAngle.Net
         /// <value>
         /// The content.
         /// </value>
-        protected byte[] Content { get; set; }
+        private byte[] Content { get; set; }
 
         #endregion
     }
