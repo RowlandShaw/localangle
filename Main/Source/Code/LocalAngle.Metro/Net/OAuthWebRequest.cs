@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
 using Windows.Storage.Streams;
@@ -54,7 +55,7 @@ namespace LocalAngle.Net
         /// </summary>
         /// <param name="uri">The URI.</param>
         /// <param name="credentials">The credentials.</param>
-        [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification= "OAuth requires the protocol be normalised in lower case.")]
+        [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = "OAuth requires the protocol be normalised in lower case.")]
         public OAuthWebRequest(Uri uri, IOAuthCredentials credentials)
         {
             if (uri == null)
@@ -96,12 +97,12 @@ namespace LocalAngle.Net
             get
             {
                 throw new NotImplementedException();
-        }
+            }
             set
             {
                 throw new NotImplementedException();
             }
-            }
+        }
 
         public override WebHeaderCollection Headers
         {
@@ -212,7 +213,7 @@ namespace LocalAngle.Net
             {
                 return _signatureMethod;
             }
-            set 
+            set
             {
                 switch (value)
                 {
@@ -270,7 +271,7 @@ namespace LocalAngle.Net
         /// The post body.
         /// </value>
         protected string PostBody { get; set; }
-        
+
         #endregion
 
         #region Public Methods
@@ -335,7 +336,7 @@ namespace LocalAngle.Net
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         public WebResponse GetResponse()
         {
-            IAsyncResult res = BeginGetResponse(callback => {}, null);
+            IAsyncResult res = BeginGetResponse(callback => { }, null);
             SpinWait sw = new SpinWait();
 
             while (!res.IsCompleted)
@@ -343,6 +344,21 @@ namespace LocalAngle.Net
                 sw.SpinOnce();
             }
             return EndGetResponse(res);
+        }
+
+        /// <summary>
+        /// Returns a response to an OAuth request.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="WebResponse"/> containing the response to the OAuth request.
+        /// </returns>
+        /// <PermissionSet>
+        ///   <IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/>
+        /// </PermissionSet>
+        public async Task<WebResponse> GetResponseAsync()
+        {
+            Sign();
+            return await Request.GetResponseAsync();
         }
 
         #endregion
@@ -380,11 +396,11 @@ namespace LocalAngle.Net
 
             switch (SignatureMethod)
             {
-                    // TODO: consider using an attribute on the enum 
+                // TODO: consider using an attribute on the enum 
                 case OAuthSignatureMethod.HmacSha1:
                     signingParameters.Add(new RequestParameter("oauth_signature_method", "HMAC-SHA1"));
                     break;
-                
+
                 case OAuthSignatureMethod.Plaintext:
                     signingParameters.Add(new RequestParameter("oauth_signature_method", "PLAINTEXT"));
                     break;
@@ -403,7 +419,7 @@ namespace LocalAngle.Net
             signingParameters.Add(new RequestParameter("oauth_version", "1.0"));
 
             // Build the digest
-            string baseString = GenerateBaseString(Method,Request.RequestUri, signingParameters);
+            string baseString = GenerateBaseString(Method, Request.RequestUri, signingParameters);
             signingParameters.Add(new RequestParameter("oauth_signature", GenerateSignature(OAuthCredentials.ConsumerSecret, OAuthCredentials.TokenSecret, baseString, SignatureMethod)));
 
             // Righty, rebuild the request
@@ -440,7 +456,7 @@ namespace LocalAngle.Net
                 wh.WaitOne();
             }
         }
-        
+
         #endregion
 
         #region Private Static Properties
@@ -513,9 +529,9 @@ namespace LocalAngle.Net
                 if ((symbol >= 'A' && symbol <= 'Z') ||
                     (symbol >= 'a' && symbol <= 'z') ||
                     (symbol >= '0' && symbol <= '9') ||
-                    symbol == '-' || 
-                    symbol == '_' || 
-                    symbol == '.' || 
+                    symbol == '-' ||
+                    symbol == '_' ||
+                    symbol == '.' ||
                     symbol == '~')
                 {
                     result.Append((char)symbol);

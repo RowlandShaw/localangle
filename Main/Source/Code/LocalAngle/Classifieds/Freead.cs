@@ -608,7 +608,7 @@ namespace LocalAngle.Classifieds
             HttpWebResponse res;
             try
             {
-                res = await req.GetResponsAsynce() as HttpWebResponse;
+                res = await req.GetResponseAsync() as HttpWebResponse;
             }
             catch (WebException)
             {
@@ -658,7 +658,7 @@ namespace LocalAngle.Classifieds
             HttpWebResponse res;
             try
             {
-                res = await req.GetResponsAsynce() as HttpWebResponse;
+                res = await req.GetResponseAsync() as HttpWebResponse;
             }
             catch (WebException)
             {

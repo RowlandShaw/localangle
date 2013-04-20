@@ -10,6 +10,9 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using LocalAngle.Net;
+#if NETFX_CORE
+using System.Threading.Tasks;
+#endif
 
 namespace LocalAngle.Events
 {
@@ -709,6 +712,120 @@ namespace LocalAngle.Events
         {
             return SearchNear(location, range, since, null, credentials);
         }
+
+#if NETFX_CORE
+
+        /// <summary>
+        /// Searches for events near the specified location.
+        /// </summary>
+        /// <param name="location">The location to search near.</param>
+        /// <param name="range">The range in miles to search for events in.</param>
+        /// <param name="since">The date to bring back changes since.</param>
+        /// <param name="topic">The category of events to bring back.</param>
+        /// <param name="credentials">The credentials.</param>
+        /// <param name="callback">The callback to call when the results are ready to be read</param>
+        /// <returns></returns>
+        public async static Task<IEnumerable<SpecialEvent>> SearchNearAsync(Postcode location, double range, DateTime since, string topic, IOAuthCredentials credentials)
+        {
+            if (location == null)
+            {
+                throw new ArgumentNullException("location", "You must specify a location to search near");
+            }
+
+            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/events/nearby"), credentials);
+            req.RequestParameters.Add(new RequestParameter("location", location.ToString()));
+            req.RequestParameters.Add(new RequestParameter("range", range.ToString(CultureInfo.InvariantCulture)));
+            if (since != default(DateTime))
+            {
+                req.RequestParameters.Add(new RequestParameter("since", since.ToUnixTime().ToString(CultureInfo.InvariantCulture)));
+            }
+            if (!string.IsNullOrEmpty(topic))
+            {
+                req.RequestParameters.Add(new RequestParameter("topic", topic));
+            }
+
+            HttpWebResponse res;
+            try
+            {
+                res = await req.GetResponseAsync() as HttpWebResponse;
+            }
+            catch (WebException)
+            {
+                // Sometimes we're seeing a 404, even though the server is not reporting one.
+                return null;
+            }
+
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(IEnumerable<SpecialEvent>));
+
+            try
+            {
+                IEnumerable<SpecialEvent> retval = (IEnumerable<SpecialEvent>)ser.ReadObject(res.GetResponseStream());
+                return retval;
+            }
+            catch (ArgumentNullException)
+            {
+                // Sometimes we're seeing an ArgumentNullException, even though ser and the stream returned are not null
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Searches for events near the specified location.
+        /// </summary>
+        /// <param name="location">The location to search near.</param>
+        /// <param name="range">The range in miles to search for events in.</param>
+        /// <param name="since">The date to bring back changes since.</param>
+        /// <param name="topic">The category of events to bring back.</param>
+        /// <param name="credentials">The credentials.</param>
+        /// <returns></returns>
+        public async static Task<IEnumerable<SpecialEvent>> SearchNearAsync(IGeoLocation location, double range, DateTime since, string topic, IOAuthCredentials credentials)
+        {
+            if (location == null)
+            {
+                throw new ArgumentNullException("location", "You must specify a location to search near");
+            }
+
+            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/events/nearby"), credentials);
+            req.RequestParameters.Add(new RequestParameter("latitude", location.Latitude.ToString(CultureInfo.InvariantCulture)));
+            req.RequestParameters.Add(new RequestParameter("longitude", location.Longitude.ToString(CultureInfo.InvariantCulture)));
+            req.RequestParameters.Add(new RequestParameter("range", range.ToString(CultureInfo.InvariantCulture)));
+            if (since != default(DateTime))
+            {
+                req.RequestParameters.Add(new RequestParameter("since", since.ToUnixTime().ToString(CultureInfo.InvariantCulture)));
+            }
+            if (!string.IsNullOrEmpty(topic))
+            {
+                req.RequestParameters.Add(new RequestParameter("topic", topic));
+            }
+
+            HttpWebResponse res;
+            try
+            {
+                res = await req.GetResponseAsync() as HttpWebResponse;
+            }
+            catch (WebException)
+            {
+                // Sometimes we're seeing a 404, even though the server is not reporting one.
+                return null;
+            }
+
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(IEnumerable<SpecialEvent>));
+
+            try
+            {
+                IEnumerable<SpecialEvent> retval = (IEnumerable<SpecialEvent>)ser.ReadObject(res.GetResponseStream());
+                return retval;
+            }
+            catch (ArgumentNullException)
+            {
+                // Sometimes we're seeing an ArgumentNullException, even though ser and the stream returned are not null
+            }
+
+            return null;
+        }
+
+#endif
 
         /// <summary>
         /// Searches for events near the specified location.
