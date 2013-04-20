@@ -10,6 +10,9 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using LocalAngle.Net;
+#if NETFX_CORE
+using System.Threading.Tasks;
+#endif
 
 namespace LocalAngle
 {
@@ -193,6 +196,34 @@ namespace LocalAngle
 #endif
             return EndLoad(res);
         }
+
+#if NETFX_CORE
+
+        /// <summary>
+        /// Begins an asynchronous search for details about the specified postal code
+        /// </summary>
+        /// <param name="location">The location to search for.</param>
+        /// <param name="credentials">The credentials.</param>
+        /// <param name="callback">The callback to call when the results are ready to be read</param>
+        /// <returns></returns>
+        public async static Task<PostcodeDetails> LoadAsync(Postcode location, IOAuthCredentials credentials)
+        {
+            if (location == null)
+            {
+                throw new ArgumentNullException("location", "You must specify a postcode to search near");
+            }
+
+            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/info/postcode"), credentials);
+            req.RequestParameters.Add(new RequestParameter("location", location.ToString()));
+
+            HttpWebResponse res = await req.GetResponseAsync() as HttpWebResponse;
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(IEnumerable<PostcodeDetails>));
+            IEnumerable<PostcodeDetails> retval = (IEnumerable<PostcodeDetails>)ser.ReadObject(res.GetResponseStream());
+
+            return retval.FirstOrDefault();
+        }
+
+#endif
 
         /// <summary>
         /// Begins an asynchronous search for details about the specified postal code
