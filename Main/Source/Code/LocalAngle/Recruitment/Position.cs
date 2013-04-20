@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Linq.Mapping;
-using System.Globalization;
-using System.Linq;
-using System.Net;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
-using System.Text;
-using LocalAngle.Net;
 
 namespace LocalAngle.Recruitment
 {
@@ -18,6 +11,8 @@ namespace LocalAngle.Recruitment
     [Table]
     public class Position : BindableBase, IGeoLocation
     {
+        #region Public Properties
+
         private Guid _jobId;
         /// <summary>
         /// Gets or sets a unique identifier for the job.
@@ -80,6 +75,7 @@ namespace LocalAngle.Recruitment
                 OnPropertyChanged("ContactDetails", ref _contact, value);
             }
         }
+
         private DateTime? _closingDate;
         /// <summary>
         /// Gets or sets the closing date for applications for the position.
@@ -229,5 +225,6 @@ namespace LocalAngle.Recruitment
             }
         }
 
+        #endregion
     }
 }

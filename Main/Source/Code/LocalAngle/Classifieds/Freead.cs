@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.Linq.Mapping;
 using System.Globalization;
+using System.IO;
 using System.Net;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
+#if NETFX_CORE
+using System.Threading.Tasks;
+#endif
 using LocalAngle.Net;
-using System.IO;
-using System.ComponentModel;
 
 namespace LocalAngle.Classifieds
 {
@@ -576,6 +579,109 @@ namespace LocalAngle.Classifieds
             res.AsyncWaitHandle.WaitOne();
             return EndSearchNear(res);
         }
+
+#if NETFX_CORE
+
+        /// <summary>
+        /// Searches for classified adverts near the specified location.
+        /// </summary>
+        /// <param name="location">The location to search near.</param>
+        /// <param name="range">The range in miles to search for classified adverts in.</param>
+        /// <param name="since">The date to bring back changes since.</param>
+        /// <param name="credentials">The credentials.</param>
+        /// <returns></returns>
+        public async static Task<IEnumerable<Freead>> SearchNearAsync(Postcode location, double range, DateTime since, IOAuthCredentials credentials)
+        {
+            if (location == null)
+            {
+                throw new ArgumentNullException("location", "You must specify a location to search near");
+            }
+
+            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/freeads/nearby"), credentials);
+            req.RequestParameters.Add(new RequestParameter("location", location.ToString()));
+            req.RequestParameters.Add(new RequestParameter("range", range.ToString(CultureInfo.InvariantCulture)));
+            if (since != default(DateTime))
+            {
+                req.RequestParameters.Add(new RequestParameter("since", since.ToUnixTime().ToString(CultureInfo.InvariantCulture)));
+            }
+
+            HttpWebResponse res;
+            try
+            {
+                res = await req.GetResponsAsynce() as HttpWebResponse;
+            }
+            catch (WebException)
+            {
+                // Sometimes we're seeing a 404, even though the server is not reporting one.
+                return null;
+            }
+
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(IEnumerable<Freead>));
+
+            try
+            {
+                IEnumerable<Freead> retval = (IEnumerable<Freead>)ser.ReadObject(res.GetResponseStream());
+                return retval;
+            }
+            catch (ArgumentNullException)
+            {
+                // Sometimes we're seeing an ArgumentNullException, even though ser and the stream returned are not null
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Searches for classified adverts near the specified location.
+        /// </summary>
+        /// <param name="location">The location to search near.</param>
+        /// <param name="range">The range in miles to search for classified adverts in.</param>
+        /// <param name="since">The date to bring back changes since.</param>
+        /// <param name="credentials">The credentials.</param>
+        /// <returns></returns>
+        public async static Task<IEnumerable<Freead>> SearchNearAsync(IGeoLocation location, double range, DateTime since, IOAuthCredentials credentials)
+        {
+            if (location == null)
+            {
+                throw new ArgumentNullException("location", "You must specify a location to search near");
+            }
+
+            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/freeads/nearby"), credentials);
+            req.RequestParameters.Add(new RequestParameter("latitude", location.Latitude.ToString(CultureInfo.InvariantCulture)));
+            req.RequestParameters.Add(new RequestParameter("longitude", location.Longitude.ToString(CultureInfo.InvariantCulture)));
+            req.RequestParameters.Add(new RequestParameter("range", range.ToString(CultureInfo.InvariantCulture)));
+            if (since != default(DateTime))
+            {
+                req.RequestParameters.Add(new RequestParameter("since", since.ToUnixTime().ToString(CultureInfo.InvariantCulture)));
+            }
+
+            HttpWebResponse res;
+            try
+            {
+                res = await req.GetResponsAsynce() as HttpWebResponse;
+            }
+            catch (WebException)
+            {
+                // Sometimes we're seeing a 404, even though the server is not reporting one.
+                return null;
+            }
+
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(IEnumerable<Freead>));
+
+            try
+            {
+                IEnumerable<Freead> retval = (IEnumerable<Freead>)ser.ReadObject(res.GetResponseStream());
+                return retval;
+            }
+            catch (ArgumentNullException)
+            {
+                // Sometimes we're seeing an ArgumentNullException, even though ser and the stream returned are not null
+            }
+
+            return null;
+        }
+
+#endif
 
         #endregion
     }
