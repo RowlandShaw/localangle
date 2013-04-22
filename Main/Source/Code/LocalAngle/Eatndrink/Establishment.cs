@@ -10,6 +10,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using LocalAngle.Net;
+using System.Collections.ObjectModel;
 #if NETFX_CORE
 using System.Threading.Tasks;
 #endif
@@ -18,7 +19,29 @@ namespace LocalAngle.Eatndrink
 {
     public class Establishment : BindableBase, IGeoLocation
     {
+        #region Constructor
+
+        public Establishment()
+        {
+            ContactNumbers = new ObservableCollection<ContactNumber>();
+        }
+
+        #endregion
+
         #region Public Properties
+
+        private ICollection<ContactNumber> _contacts;
+        public ICollection<ContactNumber> ContactNumbers
+        {
+            get
+            {
+                return _contacts;
+            }
+            private set
+            {
+                _contacts = value;
+            }
+        }
 
         private Guid _guid;
         /// <summary>
@@ -148,6 +171,20 @@ namespace LocalAngle.Eatndrink
             }
         }
 
+        private Uri _orderUri;
+        [Column(DbType = "NVARCHAR(255)", UpdateCheck = UpdateCheck.Never)]
+        public Uri OrderUrl
+        {
+            get
+            {
+                return _orderUri;
+            }
+            set
+            {
+                OnPropertyChanged("OrderUrl", ref _orderUri, value);
+            }
+        }
+
         /// <summary>
         /// Gets or sets the postcode.
         /// </summary>
@@ -169,6 +206,19 @@ namespace LocalAngle.Eatndrink
             set
             {
                 Location = new Postcode(value);
+            }
+        }
+
+        private Uri _website;
+        public Uri Website
+        {
+            get
+            {
+                return _website;
+            }
+            set
+            {
+                OnPropertyChanged("Website", ref _website, value);
             }
         }
 

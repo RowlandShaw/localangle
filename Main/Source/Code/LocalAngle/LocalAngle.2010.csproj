@@ -57,6 +57,8 @@
     <Compile Include="Classifieds\Freead.cs" />
     <Compile Include="Classifieds\PublishStatus.cs" />
     <Compile Include="Comparer.cs" />
+    <Compile Include="ContactNumber.cs" />
+    <Compile Include="ContactType.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="Diagnostics\DebugOutStream.cs" />
     <Compile Include="Diagnostics\DebugStreamWriter.cs" />
