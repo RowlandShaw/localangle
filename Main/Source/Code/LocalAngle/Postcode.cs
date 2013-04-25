@@ -120,12 +120,19 @@ namespace LocalAngle
                 return -1;
             }
 
-            if (obj is Postcode)
+            Postcode other = obj as Postcode;
+            if (other != null)
             {
-                return CompareTo((Postcode)obj);
+                return CompareTo(other);
             }
 
-            throw new ArgumentOutOfRangeException();
+            string str = obj.ToString();
+            if (Postcode.IsValid(str))
+            {
+                return CompareTo(new Postcode(str));
+            }
+
+            throw new ArgumentOutOfRangeException("obj","Unable to compare a non-postcode to a postcode");
         }
 
         /// <summary>
@@ -142,17 +149,17 @@ namespace LocalAngle
                 return -1;
             }
 
-            return ToString().CompareTo(other.ToString());
+            return string.Compare(ToString(), other.ToString(), StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
         /// Equalses the specified other.
         /// </summary>
-        /// <param name="other">The other.</param>
+        /// <param name="obj">The other.</param>
         /// <returns></returns>
-        public override bool Equals(Object other)
+        public override bool Equals(Object obj)
         {
-            return CompareTo(other) == 0;
+            return CompareTo(obj) == 0;
         }
 
         /// <summary>
@@ -192,6 +199,106 @@ namespace LocalAngle
         #endregion
 
         #region Public Static Methods
+
+        public static bool operator >( Postcode a, Postcode b)
+        {
+            if (a == null)
+            {
+                if (b == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return b.CompareTo(a) < 0;
+                }
+            }
+            else
+            {
+                return a.CompareTo(b) > 0;
+            }
+        }
+
+        public static bool operator <(Postcode a, Postcode b)
+        {
+            if (a == null)
+            {
+                if (b == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return b.CompareTo(a) > 0;
+                }
+            }
+            else
+            {
+                return a.CompareTo(b) < 0;
+            }
+        }
+
+        public static bool operator >=(Postcode a, Postcode b)
+        {
+            if (a == null)
+            {
+                if (b == null)
+                {
+                    return true;
+                }
+                else
+                {
+                    return b.CompareTo(a) <= 0;
+                }
+            }
+            else
+            {
+                return a.CompareTo(b) >= 0;
+            }
+        }
+
+        public static bool operator <=(Postcode a, Postcode b)
+        {
+            if (a == null)
+            {
+                if (b == null)
+                {
+                    return true;
+                }
+                else
+                {
+                    return b.CompareTo(a) >= 0;
+                }
+            }
+            else
+            {
+                return a.CompareTo(b) <= 0;
+            }
+        }
+
+        public static bool operator ==(Postcode a, Postcode b)
+        {
+            if (a == null)
+            {
+                return (b == null);
+            }
+            else
+            {
+                return a.CompareTo(b) == 0;
+            }
+        }
+
+        public static bool operator !=(Postcode a, Postcode b)
+        {
+            if (a == null)
+            {
+                return !(b == null);
+            }
+            else
+            {
+                return a.CompareTo(b) != 0;
+            }
+        }
 
         /// <summary>
         /// Performs an implicit conversion from <see cref="LocalAngle.Postcode"/> to <see cref="System.String"/>.

@@ -67,6 +67,7 @@
     <Compile Include="Events\SpecialEvent.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ICacheable.cs" />
+    <Compile Include="ICollectionExtensions.cs" />
     <Compile Include="IGeoLocation.cs" />
     <Compile Include="IOAuthCredentials.cs" />
     <Compile Include="Net\OAuthSignatureMethod.cs" />
