@@ -295,12 +295,12 @@ namespace LocalAngle.Classifieds
 
             if (!imageFile.Exists)
             {
-                throw new ArgumentOutOfRangeException("imageFile", string.Format("Unable to locate image at '{0}'.", imageFile.FullName));
+                throw new ArgumentOutOfRangeException("imageFile", string.Format(CultureInfo.CurrentUICulture, "Unable to locate image at '{0}'.", imageFile.FullName));
             }
 
             if (imageFile.Length > MaximumImageSize)
             {
-                throw new ArgumentOutOfRangeException("imageFile", string.Format("Images are not permitted to be larger than {1} bytes. The specifed file was {0} bytes long.", imageFile.Length, MaximumImageSize));
+                throw new ArgumentOutOfRangeException("imageFile", string.Format(CultureInfo.CurrentUICulture, "Images are not permitted to be larger than {1} bytes. The specifed file was {0} bytes long.", imageFile.Length, MaximumImageSize));
             }
 
             string fileExtension = Path.GetExtension(imageFile.FullName);
@@ -308,22 +308,22 @@ namespace LocalAngle.Classifieds
 
             // Make a guess on the mime tpye based on the file extensions -- as we're the API only supports a limited set,
             // only check for supported types
-            if (string.Compare(".png", fileExtension, StringComparison.InvariantCultureIgnoreCase) == 0)
+            if (string.Compare(".png", fileExtension, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 mimeType = "image/png";
             }
-            else if (string.Compare(".jpg", fileExtension, StringComparison.InvariantCultureIgnoreCase) == 0 || string.Compare(".jpeg", fileExtension, StringComparison.InvariantCultureIgnoreCase) == 0)
+            else if (string.Compare(".jpg", fileExtension, StringComparison.OrdinalIgnoreCase) == 0 || string.Compare(".jpeg", fileExtension, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 mimeType = "image/jepg";
             }
-            else if (string.Compare(".gif", fileExtension, StringComparison.InvariantCultureIgnoreCase) == 0)
+            else if (string.Compare(".gif", fileExtension, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 mimeType = "image/gif";
             }
 
             if (string.IsNullOrEmpty(mimeType))
             {
-                throw new ArgumentOutOfRangeException("imageFile", string.Format("'{0}' is not a recognised image file type.", imageFile.FullName));
+                throw new ArgumentOutOfRangeException("imageFile", string.Format(CultureInfo.CurrentUICulture, "'{0}' is not a recognised image file type.", imageFile.FullName));
             }
 
             AddImage( imageFile.FullName, mimeType, (int)imageFile.Length, imageFile.OpenRead());

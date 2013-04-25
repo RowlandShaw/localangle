@@ -415,7 +415,7 @@ namespace LocalAngle.Net
                 throw new InvalidOperationException("Unable to sign a request without a consumer key");
             }
 
-            bool isStandardForm = (string.Compare(ContentType, "application/x-www-form-urlencoded", StringComparison.InvariantCultureIgnoreCase) == 0);
+            bool isStandardForm = (string.Compare(ContentType, "application/x-www-form-urlencoded", StringComparison.OrdinalIgnoreCase) == 0);
             // Decouple from externally visible parameters
             // TODO: consider changing to use a list that maintains order.
             // To support multipart uploads, Twitter reckons you don't include anything other than the oauth fields in the signature
