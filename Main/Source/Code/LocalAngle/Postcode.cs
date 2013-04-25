@@ -12,7 +12,7 @@ namespace LocalAngle
 #if !NETFX_CORE
     [TypeConverter(typeof(PostcodeConverter))]
 #endif
-    public class Postcode
+    public class Postcode : IComparable, IComparable<Postcode>, IEquatable<Postcode>
     {
         #region Constructors
 
@@ -105,6 +105,78 @@ namespace LocalAngle
         #endregion
 
         #region Public Methods
+
+        /// <summary>
+        /// Compares the current instance with another object of the same type and returns an integer that indicates whether the current instance precedes, follows, or occurs in the same position in the sort order as the other object.
+        /// </summary>
+        /// <param name="obj">An object to compare with this instance.</param>
+        /// <returns>
+        /// A value that indicates the relative order of the objects being compared. The return value has these meanings: Value Meaning Less than zero This instance precedes <paramref name="obj" /> in the sort order. Zero This instance occurs in the same position in the sort order as <paramref name="obj" />. Greater than zero This instance follows <paramref name="obj" /> in the sort order.
+        /// </returns>
+        public int CompareTo(object obj)
+        {
+            if (obj == null)
+            {
+                return -1;
+            }
+
+            if (obj is Postcode)
+            {
+                return CompareTo((Postcode)obj);
+            }
+
+            throw new ArgumentOutOfRangeException();
+        }
+
+        /// <summary>
+        /// Compares the current object with another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// A 32-bit signed integer that indicates the relative order of the objects being compared. The return value has the following meanings: Value Meaning Less than zero This object is less than the other parameter.Zero This object is equal to other. Greater than zero This object is greater than other.
+        /// </returns>
+        public int CompareTo(Postcode other)
+        {
+            if (other == null)
+            {
+                return -1;
+            }
+
+            return ToString().CompareTo(other.ToString());
+        }
+
+        /// <summary>
+        /// Equalses the specified other.
+        /// </summary>
+        /// <param name="other">The other.</param>
+        /// <returns></returns>
+        public override bool Equals(Object other)
+        {
+            return CompareTo(other) == 0;
+        }
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// true if the current object is equal to the other parameter; otherwise, false.
+        /// </returns>
+        public bool Equals(Postcode other)
+        {
+            return CompareTo(other) == 0;
+        }
+
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// </returns>
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
+        }
 
         /// <summary>
         /// Returns a <see cref="System.String"/> that represents this instance.
