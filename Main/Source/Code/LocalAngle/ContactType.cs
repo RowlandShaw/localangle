@@ -7,13 +7,13 @@ namespace LocalAngle
 {
     public enum ContactType
     {
-        tel,
-        fax,
-        mob,
-        text,
-        other,
-        minicom,
-        telex,
-        twitter
+        Tel,
+        Fax,
+        Mob,
+        Text,
+        Other,
+        Minicom,
+        Telex,
+        Twitter
     }
 }
