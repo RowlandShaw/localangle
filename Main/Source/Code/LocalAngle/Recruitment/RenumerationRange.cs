@@ -177,7 +177,7 @@ namespace LocalAngle.Recruitment
                 }
                 else
                 {
-                    return (Currency.Length == 1 ? Currency : "") + value.ToString("f1", CultureInfo.CurrentCulture) + "K" + (Currency.Length > 1 ? " " + Currency : "");
+                    return (Currency.Length == 1 ? Currency : "") + value.ToString("f0", CultureInfo.CurrentCulture) + "K" + (Currency.Length > 1 ? " " + Currency : "");
                 }
             }
             else

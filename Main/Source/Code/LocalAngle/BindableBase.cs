@@ -1,5 +1,8 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
 using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
 
 namespace LocalAngle
 {
@@ -72,5 +75,19 @@ namespace LocalAngle
         }
 
         #endregion
+    }
+
+    public static class BindableBaseExtensions
+    {
+        /// <summary>
+        /// Saves in JSON notation to the specified stream.
+        /// </summary>
+        /// <param name="collection">The collection.</param>
+        /// <param name="stream">The stream.</param>
+        public static void SaveJson<T>(this IEnumerable<T> collection, Stream stream) where T : BindableBase
+        {
+            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(IEnumerable<T>));
+            ser.WriteObject(stream, collection);
+        }
     }
 }
