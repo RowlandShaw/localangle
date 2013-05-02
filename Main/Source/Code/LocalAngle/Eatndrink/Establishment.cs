@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Linq.Mapping;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
@@ -427,11 +428,20 @@ namespace LocalAngle.Eatndrink
                 return null;
             }
 
-            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(IEnumerable<Establishment>));
+            return LoadJson(res.GetResponseStream());
+        }
 
+        /// <summary>
+        /// Loads a collection of establishments from json in a stream.
+        /// </summary>
+        /// <param name="stream">The stream containing the JSON.</param>
+        /// <returns></returns>
+        public static IEnumerable<Establishment> LoadJson(Stream stream )
+        {
             try
             {
-                IEnumerable<Establishment> retval = (IEnumerable<Establishment>)ser.ReadObject(res.GetResponseStream());
+                DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(IEnumerable<Establishment>));
+                IEnumerable<Establishment> retval = (IEnumerable<Establishment>)ser.ReadObject(stream);
                 return retval;
             }
             catch (ArgumentNullException)
