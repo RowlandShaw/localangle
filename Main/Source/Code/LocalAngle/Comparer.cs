@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace LocalAngle
 {
@@ -7,7 +6,7 @@ namespace LocalAngle
     /// A simple comparer that can compare anything implementing <see cref="IComparable{T}"/>
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class Comparer<T> : Comparer<T> where T : IComparable<T>
+    public class Comparer<T> : System.Collections.Generic.Comparer<T> where T : IComparable<T>
     {
         /// <summary>
         /// Performs a comparison of two objects of the same type and returns a value indicating whether one object is less than, equal to, or greater than the other.
