@@ -1,26 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Net;
+using System.Linq;
 using System.Runtime.Serialization.Json;
+using System.Text;
 using LocalAngle.Eatndrink;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LocalAngle;
-using LocalAngle.Net;
 
 namespace LocalAngle.Test
 {
     /// <summary>
-    ///This is a test class for SpecialEventTest and is intended
-    ///to contain all SpecialEventTest Unit Tests
+    ///This is a test class for EstablishmentTest and is intended
+    ///to contain all EstablishmentTest Unit Tests
     ///</summary>
     [TestClass()]
     public class EstablishmentTest
     {
-
-
         private TestContext testContextInstance;
-
         /// <summary>
         ///Gets or sets the test context which provides
         ///information about and functionality for the current test run.
@@ -82,7 +77,7 @@ namespace LocalAngle.Test
             target.Description = "Little bit of info about the place";
             target.Location = new Postcode("IP3 9GG");
             target.DeliveryPoint = "15";
-            target.ContactNumbers.Add(new ContactNumber() { ContactType = ContactType.Twitter, Detail = "LocalAngle" } );
+            target.ContactNumbers.Add(new ContactNumber() { ContactType = ContactType.Twitter, Detail = "LocalAngle" });
             col.Add(target);
 
             MemoryStream stream1 = new MemoryStream();
@@ -93,5 +88,36 @@ namespace LocalAngle.Test
             System.Diagnostics.Debug.WriteLine(sr.ReadToEnd());
         }
 
+        /// <summary>
+        ///A test for LoadJson
+        ///</summary>
+        [TestMethod()]
+        public void LoadJsonTest()
+        {
+            string data = @"[{}]";
+            Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(data)); // TODO: Initialize to an appropriate value
+            IEnumerable<Establishment> actual;
+            int expectedCount = 0;
+
+            actual = Establishment.LoadJson(stream);
+
+            int actualCount = actual.Count();
+            Assert.AreEqual(expectedCount, actualCount);
+        }
+
+        /// <summary>
+        ///A test for SearchNear
+        ///</summary>
+        ///<remarks>
+        ///Rubbish test - just checks we don't blow up
+        ///</remarks>
+        [TestMethod()]
+        public void SearchNearTest()
+        {
+            Postcode location = new Postcode("IP3 9SJ"); // TODO: Initialize to an appropriate value
+            double range = 10F; // TODO: Initialize to an appropriate value
+            IEnumerable<Establishment> actual;
+            actual = Establishment.SearchNear(location, range, uatCredentials);
+        }
     }
 }

@@ -59,6 +59,9 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindableBase.cs" />
@@ -69,13 +72,17 @@
     <Compile Include="Classifieds\PublishStatus.cs" />
     <Compile Include="Classifieds\Freead.cs" />
     <Compile Include="Comparer.cs" />
+    <Compile Include="ContactNumber.cs" />
+    <Compile Include="ContactType.cs" />
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="Diagnostics\DebugOutStream.cs" />
     <Compile Include="Diagnostics\DebugStreamWriter.cs" />
+    <Compile Include="Eatndrink\Establishment.cs" />
     <Compile Include="Events\PublishStatus.cs" />
     <Compile Include="Events\SpecialEvent.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ICacheable.cs" />
+    <Compile Include="ICollectionExtensions.cs" />
     <Compile Include="IGeoLocation.cs" />
     <Compile Include="IOAuthCredentials.cs" />
     <Compile Include="Net\OAuthSignatureMethod.cs" />
