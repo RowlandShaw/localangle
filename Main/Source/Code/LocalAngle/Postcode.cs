@@ -159,7 +159,7 @@ namespace LocalAngle
         /// <returns></returns>
         public override bool Equals(Object obj)
         {
-            return CompareTo(obj) == 0;
+            return Equals(obj as Postcode);
         }
 
         /// <summary>
@@ -171,7 +171,12 @@ namespace LocalAngle
         /// </returns>
         public bool Equals(Postcode other)
         {
-            return CompareTo(other) == 0;
+            if (other == null)
+            {
+                return false;
+            }
+
+            return (CompareTo(other) == 0);
         }
 
         /// <summary>
@@ -276,15 +281,24 @@ namespace LocalAngle
             }
         }
 
-        public static bool operator ==(Postcode a, Postcode b)
+        public static bool operator ==(Postcode left, Postcode right)
         {
-            if (a == null)
+            if (object.ReferenceEquals(left, right))
             {
-                return (b == null);
+                return true;
+            }
+
+            if (!object.ReferenceEquals(left, null))
+            {
+                return left.Equals(right);
+            }
+            else if (!object.ReferenceEquals(right, null))
+            {
+                return right.Equals(left);
             }
             else
             {
-                return a.CompareTo(b) == 0;
+                return false;
             }
         }
 

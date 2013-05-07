@@ -79,7 +79,8 @@ namespace LocalAngle.Net.Test
             string consumerSecret = "jmOYyX43N3W5S0gHsX2lP7OzUPavVUEigTrsdvyirG4";
             string token = "86389544-grD6t7NnRyVPyOFNwkH4ciL3rhdT2ayN1RmLMg1Q";
             string tokenSecret = "6h45JPBeXaMq0TngKolfku6M2tB6gmTmIQshBZgL8i8";
-            string expected = @"[{""Description"":""Little bit of info about the event"",""EndTime"":""\/Date(1322046065000+0000)\/"",""Name"":""Test event name"",""Postcode"":""IP1 5PH"",""StartTime"":""\/Date(1322046000000+0000)\/""},{""Description"":""Little bit of info about the event"",""EndTime"":""\/Date(1322046065000+0000)\/"",""Name"":""Test event name"",""Postcode"":""IP1 5PH"",""StartTime"":""\/Date(1322046000000+0000)\/""}]";
+            string expected = @"[{""Description"":""Little bit of info about the event"",""EndTime"":""\/Date(1322046065000+0000)\/"",""Name"":""Test event name"",""Postcode"":""IP1 5PH"",""StartTime"":""\/Date(1322046000000+0000)\/""},
+{""Description"":""Little bit of info about the event"",""EndTime"":""\/Date(1322046065000+0000)\/"",""Name"":""Test event name"",""Postcode"":""IP1 5PH"",""StartTime"":""\/Date(1322046000000+0000)\/""}]";
             OAuthWebRequest req = OAuthWebRequest.Create(uri, new OAuthCredentials(consumerKey, consumerSecret, token, tokenSecret));
             req.RequestParameters.Add(new RequestParameter("location", "IP1 5PH"));
             req.RequestParameters.Add(new RequestParameter("range", 0f.ToString()));
@@ -178,7 +179,8 @@ namespace LocalAngle.Net.Test
             string consumerSecret = "jmOYyX43N3W5S0gHsX2lP7OzUPavVUEigTrsdvyirG4";
             string token = "86389544-grD6t7NnRyVPyOFNwkH4ciL3rhdT2ayN1RmLMg1Q";
             string tokenSecret = "6h45JPBeXaMq0TngKolfku6M2tB6gmTmIQshBZgL8i8";
-            string expected = @"[{""Description"":""Little bit of info about the event"",""EndTime"":""\/Date(1322046065000+0000)\/"",""Name"":""Test event name"",""Postcode"":""IP1 5PH"",""StartTime"":""\/Date(1322046000000+0000)\/""},{""Description"":""Little bit of info about the event"",""EndTime"":""\/Date(1322046065000+0000)\/"",""Name"":""Test event name"",""Postcode"":""IP1 5PH"",""StartTime"":""\/Date(1322046000000+0000)\/""}]";
+            string expected = @"[{""Description"":""Little bit of info about the event"",""EndTime"":""\/Date(1322046065000+0000)\/"",""Name"":""Test event name"",""Postcode"":""IP1 5PH"",""StartTime"":""\/Date(1322046000000+0000)\/""},
+{""Description"":""Little bit of info about the event"",""EndTime"":""\/Date(1322046065000+0000)\/"",""Name"":""Test event name"",""Postcode"":""IP1 5PH"",""StartTime"":""\/Date(1322046000000+0000)\/""}]";
             OAuthWebRequest req = OAuthWebRequest.Create(uri, new OAuthCredentials(consumerKey, consumerSecret, token, tokenSecret));
             req.RequestParameters.Add(new RequestParameter("location", "IP1 5PH"));
             req.RequestParameters.Add(new RequestParameter("range", 0f.ToString()));
