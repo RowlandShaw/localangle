@@ -56,6 +56,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="..\LocalAngle.Test\EstablishmentTest.cs">
+      <Link>EstablishmentTest.cs</Link>
+    </Compile>
     <Compile Include="..\LocalAngle.Test\PostCodeTest.cs">
       <Link>PostCodeTest.cs</Link>
     </Compile>

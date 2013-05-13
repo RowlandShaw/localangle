@@ -94,7 +94,7 @@ namespace LocalAngle.Test
         [TestMethod()]
         public void LoadJsonTest()
         {
-            string data = @"[{}]";
+            string data = @"[]";
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(data)); // TODO: Initialize to an appropriate value
             IEnumerable<Establishment> actual;
             int expectedCount = 0;
