@@ -115,6 +115,27 @@ namespace LocalAngle.Eatndrink
             }
         }
 
+        private int? _foodSafetyId;
+        /// <summary>
+        /// Gets or sets the food safety id.
+        /// </summary>
+        /// <value>
+        /// The food safety id.
+        /// </value>
+        [DataMember]
+        [Column(DbType = "INT", UpdateCheck = UpdateCheck.Never)]
+        public int? FoodSafetyId
+        {
+            get
+            {
+                return _foodSafetyId;
+            }
+            set
+            {
+                OnPropertyChanged("FoodSafetyId", ref _foodSafetyId, value);
+            }
+        }
+
         private DateTime? _foodSafetyInspectionDate;
         /// <summary>
         /// Gets or sets the date of the most recent food safety inspection.
@@ -322,7 +343,14 @@ namespace LocalAngle.Eatndrink
             }
             set
             {
-                Location = new Postcode(value);
+                if (LocalAngle.Postcode.IsValid(value))
+                {
+                    Location = new Postcode(value);
+                }
+                else
+                {
+                    Location = new Postcode();
+                }
             }
         }
 
