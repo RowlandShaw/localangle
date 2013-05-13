@@ -205,79 +205,79 @@ namespace LocalAngle
 
         #region Public Static Methods
 
-        public static bool operator >( Postcode a, Postcode b)
+        public static bool operator >( Postcode left, Postcode right)
         {
-            if (a == null)
+            if (left == null)
             {
-                if (b == null)
+                if (right == null)
                 {
                     return false;
                 }
                 else
                 {
-                    return b.CompareTo(a) < 0;
+                    return right.CompareTo(left) < 0;
                 }
             }
             else
             {
-                return a.CompareTo(b) > 0;
+                return left.CompareTo(right) > 0;
             }
         }
 
-        public static bool operator <(Postcode a, Postcode b)
+        public static bool operator <(Postcode left, Postcode right)
         {
-            if (a == null)
+            if (left == null)
             {
-                if (b == null)
+                if (right == null)
                 {
                     return false;
                 }
                 else
                 {
-                    return b.CompareTo(a) > 0;
+                    return right.CompareTo(left) > 0;
                 }
             }
             else
             {
-                return a.CompareTo(b) < 0;
+                return left.CompareTo(right) < 0;
             }
         }
 
-        public static bool operator >=(Postcode a, Postcode b)
+        public static bool operator >=(Postcode left, Postcode right)
         {
-            if (a == null)
+            if (left == null)
             {
-                if (b == null)
+                if (right == null)
                 {
                     return true;
                 }
                 else
                 {
-                    return b.CompareTo(a) <= 0;
+                    return right.CompareTo(left) <= 0;
                 }
             }
             else
             {
-                return a.CompareTo(b) >= 0;
+                return left.CompareTo(right) >= 0;
             }
         }
 
-        public static bool operator <=(Postcode a, Postcode b)
+        public static bool operator <=(Postcode left, Postcode right)
         {
-            if (a == null)
+            if (left == null)
             {
-                if (b == null)
+                if (right == null)
                 {
                     return true;
                 }
                 else
                 {
-                    return b.CompareTo(a) >= 0;
+                    return right.CompareTo(left) >= 0;
                 }
             }
             else
             {
-                return a.CompareTo(b) <= 0;
+                return left.CompareTo(right) <= 0;
             }
         }
 
@@ -302,15 +302,15 @@ namespace LocalAngle
             }
         }
 
-        public static bool operator !=(Postcode a, Postcode b)
+        public static bool operator !=(Postcode left, Postcode right)
         {
-            if (a == null)
+            if (left == null)
             {
-                return !(b == null);
+                return !(right == null);
             }
             else
             {
-                return a.CompareTo(b) != 0;
+                return left.CompareTo(right) != 0;
             }
         }
 

@@ -15,7 +15,7 @@ namespace LocalAngle
         /// <param name="items">The items.</param>
         public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> items)
         {
-            if (items != null)
+            if (items != null && collection != null)
             {
                 foreach (T item in items)
                 {

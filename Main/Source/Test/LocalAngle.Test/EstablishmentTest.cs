@@ -94,10 +94,12 @@ namespace LocalAngle.Test
         [TestMethod()]
         public void LoadJsonTest()
         {
-            string data = @"[]";
+            string data = @"[{""SiteId"":690,""Tag"":""plough"",""Name"":""The Plough"",""DeliveryPoint"":"""",""Postcode"":""IP41AD"",""CategoryKey"":""pubs"",""SubCategoryKey"":""aipswich"",""SubCategoryName"":""Ipswich"",""Status"":""live"",""Flags"":""wifi"",""Website"":null,""OrderUrl"":null,""FoodSafetyId"":169982,""FoodSafetyRatingKey"":""fhrs_5_en-GB"",""Hygene"":5,""Structural"":5,""Management"":0,""FoodSafetyInspectionDate"":""\/Date(1315350000000)\/""},
+{""SiteId"":690,""Tag"":""pizzaexp"",""Name"":""Pizza Express"",""DeliveryPoint"":24,""Postcode"":""IP13HD"",""CategoryKey"":""restaurants"",""SubCategoryKey"":""italian"",""SubCategoryName"":""Italian"",""Status"":""live"",""Flags"":""takeaway"",""Website"":null,""OrderUrl"":null,""FoodSafetyId"":175219,""FoodSafetyRatingKey"":""fhrs_5_en-GB"",""Hygene"":0,""Structural"":0,""Management"":0,""FoodSafetyInspectionDate"":""\/Date(1303858800000)\/""},
+{""SiteId"":690,""Tag"":""oyster"",""Name"":""The Oyster Reach (Beefeater)"",""DeliveryPoint"":"""",""Postcode"":""IP28ND"",""CategoryKey"":""restaurants"",""SubCategoryKey"":""european"",""SubCategoryName"":""European"",""Status"":""live"",""Flags"":""nosmoking,parking"",""Website"":null,""OrderUrl"":null,""FoodSafetyId"":null,""FoodSafetyRatingKey"":null,""Hygene"":null,""Structural"":null,""Management"":null,""FoodSafetyInspectionDate"":null}]";
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(data)); // TODO: Initialize to an appropriate value
             IEnumerable<Establishment> actual;
-            int expectedCount = 0;
+            int expectedCount = 3;
 
             actual = Establishment.LoadJson(stream);
 
