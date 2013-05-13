@@ -4,11 +4,13 @@
 		<Recognized>
 			<Word>Auth</Word>
 			<Word>Favourite</Word>
-			<Word>Freead</Word>
+      <Word>Eatndrink</Word>
+      <Word>Freead</Word>
 			<Word>Freeads</Word>
 			<Word>Initialise</Word>
-			<Word>Hmac</Word>
-			<Word>Sha</Word>
+      <Word>Hmac</Word>
+      <Word>Minicom</Word>
+      <Word>Sha</Word>
 			<Word>Sortable</Word>
 			<Word>Rsa</Word>
 			<Word>Kilometres</Word>

@@ -5,6 +5,7 @@ namespace LocalAngle.Classifieds
     /// <summary>
     /// The advert type
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     public enum AdvertType
     {
         /// <summary>
