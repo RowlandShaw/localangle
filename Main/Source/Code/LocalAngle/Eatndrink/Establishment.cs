@@ -463,6 +463,9 @@ namespace LocalAngle.Eatndrink
         /// Loads a collection of establishments from json in a stream.
         /// </summary>
         /// <param name="stream">The stream containing the JSON.</param>
+        /// <remarks>
+        /// It is for the caller to close the stream, as required
+        /// </remarks>
         /// <returns></returns>
         public static IEnumerable<Establishment> LoadJson(Stream stream )
         {
