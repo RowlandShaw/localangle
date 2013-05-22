@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.Serialization;
@@ -87,10 +88,29 @@ namespace LocalAngle
         /// <remarks>
         /// It is for the caller to close the stream, as required
         /// </remarks>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection">The collection.</param>
+        /// <param name="stream">The stream.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException">stream;The specified stream must support writing</exception>
         public static void SaveJson<T>(this IEnumerable<T> collection, Stream stream) where T : BindableBase
         {
+            if (!stream.CanWrite)
+            {
+                throw new ArgumentOutOfRangeException("stream", "The specified stream must support writing");
+            }
+
             DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(IEnumerable<T>));
+            if (stream.CanSeek)
+            {
+                // Move to the start of the stream, if we can :)
+                stream.Seek(0, 0);
+            }
+
             ser.WriteObject(stream, collection);
+            if (stream.CanSeek)
+            {
+                stream.SetLength(stream.Position);
+            }
         }
 
         /// <summary>
