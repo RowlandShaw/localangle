@@ -91,9 +91,15 @@ namespace LocalAngle
         /// <typeparam name="T"></typeparam>
         /// <param name="collection">The collection.</param>
         /// <param name="stream">The stream.</param>
+        /// <exception cref="System.ArgumentNullException">stream;A valid stream must be provided to write to</exception>
         /// <exception cref="System.ArgumentOutOfRangeException">stream;The specified stream must support writing</exception>
         public static void SaveJson<T>(this IEnumerable<T> collection, Stream stream) where T : BindableBase
         {
+            if (stream == null)
+            {
+                throw new ArgumentNullException("stream", "A valid stream must be provided to write to.");
+            }
+
             if (!stream.CanWrite)
             {
                 throw new ArgumentOutOfRangeException("stream", "The specified stream must support writing");
@@ -121,8 +127,14 @@ namespace LocalAngle
         /// <remarks>
         /// No attempt is made to determine whether this will destruct existing data.
         /// </remarks>
+        /// <exception cref="System.ArgumentOutOfRangeException">filename;A filename must be provided to save to</exception>
         public static void SaveJson<T>(this IEnumerable<T> collection, string filename) where T : BindableBase
         {
+            if (string.IsNullOrEmpty(filename))
+            {
+                throw new ArgumentOutOfRangeException("filename", "A filename must be provided to save to");
+            }
+
             FileInfo fi = new FileInfo(filename);
             using (Stream str = fi.OpenWrite())
             {
