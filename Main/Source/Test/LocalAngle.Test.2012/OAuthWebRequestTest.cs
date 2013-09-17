@@ -74,7 +74,7 @@ namespace LocalAngle.Net.Test
         [TestMethod(), TestCategory("Echo tests")]
         public void GetLocalAngleTest()
         {
-            Uri uri = new Uri(ApiHelper.BaseUri, "events/nearby");
+            Uri uri = new Uri(ApiHelper.BaseUri, new Uri("events/nearby", UriKind.Relative));
             string consumerKey = "ngcA6zb9mcLwj15Hyjy0vA";
             string consumerSecret = "jmOYyX43N3W5S0gHsX2lP7OzUPavVUEigTrsdvyirG4";
             string token = "86389544-grD6t7NnRyVPyOFNwkH4ciL3rhdT2ayN1RmLMg1Q";
@@ -174,7 +174,7 @@ namespace LocalAngle.Net.Test
         [TestMethod(), TestCategory("Echo tests")]
         public void PostLocalAngleTest()
         {
-            Uri uri = new Uri(ApiHelper.BaseUri, "events/nearby");
+            Uri uri = new Uri(ApiHelper.BaseUri, new Uri("events/nearby", UriKind.Relative));
             string consumerKey = "ngcA6zb9mcLwj15Hyjy0vA";
             string consumerSecret = "jmOYyX43N3W5S0gHsX2lP7OzUPavVUEigTrsdvyirG4";
             string token = "86389544-grD6t7NnRyVPyOFNwkH4ciL3rhdT2ayN1RmLMg1Q";
