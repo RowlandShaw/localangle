@@ -121,6 +121,7 @@ namespace LocalAngle
             }
         }
 
+#if !NETFX_CORE
         /// <summary>
         /// Saves in JSON notation to the specified stream.
         /// </summary>
@@ -145,5 +146,6 @@ namespace LocalAngle
                 collection.SaveJson(str);
             }
         }
+#endif
     }
 }
