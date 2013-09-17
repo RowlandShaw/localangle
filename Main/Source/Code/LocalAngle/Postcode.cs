@@ -67,7 +67,7 @@ namespace LocalAngle
             }
             else
             {
-                throw new FormatException(string.Format("'{0}' is not recognised as a valid UK postcode", value));
+                throw new FormatException(string.Format(CultureInfo.InvariantCulture, "'{0}' is not recognised as a valid UK postcode", value));
             }
         }
 

@@ -393,7 +393,7 @@ namespace LocalAngle.Eatndrink
                 throw new ArgumentNullException("location", "You must specify a location to search near");
             }
 
-            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/eatndrink/nearby"), credentials);
+            OAuthWebRequest req = new OAuthWebRequest(new Uri(ApiHelper.BaseUri, new Uri("eatndrink/nearby", UriKind.Relative)), credentials);
             req.RequestParameters.Add(new RequestParameter("location", location.ToString()));
             req.RequestParameters.Add(new RequestParameter("range", range.ToString(CultureInfo.InvariantCulture)));
             if (since != default(DateTime))
@@ -420,7 +420,7 @@ namespace LocalAngle.Eatndrink
                 throw new ArgumentNullException("location", "You must specify a location to search near");
             }
 
-            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/eatndrink/nearby"), credentials);
+            OAuthWebRequest req = new OAuthWebRequest(new Uri(ApiHelper.BaseUri, new Uri("eatndrink/nearby", UriKind.Relative)), credentials);
             req.RequestParameters.Add(new RequestParameter("latitude", location.Latitude.ToString(CultureInfo.InvariantCulture)));
             req.RequestParameters.Add(new RequestParameter("longitude", location.Longitude.ToString(CultureInfo.InvariantCulture)));
             req.RequestParameters.Add(new RequestParameter("range", range.ToString(CultureInfo.InvariantCulture)));
@@ -563,7 +563,7 @@ namespace LocalAngle.Eatndrink
                 throw new ArgumentNullException("location", "You must specify a location to search near");
             }
 
-            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/eatndrink/nearby"), credentials);
+            OAuthWebRequest req = new OAuthWebRequest(ApiHelper.BaseUri, "eatndrink/nearby"), credentials);
             req.RequestParameters.Add(new RequestParameter("location", location.ToString()));
             req.RequestParameters.Add(new RequestParameter("range", range.ToString(CultureInfo.InvariantCulture)));
             if (since != default(DateTime))
@@ -612,7 +612,7 @@ namespace LocalAngle.Eatndrink
                 throw new ArgumentNullException("location", "You must specify a location to search near");
             }
 
-            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/eatndrink/nearby"), credentials);
+            OAuthWebRequest req = new OAuthWebRequest(ApiHelper.BaseUri, "eatndrink/nearby"), credentials);
             req.RequestParameters.Add(new RequestParameter("latitude", location.Latitude.ToString(CultureInfo.InvariantCulture)));
             req.RequestParameters.Add(new RequestParameter("longitude", location.Longitude.ToString(CultureInfo.InvariantCulture)));
             req.RequestParameters.Add(new RequestParameter("range", range.ToString(CultureInfo.InvariantCulture)));

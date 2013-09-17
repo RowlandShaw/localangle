@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace System.ComponentModel
 {
-    public class DescriptionAttribute : Attribute
+    [AttributeUsage(AttributeTargets.All)]
+    public sealed class DescriptionAttribute : Attribute
     {
         public DescriptionAttribute() { }
 
-        public DescriptionAttribute(string description) { }
+        public DescriptionAttribute(string description) { Description = description; }
+
+        public string Description { get; protected set; }
     }
 }

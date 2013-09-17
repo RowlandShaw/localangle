@@ -474,7 +474,7 @@ namespace LocalAngle.Events
                 throw new UnauthorizedAccessException("Insufficient details provided to be able to save changes.");
             }
 
-            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/event/save"), credentials);
+            OAuthWebRequest req = new OAuthWebRequest(new Uri(ApiHelper.BaseUri, new Uri("event/save", UriKind.Relative)), credentials);
             req.Method = "POST";
             req.RequestParameters.Add(new RequestParameter("name", Name));
             req.RequestParameters.Add(new RequestParameter("description", Description));
@@ -673,7 +673,7 @@ namespace LocalAngle.Events
                 throw new ArgumentNullException("location", "You must specify a location to search near");
             }
 
-            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/events/nearby"), credentials);
+            OAuthWebRequest req = new OAuthWebRequest(new Uri(ApiHelper.BaseUri, new Uri("events/nearby", UriKind.Relative)), credentials);
             req.RequestParameters.Add(new RequestParameter("location", location.ToString()));
             req.RequestParameters.Add(new RequestParameter("range", range.ToString(CultureInfo.InvariantCulture)));
             if (since != default(DateTime))
@@ -732,7 +732,7 @@ namespace LocalAngle.Events
                 throw new ArgumentNullException("location", "You must specify a location to search near");
             }
 
-            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/events/nearby"), credentials);
+            OAuthWebRequest req = new OAuthWebRequest(new Uri(ApiHelper.BaseUri, new Uri("events/nearby", UriKind.Relative)), credentials);
             req.RequestParameters.Add(new RequestParameter("location", location.ToString()));
             req.RequestParameters.Add(new RequestParameter("range", range.ToString(CultureInfo.InvariantCulture)));
             if (since != default(DateTime))
@@ -786,7 +786,7 @@ namespace LocalAngle.Events
                 throw new ArgumentNullException("location", "You must specify a location to search near");
             }
 
-            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/events/nearby"), credentials);
+            OAuthWebRequest req = new OAuthWebRequest(new Uri(ApiHelper.BaseUri, new Uri("events/nearby", UriKind.Relative)), credentials);
             req.RequestParameters.Add(new RequestParameter("latitude", location.Latitude.ToString(CultureInfo.InvariantCulture)));
             req.RequestParameters.Add(new RequestParameter("longitude", location.Longitude.ToString(CultureInfo.InvariantCulture)));
             req.RequestParameters.Add(new RequestParameter("range", range.ToString(CultureInfo.InvariantCulture)));
@@ -867,7 +867,7 @@ namespace LocalAngle.Events
                 throw new ArgumentNullException("location", "You must specify a location to search near");
             }
 
-            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/events/nearby"), credentials);
+            OAuthWebRequest req = new OAuthWebRequest(new Uri(ApiHelper.BaseUri, new Uri("events/nearby", UriKind.Relative)), credentials);
             req.RequestParameters.Add(new RequestParameter("latitude", location.Latitude.ToString(CultureInfo.InvariantCulture)));
             req.RequestParameters.Add(new RequestParameter("longitude", location.Longitude.ToString(CultureInfo.InvariantCulture)));
             req.RequestParameters.Add(new RequestParameter("range", range.ToString(CultureInfo.InvariantCulture)));

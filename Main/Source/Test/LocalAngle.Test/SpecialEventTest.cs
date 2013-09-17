@@ -123,7 +123,7 @@ namespace LocalAngle.Entities.Test
         [TestMethod()]
         public void VerifyTrustTest()
         {
-            Uri uri = new Uri("http://api.angle.uk.com/oauth/1.0/auth/verifytrust");
+            Uri uri = new Uri(ApiHelper.BaseUri, "auth/verifytrust");
             string expected = "0"; // Expect the user token / app key associated to UAT to report no access
 
             OAuthWebRequest req = OAuthWebRequest.Create(uri, uatCredentials);

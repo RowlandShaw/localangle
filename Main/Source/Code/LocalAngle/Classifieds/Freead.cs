@@ -363,7 +363,7 @@ namespace LocalAngle.Classifieds
                 throw new InvalidOperationException("You cannot renew an advert that has been deleted");
             }
 
-            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/freead/renew"), credentials);
+            OAuthWebRequest req = new OAuthWebRequest(new Uri(ApiHelper.BaseUri, new Uri("freead/renew", UriKind.Relative)), credentials);
             req.Method = "POST";
             req.RequestParameters.Add(new RequestParameter("advertid", AdvertId.ToString(CultureInfo.InvariantCulture)));
             HttpWebResponse res = req.GetResponse() as HttpWebResponse;
@@ -400,7 +400,7 @@ namespace LocalAngle.Classifieds
                 throw new UnauthorizedAccessException("Insufficient details provided to be able to save changes.");
             }
 
-            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/freead/save"), credentials);
+            OAuthWebRequest req = new OAuthWebRequest(new Uri(ApiHelper.BaseUri, new Uri("freead/save", UriKind.Relative)), credentials);
             req.Method = "POST";
             // TODO:
             req.RequestParameters.Add(new RequestParameter("name", Name));
@@ -450,7 +450,7 @@ namespace LocalAngle.Classifieds
                 throw new ArgumentNullException("location", "You must specify a location to search near");
             }
 
-            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/freeads/nearby"), credentials);
+            OAuthWebRequest req = new OAuthWebRequest(new Uri(ApiHelper.BaseUri, new Uri("freeads/nearby", UriKind.Relative)), credentials);
             req.RequestParameters.Add(new RequestParameter("location", location.ToString()));
             req.RequestParameters.Add(new RequestParameter("range", range.ToString(CultureInfo.InvariantCulture)));
             if (since != default(DateTime))
@@ -477,7 +477,7 @@ namespace LocalAngle.Classifieds
                 throw new ArgumentNullException("location", "You must specify a location to search near");
             }
 
-            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/freeads/nearby"), credentials);
+            OAuthWebRequest req = new OAuthWebRequest(new Uri(ApiHelper.BaseUri, new Uri("freeads/nearby", UriKind.Relative)), credentials);
             req.RequestParameters.Add(new RequestParameter("latitude", location.Latitude.ToString(CultureInfo.InvariantCulture)));
             req.RequestParameters.Add(new RequestParameter("longitude", location.Longitude.ToString(CultureInfo.InvariantCulture)));
             req.RequestParameters.Add(new RequestParameter("range", range.ToString(CultureInfo.InvariantCulture)));
@@ -605,7 +605,7 @@ namespace LocalAngle.Classifieds
                 throw new ArgumentNullException("location", "You must specify a location to search near");
             }
 
-            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/freeads/nearby"), credentials);
+            OAuthWebRequest req = new OAuthWebRequest(new Uri(ApiHelper.BaseUri, new Uri("freeads/nearby", UriKind.Relative)), credentials);
             req.RequestParameters.Add(new RequestParameter("location", location.ToString()));
             req.RequestParameters.Add(new RequestParameter("range", range.ToString(CultureInfo.InvariantCulture)));
             if (since != default(DateTime))
@@ -654,7 +654,7 @@ namespace LocalAngle.Classifieds
                 throw new ArgumentNullException("location", "You must specify a location to search near");
             }
 
-            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/freeads/nearby"), credentials);
+            OAuthWebRequest req = new OAuthWebRequest(new Uri(ApiHelper.BaseUri, new Uri("freeads/nearby", UriKind.Relative)), credentials);
             req.RequestParameters.Add(new RequestParameter("latitude", location.Latitude.ToString(CultureInfo.InvariantCulture)));
             req.RequestParameters.Add(new RequestParameter("longitude", location.Longitude.ToString(CultureInfo.InvariantCulture)));
             req.RequestParameters.Add(new RequestParameter("range", range.ToString(CultureInfo.InvariantCulture)));

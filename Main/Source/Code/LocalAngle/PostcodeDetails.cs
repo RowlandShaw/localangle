@@ -213,7 +213,7 @@ namespace LocalAngle
                 throw new ArgumentNullException("location", "You must specify a postcode to search near");
             }
 
-            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/info/postcode"), credentials);
+            OAuthWebRequest req = new OAuthWebRequest(new Uri(ApiHelper.BaseUri, new Uri("info/postcode", UriKind.Relative)), credentials);
             req.RequestParameters.Add(new RequestParameter("location", location.ToString()));
 
             HttpWebResponse res = await req.GetResponseAsync() as HttpWebResponse;
@@ -239,7 +239,7 @@ namespace LocalAngle
                 throw new ArgumentNullException("location", "You must specify a postcode to search near");
             }
 
-            OAuthWebRequest req = new OAuthWebRequest(new Uri("http://api.angle.uk.com/oauth/1.0/info/postcode"), credentials);
+            OAuthWebRequest req = new OAuthWebRequest(new Uri(ApiHelper.BaseUri, new Uri("info/postcode", UriKind.Relative)), credentials);
             req.RequestParameters.Add(new RequestParameter("location", location.ToString()));
 
             return req.BeginGetResponse(callback, req);
