@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
+using System.Security;
 
 namespace LocalAngle
 {
@@ -78,13 +79,14 @@ namespace LocalAngle
         #endregion
     }
 
+    /// <summary>
+    /// Extension methods for Ienumerable<typeparamref name="T"/>
+    /// </summary>
     public static class BindableBaseExtensions
     {
         /// <summary>
         /// Saves in JSON notation to the specified stream.
         /// </summary>
-        /// <param name="collection">The collection.</param>
-        /// <param name="stream">The stream.</param>
         /// <remarks>
         /// It is for the caller to close the stream, as required
         /// </remarks>
@@ -122,12 +124,14 @@ namespace LocalAngle
         /// <summary>
         /// Saves in JSON notation to the specified stream.
         /// </summary>
-        /// <param name="collection">The collection.</param>
-        /// <param name="filename">The fully qualified path to save the JSON file to.</param>
         /// <remarks>
         /// No attempt is made to determine whether this will destruct existing data.
         /// </remarks>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection">The collection.</param>
+        /// <param name="stream">The stream.</param>
         /// <exception cref="System.ArgumentOutOfRangeException">filename;A filename must be provided to save to</exception>
+        [SecurityCritical]
         public static void SaveJson<T>(this IEnumerable<T> collection, string filename) where T : BindableBase
         {
             if (string.IsNullOrEmpty(filename))
