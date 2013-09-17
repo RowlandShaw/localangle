@@ -205,6 +205,12 @@ namespace LocalAngle
 
         #region Public Static Methods
 
+        /// <summary>
+        /// Comparison to see if the left is greater than the right.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns></returns>
         public static bool operator >( Postcode left, Postcode right)
         {
             if (left == null)
@@ -224,6 +230,12 @@ namespace LocalAngle
             }
         }
 
+        /// <summary>
+        /// Comparison to see if the left is less than than the right.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns></returns>
         public static bool operator <(Postcode left, Postcode right)
         {
             if (left == null)
@@ -243,6 +255,12 @@ namespace LocalAngle
             }
         }
 
+        /// <summary>
+        /// Comparison to see if the left is greater than or equal to the right.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns></returns>
         public static bool operator >=(Postcode left, Postcode right)
         {
             if (left == null)
@@ -262,6 +280,12 @@ namespace LocalAngle
             }
         }
 
+        /// <summary>
+        /// Comparison to see if the left is less than than or equal to the right.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns></returns>
         public static bool operator <=(Postcode left, Postcode right)
         {
             if (left == null)
@@ -281,6 +305,12 @@ namespace LocalAngle
             }
         }
 
+        /// <summary>
+        /// Comparison to see if the left is equal to the right.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns></returns>
         public static bool operator ==(Postcode left, Postcode right)
         {
             if (object.ReferenceEquals(left, right))
@@ -302,6 +332,12 @@ namespace LocalAngle
             }
         }
 
+        /// <summary>
+        /// Comparison to see if the left is different to the right.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns></returns>
         public static bool operator !=(Postcode left, Postcode right)
         {
             if (left == null)

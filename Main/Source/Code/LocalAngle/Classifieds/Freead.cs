@@ -11,6 +11,7 @@ using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
 #endif
 using LocalAngle.Net;
+using System.Security;
 
 namespace LocalAngle.Classifieds
 {
@@ -109,7 +110,7 @@ namespace LocalAngle.Classifieds
         }
 
         [DataMember(Name = "ImageUri")]
-        private Uri _imageUri;
+        private Uri _imageUri = null;
         /// <summary>
         /// Gets or sets the URI for ticketing information.
         /// </summary>
@@ -286,6 +287,7 @@ namespace LocalAngle.Classifieds
         /// Adds the image.
         /// </summary>
         /// <param name="imageFile">The image file.</param>
+        [SecurityCritical]
         public void AddImage(FileInfo imageFile)
         {
             if (imageFile == null)
