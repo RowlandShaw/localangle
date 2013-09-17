@@ -169,16 +169,13 @@
     <Compile Include="..\LocalAngle\Recurrence.cs">
       <Link>Recurrence.cs</Link>
     </Compile>
+    <Compile Include="ApiHelper.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Net\OAuthWebRequest.cs" />
     <Compile Include="System\ComponentModel\DescriptionAttribute.cs" />
     <Compile Include="System\ComponentModel\INotifyPropertyChanging.cs" />
-    <Compile Include="System\Data\Linq\ConflictMode.cs" />
-    <Compile Include="System\Data\Linq\DataContext.cs" />
-    <Compile Include="System\Data\Linq\ITable.cs" />
     <Compile Include="System\Data\Linq\Mapping\ColumnAttribute.cs" />
     <Compile Include="System\Data\Linq\Mapping\TableAttribute.cs" />
-    <Compile Include="System\Data\Linq\Table.cs" />
     <Compile Include="Windows8CredentialProvider.cs" />
   </ItemGroup>
   <ItemGroup>

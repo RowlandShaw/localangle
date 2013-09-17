@@ -130,17 +130,17 @@ namespace LocalAngle
         /// </remarks>
         /// <typeparam name="T"></typeparam>
         /// <param name="collection">The collection.</param>
-        /// <param name="stream">The stream.</param>
+        /// <param name="fileName">The destination file name.</param>
         /// <exception cref="System.ArgumentOutOfRangeException">filename;A filename must be provided to save to</exception>
         [SecurityCritical]
-        public static void SaveJson<T>(this IEnumerable<T> collection, string filename) where T : BindableBase
+        public static void SaveJson<T>(this IEnumerable<T> collection, string fileName) where T : BindableBase
         {
-            if (string.IsNullOrEmpty(filename))
+            if (string.IsNullOrEmpty(fileName))
             {
-                throw new ArgumentOutOfRangeException("filename", "A filename must be provided to save to");
+                throw new ArgumentOutOfRangeException("fileName", "A filename must be provided to save to");
             }
 
-            FileInfo fi = new FileInfo(filename);
+            FileInfo fi = new FileInfo(fileName);
             using (Stream str = fi.OpenWrite())
             {
                 collection.SaveJson(str);

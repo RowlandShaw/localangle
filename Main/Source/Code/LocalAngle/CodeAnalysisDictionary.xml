@@ -13,7 +13,8 @@
       <Word>Sha</Word>
 			<Word>Sortable</Word>
 			<Word>Rsa</Word>
-			<Word>Kilometres</Word>
-		</Recognized>
+      <Word>Kilometres</Word>
+      <Word>recognised</Word>
+    </Recognized>
 	</Words>
 </Dictionary>

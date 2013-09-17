@@ -117,6 +117,11 @@ namespace LocalAngle
         /// <returns></returns>
         public static IEnumerable<T> WithinMiles<T>( this IEnumerable<T> source, double range, IGeoLocation point) where T : IGeoLocation
         {
+            if (source == null)
+            {
+                return null;
+            }
+
             // TODO: Consider doing magic to make the return type the same as the source
             // For the moment, always return a list of T
             List<T> retval = new List<T>();

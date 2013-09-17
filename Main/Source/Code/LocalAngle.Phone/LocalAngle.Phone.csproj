@@ -121,6 +121,7 @@
     <Compile Include="..\LocalAngle\Recurrence.cs">
       <Link>Recurrence.cs</Link>
     </Compile>
+    <Compile Include="ApiHelper.cs" />
     <Compile Include="GeoLocation.cs" />
     <Compile Include="..\LocalAngle\PostcodeDetails.cs">
       <Link>PostcodeDetails.cs</Link>
