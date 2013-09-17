@@ -107,6 +107,31 @@ namespace LocalAngle
             return start.KilometresTo(endLatitude, endLongitude);
         }
 
+        /// <summary>
+        /// Returns a subset of items that are within the specifed distance, of the specified point.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source">The source collection.</param>
+        /// <param name="range">The range in miles.</param>
+        /// <param name="point">The centre point.</param>
+        /// <returns></returns>
+        public static IEnumerable<T> WithinMiles<T>( this IEnumerable<T> source, double range, IGeoLocation point) where T : IGeoLocation
+        {
+            // TODO: Consider doing magic to make the return type the same as the source
+            // For the moment, always return a list of T
+            List<T> retval = new List<T>();
+
+            foreach (T candidate in source)
+            {
+                if (candidate.MilesTo(point) <= range)
+                {
+                    retval.Add(candidate);
+                }
+            }
+
+            return retval;
+        }
+
         private const double MeanRadiusKilometres = 19113.0263142 / 3.0; // WGS84 definition
         private const double KilometresInAMile = 1.609344; // 1760 yards in a mile
     }
