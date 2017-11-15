@@ -83,8 +83,7 @@ namespace LocalAngle.Entities.Test
             target.Location = new Postcode("IP1 5PH");
             target.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
             target.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
-            target.Tags.Add("gig");
-            target.Tags.Add("jazz");
+            target.Tags = "gig-jazz";
             target.PublishStatus = PublishStatus.Active;
             col.Add(target);
 
@@ -150,7 +149,7 @@ namespace LocalAngle.Entities.Test
             target.EndTime = new DateTime(2012, 03, 31, 13, 45, 59);
             target.VenueName = "UAT Land";
             target.Location = new Postcode("IP1 3RL"); // Completely made up postcode, but should be syntactically valid (heck, it might even be a real one)
-            target.Tags.Add("gig"); // Pretend to be a live music event
+            target.Tags = "gig"; // Pretend to be a live music event
             target.Save(uatCredentials);
             Assert.IsTrue(target.EventId > 0);
         }
@@ -169,7 +168,7 @@ namespace LocalAngle.Entities.Test
             left.Location = new Postcode("IP1 5PH");
             left.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
             left.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
-            left.Tags.Add("gig");
+            left.Tags = "gig";
 
             SpecialEvent right = new SpecialEvent();
             right.Name = "Test event name";
@@ -177,7 +176,7 @@ namespace LocalAngle.Entities.Test
             right.Location = new Postcode("IP1 5PH");
             right.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
             right.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
-            right.Tags.Add("gig");
+            right.Tags = "gig";
 
             bool expected = true;
             bool actual;
@@ -197,7 +196,7 @@ namespace LocalAngle.Entities.Test
             left.Location = new Postcode("IP1 5PH");
             left.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
             left.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
-            left.Tags.Add("gig");
+            left.Tags = "gig";
 
             SpecialEvent right = new SpecialEvent();
             right.Name = "Test event name";
@@ -205,7 +204,7 @@ namespace LocalAngle.Entities.Test
             right.Location = new Postcode("IP1 5PH");
             right.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
             right.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
-            right.Tags.Add("gig");
+            right.Tags = "gig";
 
             bool expected = false;
             bool actual;
@@ -225,7 +224,7 @@ namespace LocalAngle.Entities.Test
             left.Location = new Postcode("IP1 5PH");
             left.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
             left.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
-            left.Tags.Add("gig");
+            left.Tags = "gig";
 
             SpecialEvent right = new SpecialEvent();
             right.Name = "Test event name";
@@ -233,7 +232,7 @@ namespace LocalAngle.Entities.Test
             right.Location = new Postcode("IP1 5PH");
             right.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
             right.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
-            right.Tags.Add("gig");
+            right.Tags = "gig";
 
             bool expected = false;
             bool actual;
@@ -253,7 +252,7 @@ namespace LocalAngle.Entities.Test
             left.Location = new Postcode("IP1 5PH");
             left.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
             left.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
-            left.Tags.Add("gig");
+            left.Tags = "gig";
 
             SpecialEvent right = new SpecialEvent();
             right.Name = "Test event name";
@@ -261,7 +260,7 @@ namespace LocalAngle.Entities.Test
             right.Location = new Postcode("IP1 5PH");
             right.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
             right.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
-            right.Tags.Add("gig");
+            right.Tags = "gig";
 
             bool expected = true;
             bool actual;
@@ -281,7 +280,7 @@ namespace LocalAngle.Entities.Test
             left.Location = new Postcode("IP1 5PH");
             left.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
             left.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
-            left.Tags.Add("gig");
+            left.Tags = "gig";
 
             SpecialEvent right = new SpecialEvent();
             right.Name = "Test event name";
@@ -289,7 +288,7 @@ namespace LocalAngle.Entities.Test
             right.Location = new Postcode("IP1 5PH");
             right.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
             right.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
-            right.Tags.Add("gig");
+            right.Tags = "gig";
 
             bool expected = true;
             bool actual;
@@ -309,7 +308,7 @@ namespace LocalAngle.Entities.Test
             left.Location = new Postcode("IP1 5PH");
             left.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
             left.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
-            left.Tags.Add("gig");
+            left.Tags = "gig";
 
             SpecialEvent right = new SpecialEvent();
             right.Name = "Test event name";
@@ -317,7 +316,7 @@ namespace LocalAngle.Entities.Test
             right.Location = new Postcode("IP1 5PH");
             right.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
             right.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
-            right.Tags.Add("gig");
+            right.Tags = "gig";
 
             bool expected = false;
             bool actual;
@@ -337,7 +336,7 @@ namespace LocalAngle.Entities.Test
             left.Location = new Postcode("IP1 5PH");
             left.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
             left.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
-            left.Tags.Add("gig");
+            left.Tags = "gig";
 
             SpecialEvent right = new SpecialEvent();
             right.Name = "Test event name";
@@ -345,7 +344,7 @@ namespace LocalAngle.Entities.Test
             right.Location = new Postcode("IP1 5PH");
             right.StartTime = new DateTime(2011, 11, 24, 10, 00, 00); // 1322046000000
             right.EndTime = new DateTime(2011, 11, 24, 10, 01, 02); //   1322046065000
-            right.Tags.Add("gig");
+            right.Tags = "gig";
 
             bool expected = true;
             bool actual;
@@ -365,7 +364,7 @@ namespace LocalAngle.Entities.Test
             left.Location = new Postcode("IP1 5PH");
             left.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
             left.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
-            left.Tags.Add("gig");
+            left.Tags = "gig";
 
             SpecialEvent right = new SpecialEvent();
             right.Name = "Test event name";
@@ -373,7 +372,7 @@ namespace LocalAngle.Entities.Test
             right.Location = new Postcode("IP1 5PH");
             right.StartTime = new DateTime(2011, 11, 24, 10, 00, 00); // 1322046000000
             right.EndTime = new DateTime(2011, 11, 24, 10, 01, 02); //   1322046065000
-            right.Tags.Add("gig");
+            right.Tags = "gig";
 
             bool expected = true;
             bool actual;
@@ -393,7 +392,7 @@ namespace LocalAngle.Entities.Test
             left.Location = new Postcode("IP1 5PH");
             left.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
             left.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
-            left.Tags.Add("gig");
+            left.Tags = "gig";
 
             SpecialEvent right = new SpecialEvent();
             right.Name = "Test event name";
@@ -401,7 +400,7 @@ namespace LocalAngle.Entities.Test
             right.Location = new Postcode("IP1 5PH");
             right.StartTime = new DateTime(2011, 11, 24, 10, 00, 00); // 1322046000000
             right.EndTime = new DateTime(2011, 11, 24, 10, 01, 02); //   1322046065000
-            right.Tags.Add("gig");
+            right.Tags = "gig";
 
             bool expected = true;
             bool actual;
@@ -421,7 +420,7 @@ namespace LocalAngle.Entities.Test
             left.Location = new Postcode("IP1 5PH");
             left.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
             left.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
-            left.Tags.Add("gig");
+            left.Tags = "gig";
 
             SpecialEvent right = new SpecialEvent();
             right.Name = "Test event name";
@@ -429,7 +428,7 @@ namespace LocalAngle.Entities.Test
             right.Location = new Postcode("IP1 5PH");
             right.StartTime = new DateTime(2011, 11, 24, 10, 00, 00); // 1322046000000
             right.EndTime = new DateTime(2011, 11, 24, 10, 01, 02); //   1322046065000
-            right.Tags.Add("gig");
+            right.Tags = "gig";
 
             bool expected = false;
             bool actual;
@@ -449,7 +448,7 @@ namespace LocalAngle.Entities.Test
             left.Location = new Postcode("IP1 5PH");
             left.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
             left.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
-            left.Tags.Add("gig");
+            left.Tags = "gig";
 
             SpecialEvent right = new SpecialEvent();
             right.Name = "Test event name";
@@ -457,7 +456,7 @@ namespace LocalAngle.Entities.Test
             right.Location = new Postcode("IP1 5PH");
             right.StartTime = new DateTime(2011, 11, 24, 10, 00, 00); // 1322046000000
             right.EndTime = new DateTime(2011, 11, 24, 10, 01, 02); //   1322046065000
-            right.Tags.Add("gig");
+            right.Tags = "gig";
 
             bool expected = false;
             bool actual;
@@ -477,7 +476,7 @@ namespace LocalAngle.Entities.Test
             left.Location = new Postcode("IP1 5PH");
             left.StartTime = new DateTime(2011, 11, 23, 11, 00, 00); // 1322046000000
             left.EndTime = new DateTime(2011, 11, 23, 11, 01, 05); //   1322046065000
-            left.Tags.Add("gig");
+            left.Tags = "gig";
 
             SpecialEvent right = new SpecialEvent();
             right.Name = "Test event name";
@@ -485,7 +484,7 @@ namespace LocalAngle.Entities.Test
             right.Location = new Postcode("IP1 5PH");
             right.StartTime = new DateTime(2011, 11, 24, 10, 00, 00); // 1322046000000
             right.EndTime = new DateTime(2011, 11, 24, 10, 01, 02); //   1322046065000
-            right.Tags.Add("gig");
+            right.Tags = "gig";
 
             bool expected = false;
             bool actual;

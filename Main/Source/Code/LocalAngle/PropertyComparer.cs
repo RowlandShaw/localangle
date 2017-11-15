@@ -13,7 +13,7 @@ namespace LocalAngle
         public PropertyComparer(string propertyToSort)
             : this(propertyToSort, ListSortDirection.Ascending)
         {
-            PropertyToSort = string.Empty;
+            PropertyToSort = propertyToSort;
         }
 
         public PropertyComparer(string propertyToSort, ListSortDirection sortOrder)

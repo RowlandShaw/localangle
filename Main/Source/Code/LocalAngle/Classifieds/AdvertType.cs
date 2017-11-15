@@ -23,6 +23,6 @@ namespace LocalAngle.Classifieds
         /// <summary>
         /// Free-cycling
         /// </summary>
-        FreeCycle = 4
+        Freecycle = 4
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Data.Linq.Mapping;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -10,6 +9,12 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using LocalAngle.Net;
+#if !WINDOWS_UWP
+using System.Data.Linq;
+using System.Data.Linq.Mapping;
+#else
+using System.ComponentModel.DataAnnotations.Schema;
+#endif
 #if NETFX_CORE
 using System.Threading.Tasks;
 #endif
@@ -20,7 +25,9 @@ namespace LocalAngle.Events
     /// Represents an event
     /// </summary>
     [DataContract]
+#if !WINDOWS_UWP
     [Table]
+#endif
     public class SpecialEvent : BindableBase, IComparable<SpecialEvent>, IEquatable<SpecialEvent>, IGeoLocation
     {
         #region Public Properties
@@ -33,7 +40,11 @@ namespace LocalAngle.Events
         /// The event id.
         /// </value>
         [DataMember]
+#if WINDOWS_UWP
+        [Key]
+#else
         [Column(IsPrimaryKey = true)]
+#endif
         public int EventId
         {
             get
@@ -55,7 +66,12 @@ namespace LocalAngle.Events
         /// </value>
         [DataMember(IsRequired=true)]
         [Required]
+#if WINDOWS_UWP
+        [MaxLength(255)]
+#else
         [Column(DbType = "NVARCHAR(255)", UpdateCheck = UpdateCheck.Never)]
+#endif
+
         [DisplayName("Event name")]
         public string Name
         {
@@ -78,7 +94,11 @@ namespace LocalAngle.Events
         /// </value>
         [DataMember(IsRequired = true)]
         [Required]
+#if WINDOWS_UWP
+        [MaxLength(255)]
+#else
         [Column(DbType = "NTEXT", UpdateCheck = UpdateCheck.Never)]
+#endif
         [DisplayName("Description")]
         public string Description
         {
@@ -100,6 +120,9 @@ namespace LocalAngle.Events
         /// </value>
         /// <remarks>Only meaningful when populated during a search (so doesn't respect INotfifyProperty...).</remarks>
         [DataMember]
+#if WINDOWS_UWP
+        [NotMapped]
+#endif
         public double Distance { get; set; }
 
         /// <summary>
@@ -110,6 +133,9 @@ namespace LocalAngle.Events
         /// It is desirable that any printed use of the event data incorporate a link, either textual, as a QR code, or both, if practical. 
         /// Displaying a URL, or using it as a hyperlink is enough to satisfy local.angle's attribution requirement of the licence to use the data.
         /// </remarks>
+#if WINDOWS_UWP
+        [NotMapped]
+#endif
         public Uri EventUri
         {
             get
@@ -127,7 +153,11 @@ namespace LocalAngle.Events
         /// </value>
         [DataMember]
         [Required]
+#if WINDOWS_UWP
+        [MaxLength(255)]
+#else
         [Column(DbType = "NVARCHAR(255)", UpdateCheck = UpdateCheck.Never)]
+#endif
         [DisplayName("Venue")]
         public string VenueName
         {
@@ -149,7 +179,9 @@ namespace LocalAngle.Events
         /// The last modified.
         /// </value>
         [DataMember]
-        [Column(UpdateCheck= UpdateCheck.Never)]
+#if !WINDOWS_UWP
+        [Column(UpdateCheck = UpdateCheck.Never)]
+#endif
         public DateTime LastModified
         {
             get
@@ -171,7 +203,9 @@ namespace LocalAngle.Events
         /// </value>
         /// <remarks>Uses the WGS84 datum</remarks>
         [DataMember]
-        [Column(UpdateCheck= UpdateCheck.Never)]
+#if !WINDOWS_UWP
+        [Column(UpdateCheck = UpdateCheck.Never)]
+#endif
         public double Latitude
         { 
             get 
@@ -193,7 +227,9 @@ namespace LocalAngle.Events
         /// </value>
         /// <remarks>Uses the WGS84 datum</remarks>
         [DataMember]
-        [Column(UpdateCheck= UpdateCheck.Never)]
+#if !WINDOWS_UWP
+        [Column(UpdateCheck = UpdateCheck.Never)]
+#endif
         public double Longitude
         {
             get
@@ -213,6 +249,9 @@ namespace LocalAngle.Events
         /// <value>
         /// The location.
         /// </value>
+#if WINDOWS_UWP
+        [NotMapped]
+#endif
         public Postcode Location
         {
             get
@@ -234,7 +273,9 @@ namespace LocalAngle.Events
         /// </value>
         [DataMember(IsRequired = true)]
         [Required]
-        [Column(UpdateCheck= UpdateCheck.Never)]
+#if !WINDOWS_UWP
+        [Column(UpdateCheck = UpdateCheck.Never)]
+#endif
         [DisplayName("Start")]
         public DateTime StartTime
         {
@@ -257,7 +298,9 @@ namespace LocalAngle.Events
         /// </value>
         [DataMember(IsRequired = true)]
         [Required]
-        [Column(UpdateCheck= UpdateCheck.Never)]
+#if !WINDOWS_UWP
+        [Column(UpdateCheck = UpdateCheck.Never)]
+#endif
         [DisplayName("End")]
         public DateTime EndTime
         {
@@ -279,7 +322,9 @@ namespace LocalAngle.Events
         /// The publish status.
         /// </value>
         [DataMember]
-        [Column(UpdateCheck= UpdateCheck.Never)]
+#if !WINDOWS_UWP
+        [Column(UpdateCheck = UpdateCheck.Never)]
+#endif
         public PublishStatus PublishStatus
         {
             get
@@ -292,24 +337,28 @@ namespace LocalAngle.Events
             }
         }
 
-        private ICollection<string> _tags;
+        private string _tags;
         /// <summary>
         /// Gets or sets the tags.
         /// </summary>
         /// <value>
         /// The tags.
         /// </value>
+#if WINDOWS_UWP
+        [MaxLength(100)]
+#else
+        [Column(DbType = "NVARCHAR(100)", UpdateCheck = UpdateCheck.Never)]
+#endif
         [DataMember]
-        public ICollection<string> Tags
+        public string Tags
         {
             get
             {
-                if( _tags == null )
-                {
-                    _tags = new List<string>();
-                }
-
                 return _tags;
+            }
+            set
+            {
+                OnPropertyChanged("Tags", ref _tags, value);
             }
         }
 
@@ -320,9 +369,10 @@ namespace LocalAngle.Events
         /// <value>
         /// The ticket URI.
         /// </value>
-        [DataMember]
-        [Column(DbType = "NVARCHAR(250)", UpdateCheck = UpdateCheck.Never)]
         [DisplayName("Online ticketing")]
+#if WINDOWS_UWP
+        [NotMapped]
+#endif
         public Uri TicketUri
         {
             get
@@ -332,6 +382,32 @@ namespace LocalAngle.Events
             set
             {
                 OnPropertyChanged("TicketUri", ref _ticketUri, value);
+                OnPropertyChanged(new PropertyChangedEventArgs("TicketUrl"));
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the URL for ticketing information.
+        /// </summary>
+        /// <value>
+        /// The ticketing URL.
+        /// </value>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1056:UriPropertiesShouldNotBeStrings")]
+#if WINDOWS_UWP
+        [MaxLength(250)]
+#else
+        [Column(DbType = "NVARCHAR(250)", UpdateCheck = UpdateCheck.Never, Name = "TicketUri")]
+#endif
+        [DataMember]
+        public string TicketUrl
+        {
+            get
+            {
+                return TicketUri == null ? null : TicketUri.AbsoluteUri;
+            }
+            set
+            {
+                TicketUri = string.IsNullOrEmpty(value) ? null : new Uri(value);
             }
         }
 
@@ -345,12 +421,20 @@ namespace LocalAngle.Events
         /// Intended for use by the JSON serialisers
         /// </remarks>
         [DataMember(Name = "Postcode")]
+#if WINDOWS_UWP
+        [MaxLength(8)]
+#else
         [Column(DbType = "NVARCHAR(8)", UpdateCheck = UpdateCheck.Never)]
+#endif
         [DisplayName("Venue postal code")]
         public string Postcode
         {
             get
             {
+                if (Location == null)
+                {
+                    Location = new Postcode();
+                }
                 return Location.ToString();
             }
             set
@@ -359,9 +443,17 @@ namespace LocalAngle.Events
             }
         }
 
-        #endregion
+#if !WINDOWS_UWP
+#pragma warning disable 0169
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        [Column(IsVersion = true)]
+        private Binary _version;
+#pragma warning restore 0169
+#endif
 
-        #region Public Methods
+#endregion
+
+#region Public Methods
 
         /// <summary>
         /// Compares the current object with another object of the same type.
@@ -380,7 +472,7 @@ namespace LocalAngle.Events
         /// </returns>
         /// <remarks>
         /// This only evaluates the natural key -- if data were duplicated in the DB, they would be compare as the same, 
-        /// even though <see cref="Equals"/> would report them as different records
+        /// even though <see cref="Equals(SpecialEvent)"/> would report them as different records
         /// </remarks>
         public int CompareTo(SpecialEvent other)
         {
@@ -394,20 +486,24 @@ namespace LocalAngle.Events
                 return -1;
             }
 
-            int retval = this.StartTime.CompareTo(other.StartTime);
-            if (retval == 0)
+            int retval = 0;
+            if (Math.Abs((other.StartTime - this.StartTime).TotalHours) != 1.0)
+            {
+                retval = this.StartTime.CompareTo(other.StartTime);
+            }
+            if (retval == 0 && Math.Abs((other.EndTime - this.EndTime).TotalHours) != 1.0)
             {
                 retval = this.EndTime.CompareTo(other.EndTime);
             }
 
             if (retval == 0)
             {
-                retval = string.Compare(this.VenueName, other.VenueName, StringComparison.CurrentCultureIgnoreCase);
+                retval = string.Compare(this.Postcode, other.Postcode, StringComparison.OrdinalIgnoreCase);
             }
-
+            
             if (retval == 0)
             {
-                retval = string.Compare(this.Postcode, other.Postcode, StringComparison.CurrentCultureIgnoreCase);
+                retval = string.Compare(this.Name, other.Name, StringComparison.CurrentCultureIgnoreCase);
             }
 
             // TODO: Other fallback comparisons.
@@ -452,7 +548,7 @@ namespace LocalAngle.Events
         /// </returns>
         public override int GetHashCode()
         {
-            return StartTime.GetHashCode() ^ EndTime.GetHashCode();
+            return EventId;
         }
 
         /// <summary>
@@ -460,7 +556,7 @@ namespace LocalAngle.Events
         /// </summary>
         /// <param name="credentials">The credentials.</param>
         /// <remarks>
-        /// This will update the state of the current object to match the server's version after chanegs are commited.
+        /// This will update the state of the current object to match the server's version after changes are committed.
         /// </remarks>
         public void Save(IOAuthCredentials credentials)
         {
@@ -474,6 +570,11 @@ namespace LocalAngle.Events
                 throw new UnauthorizedAccessException("Insufficient details provided to be able to save changes.");
             }
 
+            if (string.IsNullOrWhiteSpace(Location.ToString()))
+            {
+                throw new InvalidOperationException("A postcode must be specified to save a new event");
+            }
+
             OAuthWebRequest req = new OAuthWebRequest(new Uri(ApiHelper.BaseUri, new Uri("event/save", UriKind.Relative)), credentials);
             req.Method = "POST";
             req.RequestParameters.Add(new RequestParameter("name", Name));
@@ -482,33 +583,48 @@ namespace LocalAngle.Events
             req.RequestParameters.Add(new RequestParameter("locpostcode", Location.ToString()));
             req.RequestParameters.Add(new RequestParameter("start", StartTime.ToString(DateFormat,CultureInfo.InvariantCulture)));
             req.RequestParameters.Add(new RequestParameter("end", EndTime.ToString(DateFormat, CultureInfo.InvariantCulture)));
-            req.RequestParameters.Add(new RequestParameter("tag", string.Join("-", Tags.ToArray())));
-            HttpWebResponse res = req.GetResponse() as HttpWebResponse;
-
-            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(SpecialEvent));
-            SpecialEvent retval = (SpecialEvent)ser.ReadObject(res.GetResponseStream());
-            if (retval != null)
+            req.RequestParameters.Add(new RequestParameter("tag", Tags));
+            req.RequestParameters.Add(new RequestParameter("ticketurl", (TicketUri == null ? "" : TicketUri.ToString())));
+            req.RequestParameters.Add(new RequestParameter("id", EventId.ToString(CultureInfo.InvariantCulture)));
+            req.RequestParameters.Add(new RequestParameter("status", ((int)PublishStatus).ToString(CultureInfo.InvariantCulture)));
+            using (HttpWebResponse res = req.GetResponse() as HttpWebResponse)
             {
-                this.EventId = retval.EventId;
-                this.Name = retval.Name;
-                this.Description = retval.Description;
-                this.VenueName = retval.VenueName;
-                this.Location = retval.Location;
-                this.StartTime = retval.StartTime;
-                this.EndTime = retval.EndTime;
-                this.TicketUri = retval.TicketUri;
+                DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(SpecialEvent));
+                SpecialEvent retval = (SpecialEvent)ser.ReadObject(res.GetResponseStream());
+                if (retval != null)
+                {
+                    this.EventId = retval.EventId;
+                    this.Name = retval.Name;
+                    this.Description = retval.Description;
+                    this.VenueName = retval.VenueName;
+                    this.Location = retval.Location;
+                    this.StartTime = retval.StartTime;
+                    this.EndTime = retval.EndTime;
+                    this.TicketUri = retval.TicketUri;
+                }
             }
         }
 
-        #endregion
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
+        public override string ToString()
+        {
+            return string.Format(CultureInfo.CurrentCulture, "{2} {0:dd/MM/yyyy} - {1:dd/MM/yyyy} {0:HH:mm} - {1:HH:mm} at {3} {4}", StartTime, EndTime, Name, VenueName, Postcode);
+        }
 
-        #region Protected Properties
+#endregion
+
+#region Protected Properties
 
         private const string DateFormat = "yyyy-MM-dd HH:mm";
 
-        #endregion
+#endregion
 
-        #region Public Static Methods
+#region Public Static Methods
 
         /// <summary>
         /// Implements the operator ==.
@@ -918,10 +1034,14 @@ namespace LocalAngle.Events
             {
                 // Sometimes we're seeing an ArgumentNullException, even though ser and the stream returned are not null
             }
+            catch (SerializationException)
+            {
+                // Sometimes the JSON is malformed - better to catch it than die horribly
+            }
 
             return null;
         }
 
-        #endregion
+#endregion
     }
 }

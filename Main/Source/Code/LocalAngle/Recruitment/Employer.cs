@@ -1,5 +1,11 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+#if WINDOWS_UWP
+using System.ComponentModel.DataAnnotations.Schema;
+#else
+using System.Data.Linq;
 using System.Data.Linq.Mapping;
+#endif
 using System.Runtime.Serialization;
 
 namespace LocalAngle.Recruitment
@@ -8,7 +14,9 @@ namespace LocalAngle.Recruitment
     /// Represents a Employer
     /// </summary>
     [DataContract]
+#if !WINDOWS_UWP
     [Table]
+#endif
     public class Employer : BindableBase
     {
         #region Public Properties 
@@ -21,7 +29,9 @@ namespace LocalAngle.Recruitment
         /// The event id.
         /// </value>
         [DataMember]
+#if !WINDOWS_UWP
         [Column(IsPrimaryKey = true)]
+#endif
         public Guid EmployerId
         {
             get
@@ -42,7 +52,9 @@ namespace LocalAngle.Recruitment
         /// The name.
         /// </value>
         [DataMember]
+#if !WINDOWS_UWP
         [Column]
+#endif
         public string DeliveryPoint
         {
             get
@@ -63,7 +75,10 @@ namespace LocalAngle.Recruitment
         /// The name.
         /// </value>
         [DataMember]
+#if !WINDOWS_UWP
         [Column(CanBeNull=false)]
+#endif
+        [Required]
         public string Name
         {
             get
@@ -83,6 +98,9 @@ namespace LocalAngle.Recruitment
         /// <value>
         /// The location.
         /// </value>
+#if WINDOWS_UWP
+        [NotMapped]
+#endif
         public Postcode Location
         {
             get
@@ -105,7 +123,11 @@ namespace LocalAngle.Recruitment
         /// Intended for use by the JSON serialisers
         /// </remarks>
         [DataMember(Name = "Postcode")]
+#if !WINDOWS_UWP
         [Column]
+#else
+        [MaxLength(8)]
+#endif
         public string Postcode
         {
             get

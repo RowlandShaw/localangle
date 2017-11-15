@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -84,6 +85,7 @@ namespace LocalAngle.Net
             bob.Append(uri.AbsolutePath);
 
             this.Request = WebRequest.Create(new Uri(bob.ToString())) as HttpWebRequest;
+            this.Request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
         }
 
         /// <summary>
@@ -269,6 +271,19 @@ namespace LocalAngle.Net
             }
         }
 
+        private bool _keepAlive;
+        public bool KeepAlive
+        {
+            get
+            {
+                return _keepAlive;
+            }
+            set
+            {
+                _keepAlive = value;
+            }
+        }
+
         #endregion
 
         #region Protected Properties
@@ -386,12 +401,24 @@ namespace LocalAngle.Net
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         public override WebResponse GetResponse()
         {
+            var timer = new Stopwatch();
+            timer.Start();
             IAsyncResult res = BeginGetResponse(callback => {}, null);
+#if SILVERLIGHT
             while (!res.IsCompleted)
             {
                 Thread.SpinWait(1);
             }
-            return EndGetResponse(res);
+#else
+            //res.AsyncWaitHandle.WaitOne();
+#endif
+            var retval = EndGetResponse(res);
+            timer.Stop();
+            if (timer.Elapsed.TotalSeconds > 1)
+            {
+                Debug.WriteLine("{1} {0}", timer.Elapsed, Request.RequestUri);
+            }
+            return retval;
         }
 
         #endregion
@@ -418,7 +445,7 @@ namespace LocalAngle.Net
             bool isStandardForm = (string.Compare(ContentType, "application/x-www-form-urlencoded", StringComparison.OrdinalIgnoreCase) == 0);
             // Decouple from externally visible parameters
             // TODO: consider changing to use a list that maintains order.
-            // To support multipart uploads, Twitter reckons you don't include anything other than the oauth fields in the signature
+            // To support multi-part uploads, Twitter reckons you don't include anything other than the oauth fields in the signature
             List<RequestParameter> signingParameters = (isStandardForm ? new List<RequestParameter>(RequestParameters) : new List<RequestParameter>());
 
             // Add in OAuth parameters
@@ -430,7 +457,7 @@ namespace LocalAngle.Net
 
             switch (SignatureMethod)
             {
-                    // TODO: consider using an attribute on the enum 
+                    // TODO: consider using an attribute on the enumeration
                 case OAuthSignatureMethod.HmacSha1:
                     signingParameters.Add(new RequestParameter("oauth_signature_method", "HMAC-SHA1"));
                     break;
@@ -464,6 +491,8 @@ namespace LocalAngle.Net
                 Uri targetUri = new Uri(uri);
                 HttpWebRequest newRequest = WebRequest.Create(targetUri) as HttpWebRequest;
                 newRequest.UserAgent = Request.UserAgent;
+                newRequest.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+                newRequest.KeepAlive = _keepAlive;
                 newRequest.Method = "GET";
                 // TODO: If we expose more properties from the encapsulated HttpWebRequest, we'll need to copy them across here.
                 Request = newRequest;
@@ -593,7 +622,7 @@ Content-Disposition: form-data; name="test"; filename="start-many-tiles.png"
 
         private const string UriSafeCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~";
         /// <summary>
-        /// The URI encoding providing by the .Net framework doesn't match the implementation specified by the OAuth spec, so reimplement per OAuth
+        /// The URI encoding providing by the .Net framework doesn't match the implementation specified by the OAuth specification, so reimplement per OAuth
         /// </summary>
         /// <param name="value">The value to Url encode</param>
         /// <returns>Returns a Url encoded string</returns>

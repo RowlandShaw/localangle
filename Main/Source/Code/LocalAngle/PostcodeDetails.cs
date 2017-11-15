@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Data.Linq.Mapping;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -109,16 +109,29 @@ namespace LocalAngle
             }
             set
             {
-                Location = new Postcode(value);
+                if (LocalAngle.Postcode.IsValid(value))
+                {
+                    Location = new Postcode(value);
+                }
+#if DEBUG
+                else if (Debugger.IsAttached)
+                {
+                    Debug.WriteLine(string.Format(CultureInfo.InvariantCulture, "'{0}' is not recognised as a valid UK postcode", value));
+                }
+#endif
+                else
+                {
+                    throw new FormatException(string.Format(CultureInfo.InvariantCulture, "'{0}' is not recognised as a valid UK postcode", value));
+                }
             }
         }
 
         private string _county;
         /// <summary>
-        /// Gets or sets the county.
+        /// Gets or sets the localEducationAuthority.
         /// </summary>
         /// <value>
-        /// The county.
+        /// The localEducationAuthority.
         /// </value>
         [DataMember]
         public string County

@@ -1,5 +1,9 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+#if !WINDOWS_UWP
+using System.Data.Linq;
 using System.Data.Linq.Mapping;
+#endif
 using System.Runtime.Serialization;
 
 namespace LocalAngle.Recruitment
@@ -8,7 +12,9 @@ namespace LocalAngle.Recruitment
     /// Represents a position that is being recruited for
     /// </summary>
     [DataContract]
+#if !WINDOWS_UWP
     [Table]
+#endif
     public class Position : BindableBase, IGeoLocation
     {
         #region Public Properties
@@ -21,7 +27,9 @@ namespace LocalAngle.Recruitment
         /// The event id.
         /// </value>
         [DataMember]
+#if !WINDOWS_UWP
         [Column(IsPrimaryKey = true)]
+#endif
         public Guid JobId
         {
             get
@@ -42,7 +50,11 @@ namespace LocalAngle.Recruitment
         /// The title.
         /// </value>
         [DataMember]
+#if !WINDOWS_UWP
         [Column(CanBeNull=false, DbType="NVARCHAR(255)")]
+#else
+        [MaxLength(255)]
+#endif
         public string Title
         {
             get
@@ -63,7 +75,11 @@ namespace LocalAngle.Recruitment
         /// The contact details.
         /// </value>
         [DataMember]
-        [Column(DbType = "NVARCHAR(255)")]
+#if !WINDOWS_UWP
+        [Column(DbType="NVARCHAR(255)")]
+#else
+        [MaxLength(255)]
+#endif
         public string ContactDetails
         {
             get
@@ -85,7 +101,9 @@ namespace LocalAngle.Recruitment
         /// </value>
         /// <remarks>A null value can be used to denote where no closing date has been set</remarks>
         [DataMember]
+#if !WINDOWS_UWP
         [Column]
+#endif
         public DateTime? ClosingDate
         {
             get
@@ -106,7 +124,9 @@ namespace LocalAngle.Recruitment
         /// The description.
         /// </value>
         [DataMember(IsRequired = true)]
+#if !WINDOWS_UWP
         [Column(DbType = "NTEXT", UpdateCheck = UpdateCheck.Never)]
+#endif
         public string Description
         {
             get
@@ -128,7 +148,9 @@ namespace LocalAngle.Recruitment
         /// </value>
         /// <remarks>Uses the WGS84 datum</remarks>
         [DataMember]
+#if !WINDOWS_UWP
         [Column]
+#endif
         public double Latitude
         {
             get
@@ -150,7 +172,9 @@ namespace LocalAngle.Recruitment
         /// </value>
         /// <remarks>Uses the WGS84 datum</remarks>
         [DataMember]
+#if !WINDOWS_UWP
         [Column]
+#endif
         public double Longitude
         {
             get
@@ -172,7 +196,9 @@ namespace LocalAngle.Recruitment
         /// </value>
         /// <remarks>A null value can be used to denote "As soon as possible"</remarks>
         [DataMember]
+#if !WINDOWS_UWP
         [Column]
+#endif
         public DateTime? StartDate
         {
             get
@@ -212,7 +238,9 @@ namespace LocalAngle.Recruitment
         /// The reference.
         /// </value>
         [DataMember]
+#if !WINDOWS_UWP
         [Column]
+#endif
         public string Reference
         {
             get

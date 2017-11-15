@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data.Linq.Mapping;
 using System.Globalization;
 using System.IO;
 using System.Net;
@@ -12,6 +11,13 @@ using System.Threading.Tasks;
 #endif
 using LocalAngle.Net;
 using System.Security;
+using System.ComponentModel.DataAnnotations;
+#if WINDOWS_UWP
+using System.ComponentModel.DataAnnotations.Schema;
+#else
+using System.Data.Linq;
+using System.Data.Linq.Mapping;
+#endif
 
 namespace LocalAngle.Classifieds
 {
@@ -19,7 +25,9 @@ namespace LocalAngle.Classifieds
     /// Represents a classified advert
     /// </summary>
     [DataContract]
+#if !WINDOWS_UWP
     [Table]
+#endif
     public class Freead : BindableBase, IGeoLocation
     {
         #region Public Properties
@@ -32,7 +40,11 @@ namespace LocalAngle.Classifieds
         /// The classified advert id.
         /// </value>
         [DataMember]
+#if WINDOWS_UWP
+        [Key]
+#else
         [Column(IsPrimaryKey = true)]
+#endif
         public int AdvertId
         {
             get
@@ -52,7 +64,9 @@ namespace LocalAngle.Classifieds
         /// <value>
         /// The type of the advert.
         /// </value>
+#if !WINDOWS_UWP
         [Column(DbType = "INT", UpdateCheck = UpdateCheck.Never)]
+#endif
         public AdvertType AdvertType
         {
             get
@@ -73,7 +87,11 @@ namespace LocalAngle.Classifieds
         /// The contact details.
         /// </value>
         [DataMember]
+#if WINDOWS_UWP
+        [MaxLength(255)]
+#else
         [Column(DbType = "NVARCHAR(255)", UpdateCheck = UpdateCheck.Never)]
+#endif
         [DisplayName("Contact details")]
         public string ContactDetails
         {
@@ -94,7 +112,9 @@ namespace LocalAngle.Classifieds
         /// <value>
         /// The description.
         /// </value>
+#if !WINDOWS_UWP
         [Column(DbType = "NTEXT", UpdateCheck = UpdateCheck.Never)]
+#endif
         [DataMember]
         [DisplayName("Item description")]
         public string Description
@@ -117,7 +137,12 @@ namespace LocalAngle.Classifieds
         /// <value>
         /// The ticket URI.
         /// </value>
+#if WINDOWS_UWP
+            /// <remarks>TODO: Need to have a string version that is persisted</remarks>
+        [NotMapped]
+#else
         [Column(DbType = "NVARCHAR(250)", UpdateCheck = UpdateCheck.Never, Storage="_imageUri")]
+#endif
         public Uri ImageUri
         {
             get
@@ -132,6 +157,9 @@ namespace LocalAngle.Classifieds
         /// <value>
         /// 	<c>true</c> if this advert has expired; otherwise, <c>false</c>.
         /// </value>
+#if WINDOWS_UWP
+        [NotMapped]
+#endif
         public bool IsExpired 
         {
             get
@@ -149,7 +177,9 @@ namespace LocalAngle.Classifieds
         /// </value>
         /// <remarks>Uses the WGS84 datum</remarks>
         [DataMember]
+#if !WINDOWS_UWP
         [Column(UpdateCheck= UpdateCheck.Never)]
+#endif
         public double Latitude
         {
             get
@@ -171,7 +201,9 @@ namespace LocalAngle.Classifieds
         /// </value>
         /// <remarks>Uses the WGS84 datum</remarks>
         [DataMember]
+#if !WINDOWS_UWP
         [Column(UpdateCheck= UpdateCheck.Never)]
+#endif
         public double Longitude
         {
             get
@@ -192,7 +224,9 @@ namespace LocalAngle.Classifieds
         /// The last modified.
         /// </value>
         [DataMember]
+#if !WINDOWS_UWP
         [Column(UpdateCheck= UpdateCheck.Never)]
+#endif
         public DateTime LastModified
         {
             get
@@ -213,7 +247,11 @@ namespace LocalAngle.Classifieds
         /// The name.
         /// </value>
         [DataMember]
+#if WINDOWS_UWP
+        [MaxLength(255)]
+#else
         [Column(DbType = "NVARCHAR(255)", UpdateCheck = UpdateCheck.Never)]
+#endif
         public string Name
         {
             get
@@ -234,7 +272,9 @@ namespace LocalAngle.Classifieds
         /// The publish status.
         /// </value>
         [DataMember]
+#if !WINDOWS_UWP
         [Column(UpdateCheck= UpdateCheck.Never)]
+#endif
         [DisplayName("Status")]
         public PublishStatus PublishStatus
         {
@@ -256,7 +296,9 @@ namespace LocalAngle.Classifieds
         /// The time when the advert will natuarally expire
         /// </value>
         [DataMember]
+#if !WINDOWS_UWP
         [Column(UpdateCheck= UpdateCheck.Never)]
+#endif
         public DateTime RenewalDate
         {
             get
@@ -276,11 +318,23 @@ namespace LocalAngle.Classifieds
         /// <summary>
         /// Gets the image to display.
         /// </summary>
+#if WINDOWS_UWP
+        [NotMapped]
+#endif
         protected RequestFileParameter ImageToSend { get; private set; }
 
-        #endregion
+#if !WINDOWS_UWP
+#pragma warning disable 0169
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        [Column(IsVersion = true)]
+        private Binary _version;
+#pragma warning restore 0169
+#endif
 
-        #region Public Methods
+
+#endregion
+
+#region Public Methods
 
 #if !NETFX_CORE
         /// <summary>
@@ -421,18 +475,18 @@ namespace LocalAngle.Classifieds
             throw new NotImplementedException();
         }
 
-        #endregion
+#endregion
 
-        #region Public Static Properties
+#region Public Static Properties
 
         /// <summary>
         /// The maximum file size for image attachments, in bytes
         /// </summary>
         public const int MaximumImageSize = 1024 * 1024;
 
-        #endregion
+#endregion
 
-        #region Public Static Methods
+#region Public Static Methods
 
         /// <summary>
         /// Begins an asynchronous searches for classified adverts near the specified location.
@@ -529,6 +583,10 @@ namespace LocalAngle.Classifieds
             catch (ArgumentNullException)
             {
                 // Sometimes we're seeing an ArgumentNullException, even though ser and the stream returned are not null
+            }
+            catch (SerializationException)
+            {
+                // Sometimes the JSON is malformed - better to catch it than die horribly
             }
 
             return null;
@@ -691,6 +749,6 @@ namespace LocalAngle.Classifieds
 
 #endif
 
-        #endregion
+#endregion
     }
 }

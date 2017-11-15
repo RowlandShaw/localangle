@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace LocalAngle.Eatndrink
 {
-    public class Establishment : BindableBase, IGeoLocation
+    public class Establishment : BindableBase, IEmployer
     {
         #region Constructor
 
@@ -30,6 +30,25 @@ namespace LocalAngle.Eatndrink
         #endregion
 
         #region Public Properties
+
+        private Brand _brand;
+        /// <summary>
+        /// Gets or sets the brand.
+        /// </summary>
+        /// <value>
+        /// The brand.
+        /// </value>
+        public Brand Brand
+        {
+            get
+            {
+                return _brand;
+            }
+            set
+            {
+                OnPropertyChanged("Brand", ref _brand, value);
+            }
+        }
 
         private ICollection<ContactNumber> _contacts;
         /// <summary>
@@ -55,7 +74,7 @@ namespace LocalAngle.Eatndrink
         /// Gets or sets the delivery point for the establishment.
         /// </summary>
         /// <value>
-        /// The email address.
+        /// The delivery point for the address
         /// </value>
         [DataMember]
         [Column(DbType = "NVARCHAR(100)", UpdateCheck = UpdateCheck.Never)]
@@ -199,6 +218,11 @@ namespace LocalAngle.Eatndrink
             set
             {
                 OnPropertyChanged("Guid", ref _guid, value);
+
+                foreach (var ot in ContactNumbers)
+                {
+                    ot.Guid = value;
+                }
             }
         }
 
@@ -306,6 +330,20 @@ namespace LocalAngle.Eatndrink
             set
             {
                 OnPropertyChanged("Name", ref _name, (value == null ? string.Empty : value.Trim()));
+            }
+        }
+
+        private ICollection<OpeningHours> _openingHours;
+        [DataMember]
+        public ICollection<OpeningHours> OpeningHours
+        {
+            get
+            {
+                if (_openingHours == null)
+                {
+                    _openingHours = new ObservableCollection<OpeningHours>();
+                }
+                return _openingHours;
             }
         }
 

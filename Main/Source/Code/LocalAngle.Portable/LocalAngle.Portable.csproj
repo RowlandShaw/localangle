@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CBE97F09-74BB-4E22-A7A8-E511901346B4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LocalAngle</RootNamespace>
+    <AssemblyName>LocalAngle.Portable</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>Profile32</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS;PCL</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <None Include="project.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\LocalAngle\Classifieds\AdvertType.cs">
+      <Link>Classifieds\AdvertType.cs</Link>
+    </Compile>
+    <Compile Include="..\LocalAngle\Classifieds\PublishStatus.cs">
+      <Link>Classifieds\PublishStatus.cs</Link>
+    </Compile>
+    <Compile Include="..\LocalAngle\Comparer.cs">
+      <Link>Comparer.cs</Link>
+    </Compile>
+    <Compile Include="..\LocalAngle\DateTimeExtensions.cs">
+      <Link>DateTimeExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\LocalAngle\Events\PublishStatus.cs">
+      <Link>Events\PublishStatus.cs</Link>
+    </Compile>
+    <Compile Include="..\LocalAngle\IGeoLocation.cs">
+      <Link>IGeoLocation.cs</Link>
+    </Compile>
+    <Compile Include="..\LocalAngle\IOAuthCredentials.cs">
+      <Link>IOAuthCredentials.cs</Link>
+    </Compile>
+    <Compile Include="..\LocalAngle\Net\OAuthSignatureMethod.cs">
+      <Link>Net\OAuthSignatureMethod.cs</Link>
+    </Compile>
+    <Compile Include="..\LocalAngle\Net\RequestFileParameter.cs">
+      <Link>Net\RequestFileParameter.cs</Link>
+    </Compile>
+    <Compile Include="..\LocalAngle\Net\RequestParameter.cs">
+      <Link>Net\RequestParameter.cs</Link>
+    </Compile>
+    <Compile Include="..\LocalAngle\OAuthCredentials.cs">
+      <Link>OAuthCredentials.cs</Link>
+    </Compile>
+    <Compile Include="..\LocalAngle\Postcode.cs">
+      <Link>Postcode.cs</Link>
+    </Compile>
+    <Compile Include="ApiHelper.cs" />
+    <Compile Include="Attractions\Attraction.cs" />
+    <Compile Include="BindableBase.cs" />
+    <Compile Include="Classifieds\Freead.cs" />
+    <Compile Include="Events\SpecialEvent.cs" />
+    <Compile Include="Net\OAuthWebRequest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <TargetPlatform Include="Windows, Version=8.1" />
+    <TargetPlatform Include="WindowsPhoneApp, Version=8.1" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

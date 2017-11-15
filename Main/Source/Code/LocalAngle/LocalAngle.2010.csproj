@@ -50,6 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiHelper.cs" />
+    <Compile Include="Attractions\Attraction.cs" />
+    <Compile Include="Attractions\BrownSignCategory.cs" />
     <Compile Include="Attractions\Hotel.cs" />
     <Compile Include="BindableBase.cs" />
     <Compile Include="Cache.cs" />
@@ -64,19 +66,26 @@
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="Diagnostics\DebugOutStream.cs" />
     <Compile Include="Diagnostics\DebugStreamWriter.cs" />
+    <Compile Include="Eatndrink\Brand.cs" />
     <Compile Include="Eatndrink\Establishment.cs" />
+    <Compile Include="Events\Club.cs" />
     <Compile Include="Events\PublishStatus.cs" />
     <Compile Include="Events\SpecialEvent.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ICacheable.cs" />
     <Compile Include="ICollectionExtensions.cs" />
+    <Compile Include="IEmployer.cs" />
     <Compile Include="IGeoLocation.cs" />
+    <Compile Include="Info\Pharmacy.cs" />
+    <Compile Include="Info\Library.cs" />
+    <Compile Include="Info\School.cs" />
     <Compile Include="IOAuthCredentials.cs" />
     <Compile Include="Net\OAuthSignatureMethod.cs" />
     <Compile Include="Net\OAuthWebRequest.cs" />
     <Compile Include="Net\RequestFileParameter.cs" />
     <Compile Include="Net\RequestParameter.cs" />
     <Compile Include="OAuthCredentials.cs" />
+    <Compile Include="OpeningHours.cs" />
     <Compile Include="Postcode.cs" />
     <Compile Include="PostcodeConverter.cs" />
     <Compile Include="PostcodeDetails.cs" />
@@ -86,7 +95,7 @@
     <Compile Include="Recruitment\Position.cs" />
     <Compile Include="Recruitment\RenumerationRange.cs" />
     <Compile Include="Recurrence.cs" />
-    <Compile Include="SortableList.cs" />
+    <Compile Include="SortableCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="CodeAnalysisDictionary.xml" />

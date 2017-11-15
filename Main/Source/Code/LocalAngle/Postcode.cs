@@ -8,10 +8,7 @@ namespace LocalAngle
     /// <summary>
     /// Represents a UK Postcode
     /// </summary>
-    /// <todo>TODO: Implment implicit conversion to a string, and explicit conversion from a string</todo>
-#if !NETFX_CORE
-    [TypeConverter(typeof(PostcodeConverter))]
-#endif
+    /// <todo>TODO: Implement implicit conversion to a string, and explicit conversion from a string</todo>
     public class Postcode : IComparable, IComparable<Postcode>, IEquatable<Postcode>
     {
         #region Constructors
@@ -37,7 +34,33 @@ namespace LocalAngle
                 return;
             }
 
-            string value = postcode.ToUpperInvariant();
+            string value = postcode.ToUpperInvariant().Trim();
+            if (string.IsNullOrEmpty(value))
+            {
+                return;
+            }
+
+            // Attempt to auto-correct some more common typos
+            // 0L -> OL
+            if (value[0] == '0' && (value[1] == 'L' || value[1] == 'X'))
+            {
+                value = "O" + value.Substring(1);
+            }
+
+            // C0 -> CO
+            if (value[1] == '0' && (value[0] == 'C' || value[0] == 'P' || value[0] == 'S' || value[0] == 'Y'))
+            {
+                value = value[0] + "O" + value.Substring(2);
+            }
+
+            // BRO -> BR0
+            if (value.Length == 6 && value[2] == 'O')
+            {
+                value = value.Substring(0, 2) + '0' + value.Substring(3);
+            }
+
+            // Zero in a sector is handled below
+
             var results = Postcode.Parse.Match(value);
             if (results.Success)
             {
@@ -63,6 +86,10 @@ namespace LocalAngle
                 }
 
                 _sector = results.Groups[18].Value[0];
+                if (_sector == 'O')
+                {
+                    _sector = '0';
+                }
                 _unit = results.Groups[19].Value;
             }
             else
@@ -153,7 +180,7 @@ namespace LocalAngle
         }
 
         /// <summary>
-        /// Equalses the specified other.
+        /// Compares the current object with another object.
         /// </summary>
         /// <param name="obj">The other.</param>
         /// <returns></returns>
@@ -231,7 +258,7 @@ namespace LocalAngle
         }
 
         /// <summary>
-        /// Comparison to see if the left is less than than the right.
+        /// Comparison to see if the left is less than the right.
         /// </summary>
         /// <param name="left">The left.</param>
         /// <param name="right">The right.</param>
@@ -281,7 +308,7 @@ namespace LocalAngle
         }
 
         /// <summary>
-        /// Comparison to see if the left is less than than or equal to the right.
+        /// Comparison to see if the left is less than or equal to the right.
         /// </summary>
         /// <param name="left">The left.</param>
         /// <param name="right">The right.</param>
@@ -376,6 +403,11 @@ namespace LocalAngle
         /// </returns>
         public static bool IsValid( string value )
         {
+            if (string.IsNullOrEmpty(value))
+            {
+                return false;
+            }
+
             var results = Postcode.Parse.Match(value);
             return results.Success;
         }
@@ -384,7 +416,7 @@ namespace LocalAngle
 
         #region Private Static Properties
 
-        private static Regex Parse = new Regex(@"^\s*(((A[BL]|B[ABDHLNRSTX]?|C[ABFHMORTVW]|D[ADEGHLNTY]|E[HNX]?|F[KY]|G[LUY]?|H[ADGPRSUX]|I[GMPV]|JE|K[ATWY]|L[ADELNSU]?|M[EKL]?|N[EGNPRW]?|O[LX]|P[AEHLOR]|R[GHM]|S[AEGKLMNOPRSTY]?|T[ADFNQRSW]|UB|W[ADFNRSV]|YO|ZE)([1-9]?[0-9])|(((E|N|NW|SE|SW|W)(1)|(EC)([1-4])|(WC)([12]))([A-HJKMNPR-Y])|(SW|W)([2-9]|[1-9][0-9])|(EC)([1-9][0-9])))\s*([0-9])([ABD-HJLNP-UW-Z]{2}))\s*$", RegexOptions.IgnoreCase);
+        private static Regex Parse = new Regex(@"^\s*(((A[BL]|B[ABDHLNRSTX]?|C[ABFHMORTVW]|D[ADEGHLNTY]|E[HNX]?|F[KY]|G[LUY]?|H[ADGPRSUX]|I[GMPV]|JE|K[ATWY]|L[ADELNSU]?|M[EKL]?|N[EGNPRW]?|O[LX]|P[AEHLOR]|R[GHM]|S[AEGKLMNOPRSTY]?|T[ADFNQRSW]|UB|W[ADFNRSV]|YO|ZE)([1-9]?[0-9])|(((E|N|NW|SE|SW|W)(1)|(EC)([1-4])|(WC)([12]))([A-HJKMNPR-Y])|(SW|W)([2-9]|[1-9][0-9])|(EC)([1-9][0-9])))\s*([O0-9])([ABD-HJLNP-UW-Z]{2}))\s*$", RegexOptions.IgnoreCase);
 
         #endregion
     }
