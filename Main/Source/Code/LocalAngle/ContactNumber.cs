@@ -9,6 +9,10 @@ using System.Text.RegularExpressions;
 
 namespace LocalAngle
 {
+    /// <summary>
+    /// Represents a point of contact for an organisation or individual
+    /// </summary>
+    /// <seealso cref="LocalAngle.BindableBase" />
     public class ContactNumber : BindableBase
     {
         #region Public Properties

@@ -13,6 +13,6 @@ namespace System.ComponentModel
 
         public DescriptionAttribute(string description) { Description = description; }
 
-        public string Description { get; protected set; }
+        public string Description { get; private set; }
     }
 }

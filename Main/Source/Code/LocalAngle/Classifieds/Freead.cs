@@ -323,7 +323,7 @@ namespace LocalAngle.Classifieds
 #endif
         protected RequestFileParameter ImageToSend { get; private set; }
 
-#if !WINDOWS_UWP
+#if WINDOWS_PHONE
 #pragma warning disable 0169
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         [Column(IsVersion = true)]
@@ -331,10 +331,9 @@ namespace LocalAngle.Classifieds
 #pragma warning restore 0169
 #endif
 
+        #endregion
 
-#endregion
-
-#region Public Methods
+        #region Public Methods
 
 #if !NETFX_CORE
         /// <summary>

@@ -80,7 +80,7 @@ namespace LocalAngle
     }
 
     /// <summary>
-    /// Extension methods for Ienumerable<typeparamref name="T"/>
+    /// Extension methods for <see cref="BindableBase"/>
     /// </summary>
     public static class BindableBaseExtensions
     {

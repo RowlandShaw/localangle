@@ -28,5 +28,6 @@
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
+    [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1003:UseGenericEventHandlerInstances")]
     public delegate void PropertyChangingEventHandler(object sender, PropertyChangingEventArgs e);
 }

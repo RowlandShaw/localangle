@@ -42,6 +42,7 @@ namespace LocalAngle.Net
         /// <param name="name">The parameter name.</param>
         /// <param name="fileName">The orginal file name.</param>
         /// <param name="contentType">Mime type of the content.</param>
+        /// <param name="contentLength">The number of bytes</param>
         /// <param name="content">A stream containing the content.</param>
         public RequestFileParameter(string name, string fileName, string contentType, int contentLength, Stream content)
         {

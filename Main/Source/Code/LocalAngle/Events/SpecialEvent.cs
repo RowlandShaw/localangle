@@ -443,7 +443,7 @@ namespace LocalAngle.Events
             }
         }
 
-#if !WINDOWS_UWP
+#if WINDOWS_PHONE
 #pragma warning disable 0169
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         [Column(IsVersion = true)]
@@ -453,7 +453,7 @@ namespace LocalAngle.Events
 
 #endregion
 
-#region Public Methods
+        #region Public Methods
 
         /// <summary>
         /// Compares the current object with another object of the same type.
